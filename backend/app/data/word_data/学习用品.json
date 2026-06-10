@@ -1,0 +1,26 @@
+[
+  {
+    "id": "p001",
+    "word": "笔记本",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy",
+    "hints": ["学生常用", "可以写字", "便携"]
+  },
+  {
+    "id": "p002",
+    "word": "铅笔盒",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy",
+    "hints": ["方形", "收纳文具", "带拉链"]
+  },
+  {
+    "id": "p003",
+    "word": "橡皮擦",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy",
+    "hints": ["消除痕迹", "白色", "软软的"]
+  }
+]

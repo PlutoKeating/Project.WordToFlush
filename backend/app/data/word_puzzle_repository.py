@@ -1,96 +1,61 @@
+import json
+import logging
 import random
+from pathlib import Path
+
 from app.models.game import WordPuzzle
 
-_PUZZLES_DATA: list[dict] = [
-    {
-        "id": "p001",
-        "word": "笔记本",
-        "word_length": 3,
-        "category": "学习用品",
-        "difficulty": "easy",
-        "hints": ["学生常用", "可以写字", "便携"],
-    },
-    {
-        "id": "p002",
-        "word": "铅笔盒",
-        "word_length": 3,
-        "category": "学习用品",
-        "difficulty": "easy",
-        "hints": ["方形", "收纳文具", "带拉链"],
-    },
-    {
-        "id": "p003",
-        "word": "橡皮擦",
-        "word_length": 3,
-        "category": "学习用品",
-        "difficulty": "easy",
-        "hints": ["消除痕迹", "白色", "软软的"],
-    },
-    {
-        "id": "p004",
-        "word": "火锅",
-        "word_length": 2,
-        "category": "美食",
-        "difficulty": "easy",
-        "hints": ["热气腾腾", "多人共享", "麻辣"],
-    },
-    {
-        "id": "p005",
-        "word": "珍珠奶茶",
-        "word_length": 4,
-        "category": "美食",
-        "difficulty": "medium",
-        "hints": ["有吸管", "甜甜的", "黑色颗粒"],
-    },
-    {
-        "id": "p006",
-        "word": "手机壳",
-        "word_length": 3,
-        "category": "数码",
-        "difficulty": "easy",
-        "hints": ["保护作用", "各种图案", "塑料材质"],
-    },
-    {
-        "id": "p007",
-        "word": "蓝牙耳机",
-        "word_length": 4,
-        "category": "数码",
-        "difficulty": "medium",
-        "hints": ["无线", "戴在耳朵上", "听音乐"],
-    },
-    {
-        "id": "p008",
-        "word": "画蛇添足",
-        "word_length": 4,
-        "category": "成语",
-        "difficulty": "hard",
-        "hints": ["多此一举", "动物", "四条腿"],
-    },
-    {
-        "id": "p009",
-        "word": "掩耳盗铃",
-        "word_length": 4,
-        "category": "成语",
-        "difficulty": "hard",
-        "hints": ["自欺欺人", "声音", "偷东西"],
-    },
-    {
-        "id": "p010",
-        "word": "对牛弹琴",
-        "word_length": 4,
-        "category": "成语",
-        "difficulty": "medium",
-        "hints": ["浪费口舌", "动物", "乐器"],
-    },
-]
+logger = logging.getLogger(__name__)
+
+WORD_DATA_DIR = Path(__file__).parent / "word_data"
 
 
 class WordPuzzleRepository:
-    @staticmethod
-    def random() -> WordPuzzle:
-        item = random.choice(_PUZZLES_DATA)
-        return WordPuzzle(**item)
+    def __init__(self, data_dir: Path | None = None):
+        self._puzzles: list[WordPuzzle] = []
+        self._by_category: dict[str, list[WordPuzzle]] = {}
+        self._load(data_dir or WORD_DATA_DIR)
 
-    @staticmethod
-    def get_by_category(category: str) -> list[WordPuzzle]:
-        return [WordPuzzle(**p) for p in _PUZZLES_DATA if p["category"] == category]
+    def _load(self, data_dir: Path) -> None:
+        if not data_dir.exists():
+            logger.warning("Word data directory not found: %s", data_dir)
+            return
+
+        json_files = sorted(data_dir.glob("*.json"))
+        logger.info("Loading word data from %d JSON file(s) in %s", len(json_files), data_dir)
+
+        for json_file in json_files:
+            category = json_file.stem
+            try:
+                items = json.loads(json_file.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError) as exc:
+                logger.warning("Skipping %s: %s", json_file.name, exc)
+                continue
+
+            if not isinstance(items, list):
+                logger.warning("Skipping %s: expected a JSON array", json_file.name)
+                continue
+
+            category_puzzles: list[WordPuzzle] = []
+            for item in items:
+                try:
+                    item["category"] = category
+                    puzzle = WordPuzzle(**item)
+                    self._puzzles.append(puzzle)
+                    category_puzzles.append(puzzle)
+                except Exception as exc:
+                    logger.warning("Skipping item in %s: %s", json_file.name, exc)
+                    continue
+
+            self._by_category[category] = category_puzzles
+
+    def random(self) -> WordPuzzle:
+        if not self._puzzles:
+            raise RuntimeError("No puzzles loaded from word_data directory")
+        return random.choice(self._puzzles)
+
+    def get_by_category(self, category: str) -> list[WordPuzzle]:
+        return self._by_category.get(category, [])
+
+    def get_categories(self) -> list[str]:
+        return list(self._by_category.keys())

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "p004",
+    "word": "火锅",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy",
+    "hints": ["热气腾腾", "多人共享", "麻辣"]
+  },
+  {
+    "id": "p005",
+    "word": "珍珠奶茶",
+    "wordLength": 4,
+    "category": "美食",
+    "difficulty": "medium",
+    "hints": ["有吸管", "甜甜的", "黑色颗粒"]
+  }
+]
