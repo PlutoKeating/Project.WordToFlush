@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
-import type { RoomState, WordPuzzle, GuessRecord } from '@shared/types/game'
+import type { RoomState, WordPuzzle, GuessRecord, PuzzleSolvedEvent } from '@shared/types/game'
 
 export const useGameStore = defineStore('game', () => {
   const ws = ref<WebSocket | null>(null)
   const connected = ref(false)
   const lastGuessResult = ref<GuessRecord | null>(null)
+  const puzzleSolved = ref<PuzzleSolvedEvent | null>(null)
 
   const roomState = reactive<RoomState>({
     roomId: '',
@@ -17,6 +18,7 @@ export const useGameStore = defineStore('game', () => {
     guessBoard: [],
     leaderboard: [],
     previousPuzzle: null,
+    solvedBy: null,
   })
 
   function connect(platform: string, roomId: string) {
@@ -41,8 +43,11 @@ export const useGameStore = defineStore('game', () => {
         Object.assign(roomState, msg.data)
       } else if (msg.event === 'game:newPuzzle') {
         roomState.currentPuzzle = msg.data
+        puzzleSolved.value = null
       } else if (msg.event === 'game:guessResult') {
         lastGuessResult.value = msg.data as GuessRecord
+      } else if (msg.event === 'game:puzzleSolved') {
+        puzzleSolved.value = msg.data as PuzzleSolvedEvent
       }
     }
 
@@ -85,5 +90,5 @@ export const useGameStore = defineStore('game', () => {
     connected.value = false
   }
 
-  return { ws, connected, roomState, lastGuessResult, connect, sendGuess, nextPuzzle, disconnect }
+  return { ws, connected, roomState, lastGuessResult, puzzleSolved, connect, sendGuess, nextPuzzle, disconnect }
 })

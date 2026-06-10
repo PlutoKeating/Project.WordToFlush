@@ -49,3 +49,4 @@ class RoomState(CamelModel):
     guess_board: list[GuessRecord] = []
     leaderboard: list[Player] = []
     previous_puzzle: Optional[str] = None
+    solved_by: Optional[str] = None

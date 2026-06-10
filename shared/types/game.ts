@@ -37,6 +37,7 @@ export interface RoomState {
   guessBoard: GuessRecord[]
   leaderboard: Player[]
   previousPuzzle: string | null
+  solvedBy: string | null
 }
 
 export interface RoomConfig {
@@ -45,6 +46,11 @@ export interface RoomConfig {
   autoNextDelay: number
   starThreshold: number
   maxHints: number
+}
+
+export interface PuzzleSolvedEvent {
+  word: string
+  solvedBy: string
 }
 
 export interface SocketEvents {
@@ -56,4 +62,5 @@ export interface SocketEvents {
   'game:state': RoomState
   'game:leaderboard': Player[]
   'game:previousPuzzle': string
+  'game:puzzleSolved': PuzzleSolvedEvent
 }

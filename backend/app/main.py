@@ -1,3 +1,4 @@
+import asyncio
 import json
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query
@@ -28,6 +29,22 @@ vector_calculator = VectorCalculator()
 game_master = GameMaster(vector_calculator)
 session_manager = SessionManager(game_master)
 connection_manager = ConnectionManager()
+
+
+async def _auto_next_puzzle(room_id: str, delay: float):
+    await asyncio.sleep(delay)
+    room_state = await session_manager.next_puzzle(room_id)
+    if room_state and room_state.current_puzzle:
+        await connection_manager.broadcast(
+            room_id,
+            "game:newPuzzle",
+            room_state.current_puzzle.model_dump(by_alias=True),
+        )
+        await connection_manager.broadcast(
+            room_id,
+            "game:state",
+            room_state.model_dump(by_alias=True),
+        )
 
 
 @app.get("/health")
@@ -101,10 +118,11 @@ async def websocket_endpoint(websocket: WebSocket):
                 if room_id and guess:
                     room_state = session_manager.get_room(room_id)
                     if room_state:
-                        record = await game_master.process_guess(
+                        result = await game_master.process_guess(
                             room_state, user_id, user_name, guess
                         )
-                        if record:
+                        if result:
+                            record = result["record"]
                             await connection_manager.broadcast(
                                 room_id,
                                 "game:guessResult",
@@ -115,6 +133,18 @@ async def websocket_endpoint(websocket: WebSocket):
                                 "game:state",
                                 room_state.model_dump(by_alias=True),
                             )
+                            if result["solved"]:
+                                await connection_manager.broadcast(
+                                    room_id,
+                                    "game:puzzleSolved",
+                                    {
+                                        "word": room_state.current_puzzle.word if room_state.current_puzzle else "",
+                                        "solvedBy": room_state.solved_by,
+                                    },
+                                )
+                                asyncio.create_task(
+                                    _auto_next_puzzle(room_id, 3.0)
+                                )
 
             elif event == "game:nextPuzzle":
                 room_id = data.get("roomId", current_room_id)

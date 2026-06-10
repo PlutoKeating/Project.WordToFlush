@@ -3,6 +3,7 @@ from app.models.game import WordPuzzle, RoomState, GuessRecord, Player, Platform
 from app.data.word_puzzle_repository import WordPuzzleRepository
 from app.core.vector_calculator import VectorCalculator
 from app.core.danmaku_filter import clean_danmaku
+from app.config import WIN_AFFINITY_THRESHOLD
 
 STAR_THRESHOLD = 0.85
 MAX_STAR = 5
@@ -24,6 +25,7 @@ class GameMaster:
             guess_board=[],
             leaderboard=[],
             previous_puzzle=None,
+            solved_by=None,
         )
 
     async def next_puzzle(self, room_state: RoomState) -> WordPuzzle:
@@ -35,6 +37,7 @@ class GameMaster:
         room_state.guess_board = []
         room_state.highest_affinity = 0.0
         room_state.star_level = 0
+        room_state.solved_by = None
 
         for p in room_state.leaderboard:
             p.current_score = 0
@@ -53,8 +56,11 @@ class GameMaster:
         user_id: str,
         user_name: str,
         raw_guess: str,
-    ) -> GuessRecord | None:
+    ) -> dict | None:
         if not room_state.current_puzzle:
+            return None
+
+        if room_state.solved_by is not None:
             return None
 
         cleaned = clean_danmaku(raw_guess)
@@ -77,6 +83,10 @@ class GameMaster:
         player.current_score += score
         player.total_score += score
 
+        is_solved = affinity >= WIN_AFFINITY_THRESHOLD
+        if is_solved:
+            room_state.solved_by = user_name
+
         if (
             room_state.highest_affinity >= STAR_THRESHOLD
             and room_state.star_level < MAX_STAR
@@ -96,7 +106,7 @@ class GameMaster:
 
         room_state.leaderboard.sort(key=lambda p: p.total_score, reverse=True)
 
-        return record
+        return {"record": record, "solved": is_solved}
 
     def _get_or_create_player(
         self, room_state: RoomState, user_id: str, user_name: str

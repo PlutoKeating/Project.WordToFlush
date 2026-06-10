@@ -9,6 +9,18 @@ const userName = ref('玩家' + Math.floor(Math.random() * 1000))
 const guessText = ref('')
 const showResult = ref(false)
 const resultFlash = ref('')
+const showSolvedPopup = ref(false)
+const solvedByName = ref('')
+
+watch(() => store.puzzleSolved, (solved) => {
+  if (solved) {
+    showSolvedPopup.value = true
+    solvedByName.value = solved.solvedBy
+    setTimeout(() => {
+      showSolvedPopup.value = false
+    }, 3000)
+  }
+})
 
 watch(() => store.lastGuessResult, (result) => {
   if (result) {
@@ -70,7 +82,17 @@ function handleKeydown(e: KeyboardEvent) {
 
     <Transition name="fade">
       <div
-        v-if="showResult && store.lastGuessResult"
+        v-if="showSolvedPopup"
+        class="text-center px-4 py-3 rounded result-solved animate-pulse"
+      >
+        <div class="text-lg font-bold text-green-400 mb-1">🎯 猜中了！</div>
+        <div class="text-sm text-gray-300">{{ solvedByName }}</div>
+      </div>
+    </Transition>
+
+    <Transition name="fade">
+      <div
+        v-if="showResult && store.lastGuessResult && !showSolvedPopup"
         :class="['text-center text-xs px-3 py-1 rounded', resultFlash]"
       >
         <div class="text-gray-300">{{ store.lastGuessResult.guess }}</div>
@@ -80,7 +102,7 @@ function handleKeydown(e: KeyboardEvent) {
       </div>
     </Transition>
 
-    <div v-if="!showResult" class="text-xs text-gray-600 text-center">
+    <div v-if="!showResult && !showSolvedPopup" class="text-xs text-gray-600 text-center">
       输入猜测词测试语义关联
     </div>
   </div>
@@ -101,6 +123,10 @@ function handleKeydown(e: KeyboardEvent) {
   background: rgba(128, 128, 128, 0.15);
   border: 1px solid #666;
   color: #999;
+}
+.result-solved {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid #22c55e;
 }
 
 .fade-enter-active,
