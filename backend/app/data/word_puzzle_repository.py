@@ -49,10 +49,22 @@ class WordPuzzleRepository:
 
             self._by_category[category] = category_puzzles
 
-    def random(self) -> WordPuzzle:
+    def random(self, exclude_category: str | None = None) -> WordPuzzle:
         if not self._puzzles:
             raise RuntimeError("No puzzles loaded from word_data directory")
-        return random.choice(self._puzzles)
+
+        candidates = self._puzzles
+        if exclude_category is not None:
+            filtered = [p for p in self._puzzles if p.category != exclude_category]
+            if filtered:
+                candidates = filtered
+            else:
+                logger.warning(
+                    "All puzzles belong to '%s', falling back to full set",
+                    exclude_category,
+                )
+
+        return random.choice(candidates)
 
     def get_by_category(self, category: str) -> list[WordPuzzle]:
         return self._by_category.get(category, [])

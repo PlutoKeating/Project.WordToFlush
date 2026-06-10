@@ -32,7 +32,8 @@ class GameMaster:
         if room_state.current_puzzle:
             room_state.previous_puzzle = room_state.current_puzzle.word
 
-        puzzle = self.repository.random()
+        prev_category = room_state.current_puzzle.category if room_state.current_puzzle else None
+        puzzle = self.repository.random(exclude_category=prev_category)
         room_state.current_puzzle = puzzle
         room_state.guess_board = []
         room_state.highest_affinity = 0.0
