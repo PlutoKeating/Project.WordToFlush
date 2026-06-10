@@ -123,7 +123,8 @@
     "highestAffinity": 0.85,
     "guessBoard": [ ... ],
     "leaderboard": [ ... ],
-    "previousPuzzle": null
+    "previousPuzzle": null,
+    "solvedBy": null
   }
 }
 ```
@@ -145,6 +146,35 @@
 }
 ```
 
+#### `game:guessResult`
+单条猜测结果广播，每次有用户成功猜词后发送。
+
+```json
+{
+  "event": "game:guessResult",
+  "data": {
+    "userId": "user-001",
+    "userName": "小明",
+    "guess": "文具盒",
+    "affinity": 0.87,
+    "timestamp": 1718000000000
+  }
+}
+```
+
+#### `game:puzzleSolved`
+谜题被猜中时广播，包含谜底和猜中用户名。前端应显示正确答案 3 秒，之后后端自动推进到下一题。
+
+```json
+{
+  "event": "game:puzzleSolved",
+  "data": {
+    "word": "铅笔盒",
+    "solvedBy": "小明"
+  }
+}
+```
+
 ---
 
 ## 数据模型
@@ -162,6 +192,7 @@
 | `guessBoard` | GuessRecord[] | 竞猜记录列表 |
 | `leaderboard` | Player[] | 积分排行榜 |
 | `previousPuzzle` | string \| null | 上一题谜底 |
+| `solvedBy` | string \| null | 本轮猜中者用户名 (null 表示未猜中) |
 
 ### WordPuzzle
 

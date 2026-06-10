@@ -35,6 +35,7 @@ uvicorn app.main:app --reload --port 8000
 | `HOST_BIND_PORT` | `8000` | 宿主机映射端口 (容器内固定 8000) |
 | `OLLAMA_HOST` | `http://host.docker.internal:11434` | Ollama API 地址 |
 | `OLLAMA_MODEL` | `bge-large-zh` | 嵌入模型名称 (推荐) |
+| `WIN_AFFINITY_THRESHOLD` | `0.92` | 猜中关联度阈值 (0.0-1.0) |
 | `REDIS_URL` | `redis://redis:6379` | Redis 连接地址 |
 | `DY_APP_ID` | (空) | 抖音 App ID (可选) |
 | `KS_APP_KEY` | (空) | 快手 App Key (可选) |

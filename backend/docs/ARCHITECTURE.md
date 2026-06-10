@@ -70,6 +70,14 @@ Client connect → WS /ws
               → ConnectionManager.connect()
               → 回复 game:state
 
+  → game:guess → GameMaster.process_guess()
+              → VectorCalculator.calculate_affinity()
+              → 检测是否猜中 (affinity >= WIN_AFFINITY_THRESHOLD)
+              → ConnectionManager.broadcast(game:guessResult)
+              → ConnectionManager.broadcast(game:state)
+              → 若猜中: broadcast(game:puzzleSolved)
+              → 若猜中: 3s 后自动调用 next_puzzle()
+
   → game:nextPuzzle → SessionManager.next_puzzle()
                     → ConnectionManager.broadcast(game:newPuzzle)
                     → ConnectionManager.broadcast(game:state)

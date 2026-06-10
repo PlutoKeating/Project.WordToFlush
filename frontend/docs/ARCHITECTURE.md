@@ -10,8 +10,9 @@ frontend/
 │   ├── env.d.ts                     # Vite 环境变量类型声明
 │   ├── components/
 │   │   ├── TopBar.vue               # 顶部: 赛季/星级/换题按钮
-│   │   ├── DecryptZone.vue          # 中部: 分类/掩码/关联度
-│   │   ├── GuessList.vue            # 左侧: 竞猜榜 (按关联度排序)
+│   │   ├── DecryptZone.vue          # 中部: 分类/掩码/关联度/猜中揭示
+│   │   ├── GuessList.vue            # 左侧: 竞猜榜 (词汇去重, 按准确率排序)
+│   │   ├── GuessInput.vue           # 中部: 猜词输入/结果反馈/猜中弹窗
 │   │   └── Leaderboard.vue          # 右侧: 积分榜 (按总分排序)
 │   ├── stores/
 │   │   └── gameStore.ts             # Pinia store (WebSocket + 状态)
@@ -40,8 +41,14 @@ WebSocket.onopen:
   → send({ event: "room:join", data: { roomId, platform } })
 
 WebSocket.onmessage:
-  → game:state     → Object.assign(roomState, msg.data)
-  → game:newPuzzle → roomState.currentPuzzle = msg.data
+  → game:state        → Object.assign(roomState, msg.data)
+  → game:newPuzzle    → roomState.currentPuzzle = msg.data
+  → game:guessResult  → lastGuessResult = msg.data
+  → game:puzzleSolved → puzzleSolved = msg.data (触发 3s 揭示 + 猜中弹窗)
+
+用户输入猜词:
+  GuessInput → gameStore.sendGuess(userId, userName, guess)
+    → ws.send({ event: "game:guess", data: { roomId, userId, userName, guess } })
 
 用户点击换题:
   TopBar → gameStore.nextPuzzle()
@@ -53,8 +60,9 @@ WebSocket.onmessage:
 ```text
 App.vue
 ├── TopBar.vue         (读取 roomState.streak, starLevel, 触发 nextPuzzle)
-├── DecryptZone.vue    (读取 roomState.currentPuzzle, highestAffinity)
-├── GuessList.vue      (读取 roomState.guessBoard, 按 affinity 排序)
+├── DecryptZone.vue    (读取 roomState.currentPuzzle, highestAffinity, puzzleSolved)
+├── GuessList.vue      (读取 roomState.guessBoard, 按词汇去重 + 准确率排序)
+├── GuessInput.vue     (猜词输入 + 触发 sendGuess, 显示 guessResult 和 puzzleSolved 弹窗)
 └── Leaderboard.vue    (读取 roomState.leaderboard, 按 totalScore 排序)
 ```
 
@@ -64,9 +72,13 @@ App.vue
 
 ```typescript
 ws: Ref<WebSocket | null>          // WebSocket 连接实例
+connected: Ref<boolean>            // 连接状态
 roomState: RoomState (reactive)    // 房间完整状态
+lastGuessResult: Ref<GuessRecord | null>  // 最近一次猜测结果
+puzzleSolved: Ref<PuzzleSolvedEvent | null>  // 猜中事件
 
 connect(platform, roomId)          // 建立 WebSocket 连接
+sendGuess(userId, userName, guess) // 发送猜词
 nextPuzzle()                       // 请求下一题
 disconnect()                       // 断开连接
 ```
