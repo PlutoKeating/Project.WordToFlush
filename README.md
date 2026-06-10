@@ -10,7 +10,8 @@
 </p>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/Node.js-18%2B-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js"/></a>
+   <a href="#"><img src="https://img.shields.io/badge/Python-3.12%2B-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"/></a>
+   <a href="#"><img src="https://img.shields.io/badge/FastAPI-0.115%2B-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI"/></a>
   <a href="#"><img src="https://img.shields.io/badge/Ollama-Local%20AI-000000?style=flat-square&logo=ollama&logoColor=white" alt="Ollama"/></a>
   <a href="#"><img src="https://img.shields.io/badge/WebSocket-RealTime-010101?style=flat-square&logo=socket.io&logoColor=white" alt="WebSocket"/></a>
   <a href="#"><img src="https://img.shields.io/badge/Redis-Session%20Cache-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis"/></a>
@@ -137,11 +138,12 @@ graph TB
 
 | 组件 | 技术选型 | 职责 |
 |:---|:---|:---|
-| 核心框架 | **Node.js + TypeScript** / Go (Gin) | HTTP + WebSocket 服务 |
-| 会话管理 | **Socket.io** / ws | 多房间实时同步与状态广播 |
+| 核心框架 | **Python FastAPI** + Swagger | HTTP REST API + WebSocket 服务 |
+| 会话管理 | **FastAPI WebSocket** (原生) | 多房间实时同步与状态广播 |
 | 向量计算 | **Ollama API** (`bge-large-zh` / `all-minilm`) | 本地语义嵌入与余弦相似度 |
 | 数据缓存 | **Redis** | 多开会话状态持久化、弹幕队列削峰 |
-| 配置管理 | dotenv + Joi | 环境变量与参数校验 |
+| 部署方式 | **Docker Compose** (唯一部署方式) | 一键编排 Redis + Backend |
+| 配置管理 | python-dotenv | 环境变量与参数校验 |
 
 ### 前端渲染 (Frontend Client)
 
@@ -167,9 +169,9 @@ graph TB
 
 ### 前置要求
 
-- Node.js ≥ 18
-- Redis 6.0+（本地或 Docker）
-- [Ollama](https://ollama.com/) 已安装并运行
+- Python 3.12+ / Docker & Docker Compose
+- Node.js ≥ 18（仅前端开发需要）
+- [Ollama](https://ollama.com/) 已安装并运行（宿主机）
 - （可选）GPU 加速以获得更佳嵌入模型性能
 
 ### 1. 启动 Ollama 并下载嵌入模型
@@ -185,42 +187,52 @@ ollama pull bge-large-zh
 ollama pull all-minilm
 ```
 
-### 2. 配置并启动后端
+### 2. 配置并启动后端（Docker Compose，唯一部署方式）
 
 ```bash
-# 克隆项目
-git clone https://github.com/yourname/wordtoflush.git
-cd wordtoflush/server
+cd backend
 
 # 环境配置
 cp .env.example .env
-# 编辑 .env，填入你的平台凭证（如使用官方 API）
+# 编辑 .env，可按需修改宿主机端口、Ollama 地址等
 
-# 安装依赖
-npm install
-
-# 启动开发服务
-npm run dev
+# 启动全部服务（Redis + Backend）
+docker compose up -d --build
 ```
 
-**`.env` 配置示例：**
+**`backend/.env` 配置示例：**
 
 ```env
-PORT=8080
-OLLAMA_HOST=http://localhost:11434
-OLLAMA_MODEL=bge-large-zh
-REDIS_URL=redis://localhost:6379
+# Docker Compose 项目名
+COMPOSE_PROJECT_NAME=word-to-flush-backend
 
-# 各平台凭证（可选，仅官方 API 需要）
-DY_APP_ID=your_douyin_app_id
-KS_APP_KEY=your_kuaishou_key
-BILI_PROJECT_ID=your_bilibili_project_id
+# 宿主机映射端口（容器内始终监听 8000）
+HOST_BIND_PORT=8000
+
+# Ollama API 地址（docker 内使用 host.docker.internal）
+OLLAMA_HOST=http://host.docker.internal:11434
+OLLAMA_MODEL=bge-large-zh
+
+# Redis 连接地址
+REDIS_URL=redis://redis:6379
+
+# 平台凭证（可选）
+DY_APP_ID=
+KS_APP_KEY=
+BILI_PROJECT_ID=
 ```
+
+> API 文档 (Swagger UI) 启动后访问 `http://localhost:8000/docs`
 
 ### 3. 启动前端（支持多开）
 
 ```bash
-cd ../client
+cd frontend
+
+# 环境配置
+cp .env.example .env
+# 编辑 .env，可配置开发端口与后端地址
+
 npm install
 npm run dev
 ```
@@ -239,44 +251,25 @@ npm run dev
 
 ## 🧠 核心逻辑：向量关联度计算
 
-```typescript
-import axios from 'axios';
+```python
+import httpx, math
 
-/**
- * 获取文本的向量嵌入
- */
-async function getEmbedding(text: string): Promise<number[]> {
-    const response = await axios.post('http://localhost:11434/api/embeddings', {
-        model: 'bge-large-zh',
-        prompt: text
-    });
-    return response.data.embedding;
-}
+async def get_embedding(text: str) -> list[float]:
+    resp = await httpx.AsyncClient().post(
+        "http://localhost:11434/api/embeddings",
+        json={"model": "bge-large-zh", "prompt": text}
+    )
+    return resp.json()["embedding"]
 
-/**
- * 计算余弦相似度
- */
-function cosineSimilarity(vecA: number[], vecB: number[]): number {
-    const dotProduct = vecA.reduce((sum, a, i) => sum + a * vecB[i], 0);
-    const normA = Math.sqrt(vecA.reduce((sum, a) => sum + a * a, 0));
-    const normB = Math.sqrt(vecB.reduce((sum, b) => sum + b * b, 0));
-    return dotProduct / (normA * normB);
-}
+def cosine_similarity(vec_a, vec_b):
+    dot = sum(a * b for a, b in zip(vec_a, vec_b))
+    return dot / (math.sqrt(sum(a**2 for a in vec_a)) * math.sqrt(sum(b**2 for b in vec_b)))
 
-/**
- * 计算猜测词与谜底的关联度（0.0 - 1.0）
- */
-export async function calculateAffinity(guess: string, target: string): Promise<number> {
-    // 完全匹配直接返回 100%
-    if (guess === target) return 1.0;
-
-    const vecA = await getEmbedding(guess);
-    const vecB = await getEmbedding(target);
-    const sim = cosineSimilarity(vecA, vecB);
-
-    // 平滑映射到 0% - 100% 展示区间
-    return Math.max(0, Math.min(1, sim));
-}
+async def calculate_affinity(guess: str, target: str) -> float:
+    if guess == target:
+        return 1.0
+    a, b = await get_embedding(guess), await get_embedding(target)
+    return max(0.0, min(1.0, cosine_similarity(a, b)))
 ```
 
 ### 性能优化策略
@@ -289,44 +282,47 @@ export async function calculateAffinity(guess: string, target: string): Promise<
 
 ## 📁 项目结构
 
-```
+```text
 wordtoflush/
-├── 📂 server/                    # 后端基座
-│   ├── src/
+├── backend/                         # 后端基座 (Python FastAPI)
+│   ├── app/
 │   │   ├── core/
-│   │   │   ├── GameMaster.ts     # 游戏主控：发题/判定/结算
-│   │   │   ├── SessionManager.ts # 多房间会话隔离
-│   │   │   └── VectorCalculator.ts # Ollama 向量计算
-│   │   ├── drivers/
-│   │   │   ├── IDanmakuDriver.ts # 统一弹幕接口抽象
-│   │   │   ├── BilibiliDriver.ts
-│   │   │   ├── DouyinDriver.ts
-│   │   │   └── KuaishouDriver.ts
+│   │   │   ├── game_master.py       # 游戏主控：发题/判定/结算
+│   │   │   ├── session_manager.py   # 多房间会话隔离
+│   │   │   ├── vector_calculator.py # Ollama 向量计算
+│   │   │   └── danmaku_filter.py    # 弹幕清洗与校验
+│   │   ├── models/
+│   │   │   └── game.py              # Pydantic 数据模型
 │   │   ├── websocket/
-│   │   │   └── SocketHandler.ts  # 房间状态广播
-│   │   └── index.ts              # 服务入口
+│   │   │   └── connection_manager.py # WebSocket 房间广播
+│   │   ├── data/
+│   │   │   └── word_puzzle_repository.py # 题库
+│   │   └── main.py                  # FastAPI 服务入口 + Swagger
+│   ├── Dockerfile
+│   ├── docker-compose.yml           # Redis + Backend 编排
+│   ├── requirements.txt
+│   ├── .env.example
+│   └── .dockerignore
+│
+├── frontend/                        # 前端渲染 (Vue 3 + Vite)
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── TopBar.vue           # 顶部信息区
+│   │   │   ├── DecryptZone.vue      # 核心解密区
+│   │   │   ├── GuessList.vue        # 左侧竞猜榜
+│   │   │   └── Leaderboard.vue      # 右侧实时排行
+│   │   ├── stores/
+│   │   │   └── gameStore.ts         # Pinia 游戏状态
+│   │   └── App.vue
+│   ├── electron/
+│   │   └── main.js                  # Electron 多开入口
 │   ├── .env.example
 │   └── package.json
 │
-├── 📂 client/                    # 前端渲染
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── TopBar.vue        # 顶部信息区
-│   │   │   ├── DecryptZone.vue   # 核心解密区
-│   │   │   ├── GuessList.vue     # 左侧竞猜榜
-│   │   │   └── Leaderboard.vue   # 右侧实时排行
-│   │   ├── stores/
-│   │   │   └── gameStore.ts      # Pinia 游戏状态
-│   │   └── App.vue
-│   ├── electron/
-│   │   └── main.js               # Electron 多开入口
-│   └── package.json
-│
-├── 📂 shared/                    # 共享类型与常量
+├── shared/                          # 共享类型与常量
 │   └── types/
 │       └── game.ts
 │
-├── docker-compose.yml            # 一键部署：Redis + Server
 └── README.md
 ```
 
@@ -338,16 +334,16 @@ wordtoflush/
 
 ```bash
 # 启动后端（单实例驱动多房间）
-cd server && npm run dev
+cd backend && docker compose up -d --build
 
 # 终端 1：B站直播间窗口
-cd client && npm run electron -- --platform=bilibili --roomId=102
+cd frontend && npm run electron -- --platform=bilibili --roomId=102
 
 # 终端 2：抖音直播间窗口
-cd client && npm run electron -- --platform=douyin --roomId=888
+cd frontend && npm run electron -- --platform=douyin --roomId=888
 
 # 终端 3：快手直播间窗口
-cd client && npm run electron -- --platform=kuaishou --roomId=666
+cd frontend && npm run electron -- --platform=kuaishou --roomId=666
 ```
 
 ### OBS 窗口捕获设置

@@ -1,0 +1,116 @@
+import json
+
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.core.session_manager import SessionManager
+from app.core.game_master import GameMaster
+from app.core.vector_calculator import VectorCalculator
+from app.websocket.connection_manager import ConnectionManager
+
+app = FastAPI(
+    title="WordToFlush",
+    description="AI 驱动的多端弹幕猜词互动游戏系统 API",
+    version="0.1.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+vector_calculator = VectorCalculator()
+game_master = GameMaster(vector_calculator)
+session_manager = SessionManager(game_master)
+connection_manager = ConnectionManager()
+
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
+
+@app.get("/api/rooms")
+async def list_rooms():
+    return {"rooms": session_manager.get_active_rooms()}
+
+
+@app.post("/api/rooms/{room_id}/next-puzzle")
+async def next_puzzle(
+    room_id: str,
+    platform: str = Query("bilibili"),
+):
+    room = session_manager.get_room(room_id)
+    if not room:
+        room = await session_manager.create_room(room_id, platform)
+
+    room = await session_manager.next_puzzle(room_id)
+    if room and room.current_puzzle:
+        puzzle_data = room.current_puzzle.model_dump(by_alias=True)
+        state_data = room.model_dump(by_alias=True)
+        await connection_manager.broadcast(room_id, "game:newPuzzle", puzzle_data)
+        await connection_manager.broadcast(room_id, "game:state", state_data)
+
+    return {
+        "status": "ok",
+        "puzzle": room.current_puzzle.model_dump(by_alias=True) if room and room.current_puzzle else None,
+    }
+
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    current_room_id: str | None = None
+
+    try:
+        while True:
+            raw = await websocket.receive_text()
+            message = json.loads(raw)
+            event = message.get("event", "")
+            data = message.get("data", {})
+
+            if event == "room:join":
+                room_id = data.get("roomId", "default")
+                platform = data.get("platform", "bilibili")
+                current_room_id = room_id
+
+                await session_manager.create_room(room_id, platform)
+                await connection_manager.connect(websocket, room_id)
+
+                room_state = session_manager.get_room(room_id)
+                if room_state:
+                    await websocket.send_json({
+                        "event": "game:state",
+                        "data": room_state.model_dump(by_alias=True),
+                    })
+
+            elif event == "room:leave":
+                if current_room_id:
+                    connection_manager.disconnect(websocket, current_room_id)
+
+            elif event == "game:nextPuzzle":
+                room_id = data.get("roomId", current_room_id)
+                if room_id:
+                    room_state = await session_manager.next_puzzle(room_id)
+                    if room_state and room_state.current_puzzle:
+                        await connection_manager.broadcast(
+                            room_id,
+                            "game:newPuzzle",
+                            room_state.current_puzzle.model_dump(by_alias=True),
+                        )
+                        await connection_manager.broadcast(
+                            room_id,
+                            "game:state",
+                            room_state.model_dump(by_alias=True),
+                        )
+
+    except WebSocketDisconnect:
+        pass
+    finally:
+        if current_room_id:
+            connection_manager.disconnect(websocket, current_room_id)

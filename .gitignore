@@ -4,3 +4,9 @@ dist/
 *.log
 .DS_Store
 .vite/
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/

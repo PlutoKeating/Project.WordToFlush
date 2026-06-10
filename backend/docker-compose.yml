@@ -1,0 +1,28 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: word-to-flush-backend-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: word-to-flush-backend:latest
+    container_name: word-to-flush-backend
+    ports:
+      - '${HOST_BIND_PORT:-8000}:8000'
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    restart: unless-stopped
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+
+volumes:
+  redis-data:
