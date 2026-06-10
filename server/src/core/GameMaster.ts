@@ -1,6 +1,7 @@
 import type { Platform, WordPuzzle, RoomState, GuessRecord } from '@shared/types/game'
 import { WordPuzzleRepository } from '../data/WordPuzzleRepository'
 import { VectorCalculator } from './VectorCalculator'
+import { cleanDanmaku } from '../utils/danmakuFilter'
 
 export class GameMaster {
   private vectorCalculator: VectorCalculator
@@ -42,9 +43,14 @@ export class GameMaster {
     roomState: RoomState,
     userId: string,
     userName: string,
-    guess: string
+    rawGuess: string
   ): Promise<GuessRecord | null> {
     if (!roomState.currentPuzzle) return null
+
+    const cleaned = cleanDanmaku(rawGuess)
+    if (!cleaned.valid) return null
+
+    const guess = cleaned.word
 
     const affinity = await this.vectorCalculator.calculateAffinity(
       guess,
