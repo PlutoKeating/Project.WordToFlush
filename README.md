@@ -302,7 +302,8 @@ wordtoflush/
 │   │   ├── websocket/
 │   │   │   └── connection_manager.py # WebSocket 房间广播
 │   │   ├── data/
-│   │   │   └── word_puzzle_repository.py # 题库
+│   │   │   ├── word_data/           # 词库数据（每分类一个JSON，文件名即分类名）
+│   │   │   └── word_puzzle_repository.py # 题库加载器（动态扫描JSON）
 │   │   └── main.py                  # FastAPI 服务入口 + Swagger
 │   ├── Dockerfile
 │   ├── docker-compose.yml           # Redis + Backend 编排

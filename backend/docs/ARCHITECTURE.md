@@ -21,7 +21,8 @@ backend/
 │   ├── websocket/
 │   │   └── connection_manager.py     # WebSocket 房间管理
 │   └── data/
-│       └── word_puzzle_repository.py # 谜题库
+│       ├── word_data/               # 词库JSON数据（每分类一个文件）
+│       └── word_puzzle_repository.py # 谜题库加载器（动态扫描JSON）
 ├── Dockerfile
 ├── docker-compose.yml                # Redis + Backend 编排
 ├── requirements.txt
@@ -92,3 +93,37 @@ Client disconnect → ConnectionManager.disconnect()
   - 会话状态持久化 (多副本)
   - 弹幕队列削峰
   - 嵌入向量缓存 (跨请求复用)
+
+## 词库数据格式
+
+谜题数据存储在 `app/data/word_data/` 目录，每个分类一个 JSON 文件。文件名即为分类名（如 `美食.json`），启动时由 `WordPuzzleRepository` 动态扫描加载。
+
+### JSON 文件格式
+
+每个文件包含一个 JSON 数组，每项为一个谜题对象：
+
+```json
+[
+  {
+    "id": "p001",
+    "word": "火锅",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy",
+    "hints": ["热气腾腾", "多人共享", "麻辣"]
+  }
+]
+```
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `id` | string | 是 | 谜题唯一标识 |
+| `word` | string | 是 | 谜底（2-4 个中文字符） |
+| `wordLength` | int | 是 | 谜底字数 |
+| `category` | string | 否* | 分类名（*字段存在但会被文件名覆盖） |
+| `difficulty` | string | 是 | 难度：`easy` / `medium` / `hard` |
+| `hints` | string[] | 是 | 提示词列表（用于星级进阶揭示） |
+
+### 添加新分类
+
+在 `app/data/word_data/` 下新建 `<分类名>.json` 文件，按上述格式写入谜题数据即可，无需修改任何业务代码。服务重启后自动生效。
