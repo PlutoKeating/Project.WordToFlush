@@ -1,0 +1,30 @@
+{
+  "name": "wordtoflush-client",
+  "version": "0.1.0",
+  "description": "WordToFlush frontend client - Vue 3 + Vite",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "electron": "electron electron/main.js",
+    "electron:multi": "node electron/multi.js",
+    "lint": "eslint src/**/*.{ts,vue}",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "gsap": "^3.12.0",
+    "pinia": "^2.1.0",
+    "socket.io-client": "^4.7.0",
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "autoprefixer": "^10.4.0",
+    "electron": "^30.0.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.4.0",
+    "vite": "^5.4.0",
+    "vue-tsc": "^2.0.0"
+  }
+}

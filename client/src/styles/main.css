@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #ff6b6b;
+  --color-secondary: #4ecdc4;
+  --color-dark: #1a1a2e;
+  --color-accent: #e94560;
+}
+
+body {
+  background-color: #1a1a2e;
+  color: #ffffff;
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
