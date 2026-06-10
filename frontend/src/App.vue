@@ -2,6 +2,7 @@
 import TopBar from './components/TopBar.vue'
 import DecryptZone from './components/DecryptZone.vue'
 import GuessList from './components/GuessList.vue'
+import GuessInput from './components/GuessInput.vue'
 import Leaderboard from './components/Leaderboard.vue'
 import { useGameStore } from './stores/gameStore'
 import { onMounted } from 'vue'
@@ -23,8 +24,7 @@ onMounted(() => {
     <div class="flex-1 flex overflow-hidden">
       <GuessList class="w-1/3" />
       <div class="w-1/3 flex items-center justify-center">
-        <!-- 动态特效区 -->
-        <div class="text-secondary text-sm opacity-50">特效区</div>
+        <GuessInput />
       </div>
       <Leaderboard class="w-1/3" />
     </div>

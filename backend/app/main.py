@@ -93,6 +93,29 @@ async def websocket_endpoint(websocket: WebSocket):
                 if current_room_id:
                     connection_manager.disconnect(websocket, current_room_id)
 
+            elif event == "game:guess":
+                room_id = data.get("roomId", current_room_id)
+                user_id = data.get("userId", "unknown")
+                user_name = data.get("userName", "匿名")
+                guess = data.get("guess", "")
+                if room_id and guess:
+                    room_state = session_manager.get_room(room_id)
+                    if room_state:
+                        record = await game_master.process_guess(
+                            room_state, user_id, user_name, guess
+                        )
+                        if record:
+                            await connection_manager.broadcast(
+                                room_id,
+                                "game:guessResult",
+                                record.model_dump(by_alias=True),
+                            )
+                            await connection_manager.broadcast(
+                                room_id,
+                                "game:state",
+                                room_state.model_dump(by_alias=True),
+                            )
+
             elif event == "game:nextPuzzle":
                 room_id = data.get("roomId", current_room_id)
                 if room_id:

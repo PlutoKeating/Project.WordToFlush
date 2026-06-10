@@ -1,8 +1,11 @@
 import time
-from app.models.game import WordPuzzle, RoomState, GuessRecord, Platform
+from app.models.game import WordPuzzle, RoomState, GuessRecord, Player, Platform
 from app.data.word_puzzle_repository import WordPuzzleRepository
 from app.core.vector_calculator import VectorCalculator
 from app.core.danmaku_filter import clean_danmaku
+
+STAR_THRESHOLD = 0.85
+MAX_STAR = 5
 
 
 class GameMaster:
@@ -31,8 +34,18 @@ class GameMaster:
         room_state.current_puzzle = puzzle
         room_state.guess_board = []
         room_state.highest_affinity = 0.0
+        room_state.star_level = 0
+
+        for p in room_state.leaderboard:
+            p.current_score = 0
 
         return puzzle
+
+    def get_available_hints(self, room_state: RoomState) -> list[str]:
+        if not room_state.current_puzzle:
+            return []
+        hints = room_state.current_puzzle.hints
+        return hints[:room_state.star_level]
 
     async def process_guess(
         self,
@@ -57,6 +70,19 @@ class GameMaster:
         if affinity > room_state.highest_affinity:
             room_state.highest_affinity = affinity
 
+        score = round(affinity * 100)
+
+        player = self._get_or_create_player(room_state, user_id, user_name)
+        player.guess_count += 1
+        player.current_score += score
+        player.total_score += score
+
+        if (
+            room_state.highest_affinity >= STAR_THRESHOLD
+            and room_state.star_level < MAX_STAR
+        ):
+            room_state.star_level = min(MAX_STAR, room_state.star_level + 1)
+
         record = GuessRecord(
             user_id=user_id,
             user_name=user_name,
@@ -68,4 +94,17 @@ class GameMaster:
         room_state.guess_board.insert(0, record)
         room_state.guess_board = room_state.guess_board[:20]
 
+        room_state.leaderboard.sort(key=lambda p: p.total_score, reverse=True)
+
         return record
+
+    def _get_or_create_player(
+        self, room_state: RoomState, user_id: str, user_name: str
+    ) -> Player:
+        for p in room_state.leaderboard:
+            if p.user_id == user_id:
+                p.user_name = user_name
+                return p
+        player = Player(user_id=user_id, user_name=user_name)
+        room_state.leaderboard.append(player)
+        return player

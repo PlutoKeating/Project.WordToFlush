@@ -9,6 +9,11 @@ const starDisplay = computed(() => {
   return '★'.repeat(store.roomState.starLevel) + '☆'.repeat(max - store.roomState.starLevel)
 })
 
+const connStatus = computed(() => {
+  if (!store.connected) return { text: '未连接', color: 'text-red-500' }
+  return { text: '已连接', color: 'text-green-500' }
+})
+
 function requestNextPuzzle() {
   store.nextPuzzle()
 }
@@ -16,8 +21,11 @@ function requestNextPuzzle() {
 
 <template>
   <div class="flex items-center justify-between px-4 py-2 bg-dark/80 border-b border-gray-700">
-    <div class="text-sm text-gray-400">
-      赛季 {{ store.roomState.streak > 0 ? 'S' + store.roomState.streak : 'S1' }}
+    <div class="flex items-center gap-2">
+      <span class="text-sm text-gray-400">
+        赛季 {{ store.roomState.streak > 0 ? 'S' + store.roomState.streak : 'S1' }}
+      </span>
+      <span :class="['text-xs', connStatus.color]">● {{ connStatus.text }}</span>
     </div>
     <div class="text-lg text-yellow-400">
       {{ starDisplay }}
