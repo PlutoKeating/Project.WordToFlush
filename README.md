@@ -13,7 +13,7 @@
    <a href="#"><img src="https://img.shields.io/badge/Python-3.12%2B-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"/></a>
    <a href="#"><img src="https://img.shields.io/badge/FastAPI-0.115%2B-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI"/></a>
   <a href="#"><img src="https://img.shields.io/badge/Ollama-Local%20AI-000000?style=flat-square&logo=ollama&logoColor=white" alt="Ollama"/></a>
-  <a href="#"><img src="https://img.shields.io/badge/WebSocket-RealTime-010101?style=flat-square&logo=socket.io&logoColor=white" alt="WebSocket"/></a>
+   <a href="#"><img src="https://img.shields.io/badge/WebSocket-Native%20JSON-010101?style=flat-square&logo=websocket&logoColor=white" alt="WebSocket"/></a>
   <a href="#"><img src="https://img.shields.io/badge/Redis-Session%20Cache-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis"/></a>
   <a href="#"><img src="https://img.shields.io/badge/Vite-Vue3%2FReact-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite"/></a>
   <a href="#"><img src="https://img.shields.io/badge/Electron-OBS%20Ready-47848F?style=flat-square&logo=electron&logoColor=white" alt="Electron"/></a>
@@ -96,7 +96,7 @@ graph TB
     end
 
     subgraph "Core Server (Backend)"
-        WS[WebSocket / Socket.io<br/>多房间管理]
+        WS[FastAPI WebSocket<br/>多房间广播]
         SM[Session Manager<br/>租户/房间隔离]
         RC[Redis Cache<br/>状态持久化 + 队列]
         VC[Vector Calculator<br/>Ollama API 调用]
