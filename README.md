@@ -181,8 +181,8 @@ graph TB
 ### 1. 启动 Ollama 并下载嵌入模型
 
 ```bash
-# 启动 Ollama 服务
-ollama serve
+# 启动 Ollama 服务（Linux 下使用 Docker 部署时，必须监听 0.0.0.0）
+OLLAMA_HOST=0.0.0.0:11434 ollama serve
 
 # 拉取中文语义嵌入模型（推荐，维度 1024）
 ollama pull bge-large-zh
@@ -190,6 +190,8 @@ ollama pull bge-large-zh
 # 或轻量版（维度 384，CPU 友好）
 ollama pull all-minilm
 ```
+
+> **Linux 部署注意**：Ollama 默认只监听 `127.0.0.1`，Docker 容器无法访问。启动时需设置环境变量 `OLLAMA_HOST=0.0.0.0:11434`，或配置 systemd 覆盖文件。
 
 ### 2. 配置并启动后端（Docker Compose，唯一部署方式）
 

@@ -10,6 +10,10 @@ cp .env.example .env      # 按需编辑端口 / Ollama 地址
 docker compose up -d --build
 ```
 
+> **前置要求**：宿主机 Ollama 必须监听 `0.0.0.0:11434`（默认仅监听 `127.0.0.1`，Docker 容器无法访问）。
+> 启动时使用 `OLLAMA_HOST=0.0.0.0:11434 ollama serve`，或配置 systemd 覆盖文件。
+> 详见项目根目录 `README.md` 第一节。
+
 启动后:
 - API 服务: `http://localhost:<HOST_BIND_PORT>` (默认 8000)
 - Swagger UI: `http://localhost:8000/docs`

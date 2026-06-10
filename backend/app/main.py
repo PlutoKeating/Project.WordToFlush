@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,6 +9,8 @@ from app.core.session_manager import SessionManager
 from app.core.game_master import GameMaster
 from app.core.vector_calculator import VectorCalculator
 from app.websocket.connection_manager import ConnectionManager
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="WordToFlush",
@@ -118,9 +121,17 @@ async def websocket_endpoint(websocket: WebSocket):
                 if room_id and guess:
                     room_state = session_manager.get_room(room_id)
                     if room_state:
-                        result = await game_master.process_guess(
-                            room_state, user_id, user_name, guess
-                        )
+                        try:
+                            result = await game_master.process_guess(
+                                room_state, user_id, user_name, guess
+                            )
+                        except Exception:
+                            logger.exception("process_guess failed for room=%s", room_id)
+                            await websocket.send_json({
+                                "event": "error",
+                                "data": {"message": "处理猜测时出错，请重试"},
+                            })
+                            continue
                         if result:
                             record = result["record"]
                             await connection_manager.broadcast(
@@ -164,6 +175,8 @@ async def websocket_endpoint(websocket: WebSocket):
 
     except WebSocketDisconnect:
         pass
+    except Exception:
+        logger.exception("WebSocket error in room=%s", current_room_id)
     finally:
         if current_room_id:
             connection_manager.disconnect(websocket, current_room_id)
