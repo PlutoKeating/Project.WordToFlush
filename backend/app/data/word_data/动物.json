@@ -1,34 +1,226 @@
 [
-  {"id": "dw001", "word": "猫", "wordLength": 1, "category": "动物", "difficulty": "easy", "hints": ["喵喵叫", "抓老鼠", "宠物"]},
-  {"id": "dw002", "word": "狗", "wordLength": 1, "category": "动物", "difficulty": "easy", "hints": ["汪汪叫", "人类朋友", "看家"]},
-  {"id": "dw003", "word": "鱼", "wordLength": 1, "category": "动物", "difficulty": "easy", "hints": ["水里游", "有鳞片", "不会闭眼"]},
-  {"id": "dw004", "word": "鸟", "wordLength": 1, "category": "动物", "difficulty": "easy", "hints": ["有羽毛", "会飞", "在树上"]},
-  {"id": "dw005", "word": "兔子", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["长耳朵", "爱吃萝卜", "蹦蹦跳"]},
-  {"id": "dw006", "word": "老鼠", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["尖嘴", "偷吃粮食", "怕猫"]},
-  {"id": "dw007", "word": "老虎", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["百兽之王", "条纹皮毛", "凶猛"]},
-  {"id": "dw008", "word": "狮子", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["雄壮", "鬃毛", "草原之王"]},
-  {"id": "dw009", "word": "大象", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["长鼻子", "大耳朵", "陆地最大"]},
-  {"id": "dw010", "word": "熊猫", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["黑白两色", "吃竹子", "国宝"]},
-  {"id": "dw011", "word": "猴子", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["灵活", "爱吃香蕉", "有尾巴"]},
-  {"id": "dw012", "word": "蛇", "wordLength": 1, "category": "动物", "difficulty": "easy", "hints": ["无脚", "爬行", "有毒牙"]},
-  {"id": "dw013", "word": "青蛙", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["呱呱叫", "捉害虫", "两栖"]},
-  {"id": "dw014", "word": "蝴蝶", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["美丽翅膀", "花间飞舞", "破茧"]},
-  {"id": "dw015", "word": "蜻蜓", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["大眼睛", "细长身", "夏天空飞"]},
-  {"id": "dw016", "word": "蚂蚁", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["小体型", "群居", "搬食物"]},
-  {"id": "dw017", "word": "蜜蜂", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["采花粉", "酿蜂蜜", "嗡嗡叫"]},
-  {"id": "dw018", "word": "蜘蛛", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["八条腿", "织网", "捕昆虫"]},
-  {"id": "dw019", "word": "蜗牛", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["背壳", "慢慢爬", "雨后出现"]},
-  {"id": "dw020", "word": "乌龟", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["硬壳", "爬行", "长寿"]},
-  {"id": "dw021", "word": "海豚", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["海中哺乳", "聪明", "跳跃"]},
-  {"id": "dw022", "word": "鲸鱼", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["海洋巨兽", "喷水柱", "哺乳动物"]},
-  {"id": "dw023", "word": "鲨鱼", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["海中猎手", "锋利牙齿", "背鳍"]},
-  {"id": "dw024", "word": "企鹅", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["不会飞", "南极", "黑白礼服"]},
-  {"id": "dw025", "word": "孔雀", "wordLength": 2, "category": "动物", "difficulty": "easy", "hints": ["开屏", "绚丽羽毛", "骄傲"]},
-  {"id": "dw026", "word": "马", "wordLength": 1, "category": "动物", "difficulty": "easy", "hints": ["奔跑", "四条腿", "骑乘"]},
-  {"id": "dw027", "word": "牛", "wordLength": 1, "category": "动物", "difficulty": "easy", "hints": ["耕地", "有角", "吃草"]},
-  {"id": "dw028", "word": "羊", "wordLength": 1, "category": "动物", "difficulty": "easy", "hints": ["咩咩叫", "毛茸茸", "吃草"]},
-  {"id": "dw029", "word": "鸡", "wordLength": 1, "category": "动物", "difficulty": "easy", "hints": ["公鸡打鸣", "下蛋", "有羽毛"]},
-  {"id": "dw030", "word": "鸭", "wordLength": 1, "category": "动物", "difficulty": "easy", "hints": ["扁嘴巴", "会游泳", "嘎嘎叫"]},
-  {"id": "dw031", "word": "猫头鹰", "wordLength": 3, "category": "动物", "difficulty": "easy", "hints": ["夜行", "大眼睛", "抓老鼠"]},
-  {"id": "dw032", "word": "长颈鹿", "wordLength": 3, "category": "动物", "difficulty": "easy", "hints": ["脖子很长", "吃树叶", "斑点花纹"]}
+  {
+    "id": "dw001",
+    "word": "猫",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw002",
+    "word": "狗",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw003",
+    "word": "鱼",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw004",
+    "word": "鸟",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw005",
+    "word": "兔子",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw006",
+    "word": "老鼠",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw007",
+    "word": "老虎",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw008",
+    "word": "狮子",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw009",
+    "word": "大象",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw010",
+    "word": "熊猫",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw011",
+    "word": "猴子",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw012",
+    "word": "蛇",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw013",
+    "word": "青蛙",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw014",
+    "word": "蝴蝶",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw015",
+    "word": "蜻蜓",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw016",
+    "word": "蚂蚁",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw017",
+    "word": "蜜蜂",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw018",
+    "word": "蜘蛛",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw019",
+    "word": "蜗牛",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw020",
+    "word": "乌龟",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw021",
+    "word": "海豚",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw022",
+    "word": "鲸鱼",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw023",
+    "word": "鲨鱼",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw024",
+    "word": "企鹅",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw025",
+    "word": "孔雀",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw026",
+    "word": "马",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw027",
+    "word": "牛",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw028",
+    "word": "羊",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw029",
+    "word": "鸡",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw030",
+    "word": "鸭",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw031",
+    "word": "猫头鹰",
+    "wordLength": 3,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw032",
+    "word": "长颈鹿",
+    "wordLength": 3,
+    "category": "动物",
+    "difficulty": "easy"
+  }
 ]

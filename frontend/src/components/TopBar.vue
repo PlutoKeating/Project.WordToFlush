@@ -4,11 +4,6 @@ import { computed } from 'vue'
 
 const store = useGameStore()
 
-const starDisplay = computed(() => {
-  const max = 5
-  return '★'.repeat(store.roomState.starLevel) + '☆'.repeat(max - store.roomState.starLevel)
-})
-
 const connStatus = computed(() => {
   if (!store.connected) return { text: '未连接', color: 'text-red-500' }
   return { text: '已连接', color: 'text-green-500' }
@@ -26,9 +21,6 @@ function requestNextPuzzle() {
         赛季 {{ store.roomState.streak > 0 ? 'S' + store.roomState.streak : 'S1' }}
       </span>
       <span :class="['text-xs', connStatus.color]">● {{ connStatus.text }}</span>
-    </div>
-    <div class="text-lg text-yellow-400">
-      {{ starDisplay }}
     </div>
     <div class="flex gap-2">
       <button

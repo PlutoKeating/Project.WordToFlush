@@ -20,7 +20,6 @@ class WordPuzzle(CamelModel):
     word_length: int
     category: str
     difficulty: Difficulty
-    hints: list[str]
 
 
 class GuessRecord(CamelModel):
@@ -44,7 +43,6 @@ class RoomState(CamelModel):
     platform: Platform
     current_puzzle: Optional[WordPuzzle] = None
     streak: int = 0
-    star_level: int = 0
     highest_affinity: float = 0.0
     guess_board: list[GuessRecord] = []
     leaderboard: list[Player] = []

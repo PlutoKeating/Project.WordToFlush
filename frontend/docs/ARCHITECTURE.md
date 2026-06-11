@@ -9,7 +9,7 @@ frontend/
 │   ├── App.vue                      # 根组件 (URL 参数解析 + 连接)
 │   ├── env.d.ts                     # Vite 环境变量类型声明
 │   ├── components/
-│   │   ├── TopBar.vue               # 顶部: 赛季/星级/换题按钮
+│   │   ├── TopBar.vue               # 顶部: 赛季/换题按钮
 │   │   ├── DecryptZone.vue          # 中部: 分类/掩码/关联度/猜中揭示
 │   │   ├── GuessList.vue            # 左侧: 竞猜榜 (词汇去重, 按准确率排序)
 │   │   ├── GuessInput.vue           # 中部: 猜词输入/结果反馈/猜中弹窗
@@ -59,7 +59,7 @@ WebSocket.onmessage:
 
 ```text
 App.vue
-├── TopBar.vue         (读取 roomState.streak, starLevel, 触发 nextPuzzle)
+├── TopBar.vue         (读取 roomState.streak, 触发 nextPuzzle)
 ├── DecryptZone.vue    (读取 roomState.currentPuzzle, highestAffinity, puzzleSolved)
 ├── GuessList.vue      (读取 roomState.guessBoard, 按词汇去重 + 准确率排序)
 ├── GuessInput.vue     (猜词输入 + 触发 sendGuess, 显示 guessResult 和 puzzleSolved 弹窗)

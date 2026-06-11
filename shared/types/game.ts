@@ -8,7 +8,6 @@ export interface WordPuzzle {
   wordLength: number
   category: string
   difficulty: Difficulty
-  hints: string[]
 }
 
 export interface GuessRecord {
@@ -32,7 +31,6 @@ export interface RoomState {
   platform: Platform
   currentPuzzle: WordPuzzle | null
   streak: number
-  starLevel: number
   highestAffinity: number
   guessBoard: GuessRecord[]
   leaderboard: Player[]
@@ -44,8 +42,6 @@ export interface RoomConfig {
   roomId: string
   platform: Platform
   autoNextDelay: number
-  starThreshold: number
-  maxHints: number
 }
 
 export interface PuzzleSolvedEvent {

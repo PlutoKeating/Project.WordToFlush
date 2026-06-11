@@ -55,8 +55,7 @@
     "word": "笔记本",
     "wordLength": 3,
     "category": "学习用品",
-    "difficulty": "easy",
-    "hints": ["学生常用", "可以写字", "便携"]
+    "difficulty": "easy"
   }
 }
 ```
@@ -119,7 +118,6 @@
     "platform": "bilibili",
     "currentPuzzle": { ... },
     "streak": 0,
-    "starLevel": 0,
     "highestAffinity": 0.85,
     "guessBoard": [ ... ],
     "leaderboard": [ ... ],
@@ -140,8 +138,7 @@
     "word": "铅笔盒",
     "wordLength": 3,
     "category": "学习用品",
-    "difficulty": "easy",
-    "hints": ["方形", "收纳文具", "带拉链"]
+    "difficulty": "easy"
   }
 }
 ```
@@ -199,7 +196,6 @@
 | `platform` | string | 平台: "bilibili" \| "douyin" \| "kuaishou" |
 | `currentPuzzle` | WordPuzzle \| null | 当前谜题 |
 | `streak` | int | 连胜次数 |
-| `starLevel` | int | 星级 (0-5) |
 | `highestAffinity` | float | 当前最高关联度 (0.0-1.0) |
 | `guessBoard` | GuessRecord[] | 竞猜记录列表 |
 | `leaderboard` | Player[] | 积分排行榜 |
@@ -215,7 +211,6 @@
 | `wordLength` | int | 字数 |
 | `category` | string | 分类 |
 | `difficulty` | string | 难度: "easy" \| "medium" \| "hard" |
-| `hints` | string[] | 提示词列表 |
 
 ### GuessRecord
 

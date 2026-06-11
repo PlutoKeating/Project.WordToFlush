@@ -13,7 +13,6 @@ export const useGameStore = defineStore('game', () => {
     platform: 'bilibili',
     currentPuzzle: null,
     streak: 0,
-    starLevel: 0,
     highestAffinity: 0,
     guessBoard: [],
     leaderboard: [],

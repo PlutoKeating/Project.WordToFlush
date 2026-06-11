@@ -5,9 +5,6 @@ from app.core.vector_calculator import VectorCalculator
 from app.core.danmaku_filter import clean_danmaku
 from app.config import WIN_AFFINITY_THRESHOLD
 
-STAR_THRESHOLD = 0.85
-MAX_STAR = 5
-
 
 class GameMaster:
     def __init__(self, vector_calculator: VectorCalculator):
@@ -20,7 +17,6 @@ class GameMaster:
             platform=platform,
             current_puzzle=None,
             streak=0,
-            star_level=0,
             highest_affinity=0.0,
             guess_board=[],
             leaderboard=[],
@@ -37,19 +33,12 @@ class GameMaster:
         room_state.current_puzzle = puzzle
         room_state.guess_board = []
         room_state.highest_affinity = 0.0
-        room_state.star_level = 0
         room_state.solved_by = None
 
         for p in room_state.leaderboard:
             p.current_score = 0
 
         return puzzle
-
-    def get_available_hints(self, room_state: RoomState) -> list[str]:
-        if not room_state.current_puzzle:
-            return []
-        hints = room_state.current_puzzle.hints
-        return hints[:room_state.star_level]
 
     async def process_guess(
         self,
@@ -70,6 +59,9 @@ class GameMaster:
 
         guess = cleaned["word"]
 
+        if len(guess) != len(room_state.current_puzzle.word):
+            return None
+
         affinity = await self.vector_calculator.calculate_affinity(
             guess, room_state.current_puzzle.word
         )
@@ -87,12 +79,6 @@ class GameMaster:
         is_solved = affinity >= WIN_AFFINITY_THRESHOLD
         if is_solved:
             room_state.solved_by = user_name
-
-        if (
-            room_state.highest_affinity >= STAR_THRESHOLD
-            and room_state.star_level < MAX_STAR
-        ):
-            room_state.star_level = min(MAX_STAR, room_state.star_level + 1)
 
         record = GuessRecord(
             user_id=user_id,

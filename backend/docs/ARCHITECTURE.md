@@ -109,8 +109,7 @@ Client disconnect → ConnectionManager.disconnect()
     "word": "火锅",
     "wordLength": 2,
     "category": "美食",
-    "difficulty": "easy",
-    "hints": ["热气腾腾", "多人共享", "麻辣"]
+    "difficulty": "easy"
   }
 ]
 ```
@@ -122,7 +121,6 @@ Client disconnect → ConnectionManager.disconnect()
 | `wordLength` | int | 是 | 谜底字数 |
 | `category` | string | 否* | 分类名（*字段存在但会被文件名覆盖） |
 | `difficulty` | string | 是 | 难度：`easy` / `medium` / `hard` |
-| `hints` | string[] | 是 | 提示词列表（用于星级进阶揭示） |
 
 ### 添加新分类
 
