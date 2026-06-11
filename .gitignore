@@ -10,3 +10,11 @@ __pycache__/
 .venv/
 venv/
 env/
+
+*.vue.js
+*.vue.js.map
+shared/types/*.js
+shared/types/*.js.map
+frontend/src/**/*.js
+frontend/src/**/*.js.map
+__vite_*
