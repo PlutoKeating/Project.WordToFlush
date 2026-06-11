@@ -67,6 +67,7 @@ function handleKeydown(e: KeyboardEvent) {
           v-model="guessText"
           type="text"
           placeholder="输入猜测..."
+          minlength="1"
           maxlength="4"
           @keydown="handleKeydown"
           class="flex-1 px-2 py-1 text-sm rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-primary"

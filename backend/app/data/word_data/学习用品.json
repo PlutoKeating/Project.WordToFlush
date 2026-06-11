@@ -1,26 +1,34 @@
 [
-  {
-    "id": "p001",
-    "word": "笔记本",
-    "wordLength": 3,
-    "category": "学习用品",
-    "difficulty": "easy",
-    "hints": ["学生常用", "可以写字", "便携"]
-  },
-  {
-    "id": "p002",
-    "word": "铅笔盒",
-    "wordLength": 3,
-    "category": "学习用品",
-    "difficulty": "easy",
-    "hints": ["方形", "收纳文具", "带拉链"]
-  },
-  {
-    "id": "p003",
-    "word": "橡皮擦",
-    "wordLength": 3,
-    "category": "学习用品",
-    "difficulty": "easy",
-    "hints": ["消除痕迹", "白色", "软软的"]
-  }
+  {"id": "xx001", "word": "笔", "wordLength": 1, "category": "学习用品", "difficulty": "easy", "hints": ["写字画画", "有墨", "常见文具"]},
+  {"id": "xx002", "word": "尺", "wordLength": 1, "category": "学习用品", "difficulty": "easy", "hints": ["量长度", "画直线", "有刻度"]},
+  {"id": "xx003", "word": "橡皮", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["擦除笔迹", "软软的", "白色"]},
+  {"id": "xx004", "word": "铅笔", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["写字用", "木头包裹", "可削"]},
+  {"id": "xx005", "word": "钢笔", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["金属笔尖", "吸墨水", "写字流畅"]},
+  {"id": "xx006", "word": "毛笔", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["软毛头", "蘸墨", "书法用"]},
+  {"id": "xx007", "word": "书包", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["背在肩上", "装书本", "学生必备"]},
+  {"id": "xx008", "word": "课本", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["教材", "上课用", "有课文"]},
+  {"id": "xx009", "word": "练习册", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["做题目", "课后作业", "有空格"]},
+  {"id": "xx010", "word": "笔记本", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["学生常用", "可以写字", "便携"]},
+  {"id": "xx011", "word": "铅笔盒", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["方形", "收纳文具", "带拉链"]},
+  {"id": "xx012", "word": "橡皮擦", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["消除痕迹", "白色", "软软的"]},
+  {"id": "xx013", "word": "削笔刀", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["削尖铅笔", "有刀片", "旋扭"]},
+  {"id": "xx014", "word": "修正带", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["覆盖错字", "白色胶带", "一拉一贴"]},
+  {"id": "xx015", "word": "圆规", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["画圆形", "两脚张开", "金属尖"]},
+  {"id": "xx016", "word": "三角板", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["三角形", "画角度", "透明塑料"]},
+  {"id": "xx017", "word": "量角器", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["半圆形", "量角度", "有刻度"]},
+  {"id": "xx018", "word": "文具盒", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["收纳文具", "多层分类", "盖子可开合"]},
+  {"id": "xx019", "word": "剪刀", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["两刃交叉", "剪纸剪布", "手工课"]},
+  {"id": "xx020", "word": "胶水", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["粘合纸张", "液体", "白色"]},
+  {"id": "xx021", "word": "胶带", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["透明带", "有粘性", "撕开可用"]},
+  {"id": "xx022", "word": "字典", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["查字", "很厚重", "按拼音"]},
+  {"id": "xx023", "word": "彩笔", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["多种颜色", "画画用", "水溶性"]},
+  {"id": "xx024", "word": "蜡笔", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["彩色棒", "油画效果", "不透明"]},
+  {"id": "xx025", "word": "水彩笔", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["彩色墨水", "笔头软", "涂色用"]},
+  {"id": "xx026", "word": "粉笔", "wordLength": 2, "category": "学习用品", "difficulty": "easy", "hints": ["白色长条", "在黑板上写", "有粉尘"]},
+  {"id": "xx027", "word": "黑板擦", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["矩形", "擦黑板", "有毛毡"]},
+  {"id": "xx028", "word": "文件夹", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["整理纸张", "塑料壳", "按扣"]},
+  {"id": "xx029", "word": "订书机", "wordLength": 3, "category": "学习用品", "difficulty": "medium", "hints": ["装订纸张", "金属钉", "按压"]},
+  {"id": "xx030", "word": "便签纸", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["小方形", "可粘贴", "记备忘"]},
+  {"id": "xx031", "word": "马克笔", "wordLength": 3, "category": "学习用品", "difficulty": "medium", "hints": ["粗头", "颜色鲜艳", "记号用"]},
+  {"id": "xx032", "word": "作业本", "wordLength": 3, "category": "学习用品", "difficulty": "easy", "hints": ["有格子", "写作业", "上交批改"]}
 ]

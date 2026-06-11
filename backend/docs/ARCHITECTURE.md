@@ -118,7 +118,7 @@ Client disconnect → ConnectionManager.disconnect()
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `id` | string | 是 | 谜题唯一标识 |
-| `word` | string | 是 | 谜底（2-4 个中文字符） |
+| `word` | string | 是 | 谜底（1-4 个中文字符） |
 | `wordLength` | int | 是 | 谜底字数 |
 | `category` | string | 否* | 分类名（*字段存在但会被文件名覆盖） |
 | `difficulty` | string | 是 | 难度：`easy` / `medium` / `hard` |

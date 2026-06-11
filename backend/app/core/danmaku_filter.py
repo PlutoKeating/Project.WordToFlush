@@ -23,7 +23,7 @@ _PUNCT_REGEX = re.compile(
     r"[!！?？。，,\.、：:；;…~～（）()【】\[\]《》\"\"''\"\"''—\-+=\/\\|@#$%^&*◇◆○●◎☆★△▲▽▼□■▷▶◁◀…·‥¨´]"
 )
 
-_CJK_RANGE = re.compile(r"^[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]{2,4}$")
+_CJK_RANGE = re.compile(r"^[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]{1,4}$")
 
 
 def clean_danmaku(raw: str) -> dict:
@@ -44,11 +44,11 @@ def clean_danmaku(raw: str) -> dict:
             "reason": "contains non-CJK after cleaning",
         }
 
-    if len(text) < 2 or len(text) > 4:
+    if len(text) < 1 or len(text) > 4:
         return {
             "valid": False,
             "word": text,
-            "reason": f"length {len(text)} out of [2,4]",
+            "reason": f"length {len(text)} out of [1,4]",
         }
 
     return {"valid": True, "word": text}
