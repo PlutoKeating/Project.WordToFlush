@@ -215,6 +215,12 @@ COMPOSE_PROJECT_NAME=word-to-flush-backend
 # 宿主机映射端口（容器内始终监听 8000）
 HOST_BIND_PORT=8000
 
+# Admin 控制面板配置
+ADMIN_HOST_BIND_PORT=8001
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=your-secure-password
+FLASK_SECRET_KEY=
+
 # Ollama API 地址（docker 内使用 host.docker.internal）
 OLLAMA_HOST=http://host.docker.internal:11434
 OLLAMA_MODEL=bge-large-zh
@@ -229,6 +235,8 @@ BILI_PROJECT_ID=
 ```
 
 > API 文档 (Swagger UI) 启动后访问 `http://localhost:8000/docs`
+>
+> Admin 控制面板启动后访问 `http://localhost:<ADMIN_HOST_BIND_PORT>` (默认 8001)
 
 ### 3. 启动前端（支持多开）
 
@@ -305,6 +313,19 @@ wordtoflush/
 │   │   │   ├── word_data/           # 词库数据（每分类一个JSON，文件名即分类名）
 │   │   │   └── word_puzzle_repository.py # 题库加载器（动态扫描JSON）
 │   │   └── main.py                  # FastAPI 服务入口 + Swagger
+│   ├── admin/                        # Admin 控制面板 (Flask)
+│   │   ├── app.py                    # Flask 应用 + SSE + 自动猜词桥
+│   │   ├── config.py                 # Admin 环境变量读取
+│   │   ├── auth.py                   # 会话登录认证
+│   │   ├── run_admin.py             # 多进程启动入口
+│   │   ├── danmaku/                  # 弹幕采集模块
+│   │   │   ├── douyin.py            # 抖音 WSS 弹幕采集
+│   │   │   ├── bilibili.py          # B站 弹幕采集
+│   │   │   ├── proto_reader.py      # 抖音 Protobuf 解析
+│   │   │   └── manager.py           # 采集器管理
+│   │   ├── dy/                       # 抖音采集参考项目 (TypeScript)
+│   │   ├── bilibili/                  # B站 API 文档
+│   │   └── templates/                # 登录/控制面板 HTML
 │   ├── Dockerfile
 │   ├── docker-compose.yml           # Redis + Backend 编排
 │   ├── requirements.txt

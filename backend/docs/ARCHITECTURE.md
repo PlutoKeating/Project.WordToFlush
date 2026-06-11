@@ -23,6 +23,24 @@ backend/
 │   └── data/
 │       ├── word_data/               # 词库JSON数据（每分类一个文件）
 │       └── word_puzzle_repository.py # 谜题库加载器（动态扫描JSON）
+├── admin/                            # Admin 控制面板 (Flask)
+│   ├── app.py                        # Flask 应用 + SSE + 自动猜词桥
+│   ├── config.py                     # Admin 环境变量读取
+│   ├── auth.py                       # 会话登录认证
+│   ├── run_admin.py                  # 多进程启动入口
+│   ├── danmaku/
+│   │   ├── __init__.py
+│   │   ├── proto_reader.py           # 抖音 Protobuf 二进制解析
+│   │   ├── douyin.py                 # 抖音 WSS 弹幕采集
+│   │   ├── bilibili.py               # B站 弹幕采集
+│   │   └── manager.py                # 采集器管理 + SSE 推送
+│   │   ├── dy/                       # 抖音采集参考项目 (TypeScript)
+│   │   │   └── src/core/            # 原始签名/解析/连接逻辑
+│   │   └── bilibili/                 # B站 API 文档
+│   │       └── README.md
+│   └── templates/
+│       ├── login.html                # 登录页面
+│       └── dashboard.html            # 控制面板主页
 ├── Dockerfile
 ├── docker-compose.yml                # Redis + Backend 编排
 ├── requirements.txt
@@ -37,8 +55,12 @@ backend/
 3. 构建 **Backend** 镜像并启动容器:
    - 基于 `python:3.12-slim`
    - 安装 `requirements.txt` 依赖
-   - 执行 `uvicorn app.main:app --host 0.0.0.0 --port 8000`
-4. 容器内 API 监听 **8000**，宿主机按 `HOST_BIND_PORT` 映射
+   - 调用 `python -m admin.run_admin`
+4. admin.run_admin 通过 `multiprocessing.Process` 启动三个子进程:
+   - **FastAPI** (主进程): `uvicorn app.main:app` 监听 8000
+   - **Flask Admin**: `waitress admin.app:app` 监听 8001
+   - **Auto-Guess Bridge**: WebSocket 连接到 FastAPI 后端，监听 puzzle 状态
+5. 宿主机按 `HOST_BIND_PORT` 映射 8000, `ADMIN_HOST_BIND_PORT` 映射 8001
 
 ## 服务实例化
 
@@ -49,6 +71,32 @@ vector_calculator = VectorCalculator()   # Ollama HTTP 客户端 + 缓存
 game_master = GameMaster(vector_calculator)  # 业务逻辑
 session_manager = SessionManager(game_master)  # 房间管理
 connection_manager = ConnectionManager()   # WS 连接管理
+```
+
+## Admin 模块架构
+
+```
+Admin Dashboard (Flask, port 8001)
+├── /login                          # 登录页面 (HTML)
+├── /                               # 控制面板 (HTML, 需登录)
+├── /api/login (POST)              # 登录认证
+├── /api/logout (POST)             # 退出登录
+├── /api/status (GET)              # 采集器状态
+├── /api/danmaku/start (POST)      # 启动弹幕采集
+├── /api/danmaku/stop (POST)       # 停止弹幕采集
+├── /api/danmaku/stream (GET)      # SSE 实时弹幕流
+├── /api/auto-guess (POST)         # 配置自动猜词
+│
+└── DanmakuManager (asyncio)
+    ├── DouyinCollector     # 抖音 WSS 弹幕采集
+    │   ├── HTTP: 获取直播间信息 (live.douyin.com)
+    │   ├── HTTP: 获取 IM 信息 (webcast/im/fetch)
+    │   └── WSS:  实时弹幕连接 (webcast100-ws-*.douyin.com)
+    ├── BilibiliCollector   # B站 WSS 弹幕采集
+    │   ├── HTTP: 获取弹幕服务器信息 (api.live.bilibili.com)
+    │   └── WSS:  实时弹幕连接
+    └── Auto-Guess Bridge   # 自动猜词桥
+        └── WSS → FastAPI /ws (game:guess 事件提交)
 ```
 
 ## 核心调用链
@@ -90,6 +138,26 @@ Client connect → WS /ws
                     → ConnectionManager.broadcast(复合键, game:state)
 
 Client disconnect → ConnectionManager.disconnect()
+```
+
+### Admin 弹幕采集 → 自动猜词
+
+```
+Admin Dashboard → POST /api/danmaku/start
+  → DanmakuManager.start_collector(platform, room)
+    → DouyinCollector.start() / BilibiliCollector.start()
+      → WSS 连接直播间, 实时接收弹幕
+      → 过滤: 仅保留纯中文文本内容
+      → _on_danmaku → DanmakuManager._publish_danmaku()
+        → SSE 推送到 Dashboard 前端
+        → Auto-Guess Bridge:
+          → 检查是否开启自动猜词
+          → 字数匹配校验 (与当前谜底字数一致)
+          → WSS → FastAPI /ws 发送 game:guess
+
+Auto-Guess Bridge → 维持 WSS 连接到 FastAPI
+  → 监听 game:state 获取当前谜底字数
+  → 将弹幕用户+内容组装为 game:guess 事件提交
 ```
 
 ### 会话隔离机制

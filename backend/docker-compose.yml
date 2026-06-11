@@ -16,6 +16,7 @@ services:
     container_name: word-to-flush-backend
     ports:
       - '${HOST_BIND_PORT:-8000}:8000'
+      - '${ADMIN_HOST_BIND_PORT:-8001}:8001'
     env_file:
       - .env
     depends_on:

@@ -3,8 +3,10 @@
 ## 基础信息
 
 - 后端框架: FastAPI
+- 管理面板: Flask (Admin 控制面板)
 - 交互式文档: 启动后访问 `http://localhost:8000/docs` (Swagger UI)
 - 替代文档: `http://localhost:8000/redoc` (ReDoc)
+- Admin 面板: `http://localhost:<ADMIN_HOST_BIND_PORT>` (默认 8001)
 
 ---
 
@@ -251,3 +253,92 @@
 | `totalScore` | int | 总分 |
 | `currentScore` | int | 当前轮得分 |
 | `guessCount` | int | 猜测次数 |
+
+---
+
+## Admin API
+
+Admin 控制面板 API，运行在端口 8001（容器内）。
+
+### `POST /api/login`
+
+登录认证。用户名和密码通过 `backend/.env` 中的 `ADMIN_USERNAME` / `ADMIN_PASSWORD` 配置。
+
+**请求体:**
+```json
+{"username": "admin", "password": "xxx"}
+```
+
+**响应示例:**
+```json
+{"ok": true}
+```
+
+### `POST /api/logout`
+
+退出登录。
+
+### `GET /api/status`
+
+获取采集器状态和自动猜词配置。
+
+**响应示例:**
+```json
+{
+  "collectors": [
+    {"platform": "douyin", "room": "123456", "running": true, "connected": true, "error": ""}
+  ],
+  "autoGuess": {"enabled": true, "targetRoomId": "room-102", "targetPuzzleWordLength": 2}
+}
+```
+
+### `POST /api/danmaku/start`
+
+启动指定平台的弹幕采集。
+
+**请求体:**
+```json
+{
+  "platform": "douyin",
+  "room": "123456",
+  "targetRoomId": "room-102",
+  "targetWordLength": 2
+}
+```
+
+### `POST /api/danmaku/stop`
+
+停止指定平台的弹幕采集。
+
+**请求体:**
+```json
+{"platform": "douyin", "room": "123456"}
+```
+
+### `POST /api/auto-guess`
+
+配置自动猜词参数。
+
+**请求体:**
+```json
+{
+  "enabled": true,
+  "targetRoomId": "room-102",
+  "targetWordLength": 2
+}
+```
+
+### `GET /api/danmaku/stream`
+
+SSE 实时弹幕流（EventSource 协议）。
+
+**事件格式:**
+```json
+{
+  "platform": "douyin",
+  "room": "123456",
+  "userName": "小明",
+  "content": "文具盒",
+  "timestamp": 1718000000000
+}
+```

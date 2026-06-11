@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WordToFlush Admin - 登录</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f0f1a;
+      color: #e0e0e0;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
+    }
+    .login-box {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 12px;
+      padding: 40px;
+      width: 360px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 8px;
+      color: #ff6b6b;
+    }
+    .subtitle { text-align: center; color: #888; font-size: 13px; margin-bottom: 28px; }
+    label { display: block; font-size: 13px; color: #aaa; margin-bottom: 4px; }
+    input[type="text"], input[type="password"] {
+      width: 100%; padding: 10px 12px;
+      margin-bottom: 16px;
+      background: #0f0f1a; border: 1px solid #2a2a4a;
+      border-radius: 6px; color: #e0e0e0; font-size: 14px;
+      outline: none;
+    }
+    input:focus { border-color: #ff6b6b; }
+    .btn {
+      width: 100%; padding: 10px;
+      background: #ff6b6b; color: #fff;
+      border: none; border-radius: 6px;
+      font-size: 15px; cursor: pointer;
+      font-weight: 600;
+    }
+    .btn:hover { background: #e55a5a; }
+    .error { color: #ff6b6b; text-align: center; margin-top: 12px; font-size: 13px; display: none; }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h1>WordToFlush Admin</h1>
+    <p class="subtitle">监管控制面板</p>
+    <form id="loginForm">
+      <label for="username">用户名</label>
+      <input type="text" id="username" name="username" autocomplete="username" required>
+      <label for="password">密码</label>
+      <input type="password" id="password" name="password" autocomplete="current-password" required>
+      <button type="submit" class="btn">登录</button>
+      <div id="error" class="error"></div>
+    </form>
+  </div>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('error');
+      try {
+        const resp = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        });
+        const data = await resp.json();
+        if (data.ok) {
+          window.location.href = '/';
+        } else {
+          errorEl.textContent = data.error || '登录失败';
+          errorEl.style.display = 'block';
+        }
+      } catch (err) {
+        errorEl.textContent = '网络错误';
+        errorEl.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

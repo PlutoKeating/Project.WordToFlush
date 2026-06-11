@@ -51,6 +51,7 @@
 | 模块 | 目录 | 技术栈 | 部署方式 |
 |------|------|--------|----------|
 | 后端 | `backend/` | Python 3.12, FastAPI, uvicorn | Docker Compose (唯一方式) |
+| 管理面板 | `backend/admin/` | Python 3.12, Flask, waitress | Docker Compose (与后端同容器) |
 | 前端 | `frontend/` | Vue 3, Vite, Pinia, TailwindCSS | npm run dev (本地开发) |
 | 共享 | `shared/` | TypeScript 类型定义 | 被前端 import 引用 |
 
