@@ -2,15 +2,94 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --color-primary: #ff6b6b;
-  --color-secondary: #4ecdc4;
-  --color-dark: #1a1a2e;
-  --color-accent: #e94560;
+@layer base {
+  body {
+    @apply bg-cyber-bg text-ink-dark font-sans antialiased;
+  }
 }
 
-body {
-  background-color: #1a1a2e;
-  color: #ffffff;
-  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+@layer components {
+  .card {
+    @apply bg-cyber-surface rounded-card shadow-card;
+    border: 1px solid theme('colors.edge-light');
+  }
+
+  .card-neon-pink {
+    @apply card;
+    border-color: rgba(255, 45, 127, 0.35);
+    box-shadow: 0 0 10px rgba(255, 45, 127, 0.12), 0 2px 8px rgba(26, 26, 46, 0.05);
+  }
+
+  .card-neon-cyan {
+    @apply card;
+    border-color: rgba(0, 212, 224, 0.35);
+    box-shadow: 0 0 10px rgba(0, 212, 224, 0.12), 0 2px 8px rgba(26, 26, 46, 0.05);
+  }
+
+  .card-neon-purple {
+    @apply card;
+    border-color: rgba(155, 89, 182, 0.35);
+    box-shadow: 0 0 10px rgba(155, 89, 182, 0.12), 0 2px 8px rgba(26, 26, 46, 0.05);
+  }
+
+  .glow-pink {
+    text-shadow: 0 0 10px rgba(255, 45, 127, 0.35);
+  }
+
+  .glow-cyan {
+    text-shadow: 0 0 10px rgba(0, 212, 224, 0.35);
+  }
+
+  .glow-purple {
+    text-shadow: 0 0 10px rgba(155, 89, 182, 0.35);
+  }
+
+  .btn-primary {
+    @apply px-3 py-1.5 rounded-btn font-bold transition-all duration-200 select-none;
+    background: linear-gradient(135deg, theme('colors.neon-pink'), theme('colors.neon-purple'));
+    color: #fff;
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 18px rgba(255, 45, 127, 0.45);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-ghost {
+    @apply px-3 py-1.5 rounded-btn font-bold transition-all duration-200 select-none;
+    border: 1.5px solid theme('colors.neon-cyan');
+    color: theme('colors.neon-cyan');
+  }
+  .btn-ghost:hover {
+    background: rgba(0, 212, 224, 0.08);
+    box-shadow: 0 0 14px rgba(0, 212, 224, 0.3);
+  }
+
+  .divider-neon {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, theme('colors.neon-pink'), theme('colors.neon-cyan'), transparent);
+    opacity: 0.4;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(26, 26, 46, 0.12);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(26, 26, 46, 0.25);
+}
+
+input::placeholder {
+  color: theme('colors.ink-muted');
+  opacity: 0.6;
 }

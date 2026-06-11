@@ -18,15 +18,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col bg-dark" style="aspect-ratio: 9/16; max-width: 480px; margin: 0 auto;">
-    <TopBar />
-    <DecryptZone />
-    <div class="flex-1 flex overflow-hidden">
-      <GuessList class="w-1/3" />
-      <div class="w-1/3 flex items-center justify-center">
-        <GuessInput />
+  <div class="w-full h-full bg-cyber-bg" style="aspect-ratio: 9/16; max-width: 480px; margin: 0 auto;">
+    <div class="h-full flex flex-col p-3 gap-2.5">
+      <TopBar />
+      <DecryptZone />
+      <GuessInput />
+      <div class="flex-1 flex gap-2.5 min-h-0">
+        <GuessList class="flex-1" />
+        <Leaderboard class="flex-1" />
       </div>
-      <Leaderboard class="w-1/3" />
     </div>
   </div>
 </template>

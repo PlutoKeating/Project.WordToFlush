@@ -37,41 +37,43 @@ const groupedGuesses = computed(() => {
 })
 
 function affinityColor(affinity: number): string {
-  if (affinity >= 0.85) return 'text-green-400'
-  if (affinity >= 0.5) return 'text-yellow-400'
-  return 'text-gray-500'
+  if (affinity >= 0.85) return 'text-neon-green glow-cyan'
+  if (affinity >= 0.5) return 'text-neon-yellow'
+  return 'text-ink-muted'
 }
 </script>
 
 <template>
-  <div class="p-2 overflow-y-auto">
-    <h3 class="text-xs text-gray-500 mb-2 text-center">竞猜榜</h3>
-    <TransitionGroup name="guess-list" tag="div">
-      <div
-        v-for="item in groupedGuesses"
-        :key="item.guess"
-        class="flex items-center justify-between text-xs py-1 border-b border-gray-800"
-      >
-        <span class="text-gray-300 truncate flex-1">{{ item.guess }}</span>
-        <span v-if="item.count > 1" class="text-gray-600 ml-1">x {{ item.count }}</span>
-        <span v-else class="text-gray-500 truncate ml-1">{{ item.userName }}</span>
-        <span :class="['ml-1', affinityColor(item.maxAffinity)]">
-          {{ Math.round(item.maxAffinity * 100) }}%
-        </span>
+  <div class="card-neon-purple p-3 flex flex-col min-h-0">
+    <h3 class="text-xs text-neon-purple font-bold mb-2 text-center tracking-wider">竞猜榜</h3>
+    <div class="flex-1 overflow-y-auto min-h-0">
+      <TransitionGroup name="guess-list" tag="div">
+        <div
+          v-for="item in groupedGuesses"
+          :key="item.guess"
+          class="flex items-center justify-between text-xs py-1.5 border-b border-edge-light last:border-0"
+        >
+          <span class="text-ink-dark truncate flex-1 font-medium">{{ item.guess }}</span>
+          <span v-if="item.count > 1" class="text-ink-muted ml-0.5">x{{ item.count }}</span>
+          <span v-else class="text-ink-muted truncate ml-0.5">{{ item.userName }}</span>
+          <span :class="['ml-1 tabular-nums font-bold', affinityColor(item.maxAffinity)]">
+            {{ Math.round(item.maxAffinity * 100) }}%
+          </span>
+        </div>
+      </TransitionGroup>
+      <div v-if="groupedGuesses.length === 0" class="text-xs text-ink-muted text-center py-4">
+        暂无竞猜
       </div>
-    </TransitionGroup>
-    <div v-if="groupedGuesses.length === 0" class="text-xs text-gray-600 text-center py-4">
-      暂无竞猜
     </div>
   </div>
 </template>
 
 <style scoped>
 .guess-list-enter-active {
-  transition: all 0.4s ease;
+  transition: all 0.35s ease;
 }
 .guess-list-enter-from {
   opacity: 0;
-  transform: translateX(-20px);
+  transform: translateX(-16px);
 }
 </style>

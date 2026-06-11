@@ -41,26 +41,32 @@ const highestAffinity = computed(() => {
 </script>
 
 <template>
-  <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
-    <div class="text-lg text-secondary mb-2">{{ category }}</div>
-    <div class="text-4xl font-bold mb-4 flex justify-center gap-3">
+  <div class="card-neon-pink px-5 py-4 flex flex-col items-center gap-3">
+    <div class="text-base text-neon-purple font-bold tracking-[0.25em] uppercase">
+      分类：{{ category }}
+    </div>
+    <div class="text-4xl font-black tracking-[0.3em] flex gap-3">
       <span
         v-for="(char, i) in puzzleChars"
         :key="i"
         :class="[
-          'transition-all duration-300',
-          showAnswer ? 'text-green-400 scale-110' : revealedChars[i] ? 'text-green-400' : 'text-primary',
+          'transition-all duration-500 inline-block',
+          showAnswer
+            ? 'text-neon-cyan scale-125 glow-cyan'
+            : revealedChars[i]
+              ? 'text-neon-cyan glow-cyan'
+              : 'text-ink-muted',
         ]"
       >
         {{ showAnswer ? char : revealedChars[i] ? char : '?' }}
       </span>
     </div>
-    <div class="text-sm text-gray-400 mb-3">
-      当前最高关联度：<span class="text-green-400 font-bold">{{ highestAffinity }}%</span>
+    <div class="text-sm text-ink-gray">
+      当前最高关联度：
+      <span class="text-neon-pink font-bold glow-pink">{{ highestAffinity }}%</span>
     </div>
-
-    <div v-if="store.roomState.previousPuzzle" class="mt-2 text-xs text-gray-600">
-      上期谜底：<span class="text-gray-500">{{ store.roomState.previousPuzzle }}</span>
+    <div v-if="store.roomState.previousPuzzle" class="text-xs text-ink-muted">
+      上期谜底：<span class="text-ink-gray">{{ store.roomState.previousPuzzle }}</span>
     </div>
   </div>
 </template>

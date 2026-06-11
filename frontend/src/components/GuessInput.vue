@@ -25,7 +25,6 @@ watch(() => store.puzzleSolved, (solved) => {
 watch(() => store.lastGuessResult, (result) => {
   if (result) {
     showResult.value = true
-    const pct = Math.round(result.affinity * 100)
     if (result.affinity >= 0.85) {
       resultFlash.value = 'result-excellent'
     } else if (result.affinity >= 0.5) {
@@ -53,28 +52,28 @@ function handleKeydown(e: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="p-2 flex flex-col items-center justify-center gap-2 h-full">
-    <div class="w-full flex flex-col gap-2">
+  <div class="card-neon-purple px-4 py-3 flex flex-col gap-2.5">
+    <div class="flex gap-2">
       <input
         v-model="userName"
         type="text"
         placeholder="昵称"
         maxlength="8"
-        class="w-full px-2 py-1 text-xs rounded bg-gray-800 text-gray-300 border border-gray-700 focus:outline-none focus:border-secondary"
+        class="w-2/5 px-2.5 py-1.5 text-xs rounded bg-cyber-panel text-ink-dark border border-edge-light focus:outline-none focus:border-neon-purple transition-colors"
       />
-      <div class="flex gap-1">
+      <div class="flex-1 flex gap-1.5">
         <input
           v-model="guessText"
           type="text"
-          placeholder="输入猜测..."
+          placeholder="输入猜测词..."
           minlength="1"
           maxlength="4"
           @keydown="handleKeydown"
-          class="flex-1 px-2 py-1 text-sm rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-primary"
+          class="flex-1 px-3 py-1.5 text-xs rounded bg-cyber-panel text-ink-dark border border-edge-light focus:outline-none focus:border-neon-pink transition-colors"
         />
         <button
           @click="submitGuess"
-          class="px-3 py-1 text-xs rounded bg-primary hover:bg-accent text-white transition font-bold"
+          class="btn-primary text-xs px-4 font-bold"
         >
           猜
         </button>
@@ -84,26 +83,27 @@ function handleKeydown(e: KeyboardEvent) {
     <Transition name="fade">
       <div
         v-if="showSolvedPopup"
-        class="text-center px-4 py-3 rounded result-solved animate-pulse"
+        class="rounded-card px-3 py-2 text-center animate-pulse"
+        style="background: rgba(0, 214, 180, 0.1); border: 1px solid rgba(0, 230, 118, 0.4); box-shadow: 0 0 10px rgba(0, 230, 118, 0.15);"
       >
-        <div class="text-lg font-bold text-green-400 mb-1">🎯 猜中了！</div>
-        <div class="text-sm text-gray-300">{{ solvedByName }}</div>
+        <div class="text-base font-bold text-neon-green glow-cyan mb-0.5">🎯 猜中了！</div>
+        <div class="text-xs text-ink-gray">{{ solvedByName }}</div>
       </div>
     </Transition>
 
     <Transition name="fade">
       <div
         v-if="showResult && store.lastGuessResult && !showSolvedPopup"
-        :class="['text-center text-xs px-3 py-1 rounded', resultFlash]"
+        :class="['text-center text-xs px-3 py-2 rounded-card', resultFlash]"
       >
-        <div class="text-gray-300">{{ store.lastGuessResult.guess }}</div>
-        <div class="font-bold text-lg">
+        <div class="text-ink-gray">{{ store.lastGuessResult.guess }}</div>
+        <div class="text-base font-bold">
           {{ Math.round(store.lastGuessResult.affinity * 100) }}%
         </div>
       </div>
     </Transition>
 
-    <div v-if="!showResult && !showSolvedPopup" class="text-xs text-gray-600 text-center">
+    <div v-if="!showResult && !showSolvedPopup" class="text-xs text-ink-muted text-center">
       输入猜测词测试语义关联
     </div>
   </div>
@@ -111,23 +111,19 @@ function handleKeydown(e: KeyboardEvent) {
 
 <style scoped>
 .result-excellent {
-  background: rgba(78, 205, 196, 0.2);
-  border: 1px solid #4ecdc4;
-  color: #4ecdc4;
+  background: rgba(0, 230, 118, 0.1);
+  border: 1px solid rgba(0, 230, 118, 0.4);
+  color: theme('colors.neon-green');
 }
 .result-good {
-  background: rgba(255, 107, 107, 0.15);
-  border: 1px solid #ff6b6b;
-  color: #ff6b6b;
+  background: rgba(255, 45, 127, 0.08);
+  border: 1px solid rgba(255, 45, 127, 0.35);
+  color: theme('colors.neon-pink');
 }
 .result-low {
-  background: rgba(128, 128, 128, 0.15);
-  border: 1px solid #666;
-  color: #999;
-}
-.result-solved {
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid #22c55e;
+  background: rgba(136, 136, 160, 0.08);
+  border: 1px solid rgba(136, 136, 160, 0.3);
+  color: theme('colors.ink-muted');
 }
 
 .fade-enter-active,

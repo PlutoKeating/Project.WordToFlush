@@ -5,8 +5,8 @@ import { computed } from 'vue'
 const store = useGameStore()
 
 const connStatus = computed(() => {
-  if (!store.connected) return { text: '未连接', color: 'text-red-500' }
-  return { text: '已连接', color: 'text-green-500' }
+  if (!store.connected) return { text: '未连接', dot: 'bg-neon-pink', glow: '' }
+  return { text: '已连接', dot: 'bg-neon-green animate-pulse', glow: 'shadow-neon-green' }
 })
 
 function requestNextPuzzle() {
@@ -15,20 +15,18 @@ function requestNextPuzzle() {
 </script>
 
 <template>
-  <div class="flex items-center justify-between px-4 py-2 bg-dark/80 border-b border-gray-700">
-    <div class="flex items-center gap-2">
-      <span class="text-sm text-gray-400">
-        赛季 {{ store.roomState.streak > 0 ? 'S' + store.roomState.streak : 'S1' }}
+  <div class="card-neon-cyan px-4 py-2.5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="text-sm text-neon-cyan font-bold tracking-[0.3em] glow-cyan">
+        S{{ store.roomState.streak > 0 ? store.roomState.streak : '1' }}
       </span>
-      <span :class="['text-xs', connStatus.color]">● {{ connStatus.text }}</span>
+      <div class="flex items-center gap-1.5">
+        <span class="inline-block w-2.5 h-2.5 rounded-full" :class="[connStatus.dot, connStatus.glow]"></span>
+        <span class="text-xs text-ink-gray">{{ connStatus.text }}</span>
+      </div>
     </div>
-    <div class="flex gap-2">
-      <button
-        class="px-3 py-1 text-xs rounded bg-gray-700 hover:bg-gray-600 text-gray-300 transition"
-        @click="requestNextPuzzle"
-      >
-        换题
-      </button>
-    </div>
+    <button class="btn-primary text-xs px-4" @click="requestNextPuzzle">
+      ⏭ 换题
+    </button>
   </div>
 </template>
