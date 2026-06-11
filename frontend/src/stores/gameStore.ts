@@ -7,6 +7,8 @@ export const useGameStore = defineStore('game', () => {
   const connected = ref(false)
   const lastGuessResult = ref<GuessRecord | null>(null)
   const puzzleSolved = ref<PuzzleSolvedEvent | null>(null)
+  const clientId = ref('')
+  const compositeRoomId = ref('')
 
   const roomState = reactive<RoomState>({
     roomId: '',
@@ -22,6 +24,9 @@ export const useGameStore = defineStore('game', () => {
   })
 
   function connect(platform: string, roomId: string) {
+    clientId.value = crypto.randomUUID()
+    compositeRoomId.value = `${roomId}:${clientId.value}`
+
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
     const wsUrl = backendUrl.replace(/^http/, 'ws') + '/ws'
 
@@ -33,7 +38,7 @@ export const useGameStore = defineStore('game', () => {
       roomState.platform = platform as RoomState['platform']
       ws.value?.send(JSON.stringify({
         event: 'room:join',
-        data: { roomId, platform },
+        data: { roomId, platform, clientId: clientId.value },
       }))
     }
 
@@ -64,7 +69,7 @@ export const useGameStore = defineStore('game', () => {
     if (ws.value?.readyState === WebSocket.OPEN && guess.trim()) {
       ws.value.send(JSON.stringify({
         event: 'game:guess',
-        data: { roomId: roomState.roomId, userId, userName, guess: guess.trim() },
+        data: { roomId: roomState.roomId, userId, userName, guess: guess.trim(), clientId: clientId.value },
       }))
     }
   }
@@ -73,7 +78,7 @@ export const useGameStore = defineStore('game', () => {
     if (ws.value?.readyState === WebSocket.OPEN) {
       ws.value.send(JSON.stringify({
         event: 'game:nextPuzzle',
-        data: { roomId: roomState.roomId },
+        data: { roomId: roomState.roomId, clientId: clientId.value },
       }))
     }
   }
@@ -90,5 +95,5 @@ export const useGameStore = defineStore('game', () => {
     connected.value = false
   }
 
-  return { ws, connected, roomState, lastGuessResult, puzzleSolved, connect, sendGuess, nextPuzzle, disconnect }
+  return { ws, connected, roomState, lastGuessResult, puzzleSolved, clientId, connect, sendGuess, nextPuzzle, disconnect }
 })

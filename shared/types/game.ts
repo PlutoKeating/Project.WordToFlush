@@ -51,10 +51,10 @@ export interface PuzzleSolvedEvent {
 }
 
 export interface SocketEvents {
-  'room:join': { roomId: string; platform: Platform }
+  'room:join': { roomId: string; platform: Platform; clientId: string }
   'room:leave': { roomId: string }
   'game:newPuzzle': WordPuzzle
-  'game:guess': { roomId: string; userId: string; userName: string; guess: string }
+  'game:guess': { roomId: string; userId: string; userName: string; guess: string; clientId: string }
   'game:guessResult': GuessRecord
   'game:state': RoomState
   'game:leaderboard': Player[]

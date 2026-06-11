@@ -97,12 +97,17 @@ async def websocket_endpoint(websocket: WebSocket):
             if event == "room:join":
                 room_id = data.get("roomId", "default")
                 platform = data.get("platform", "bilibili")
-                current_room_id = room_id
+                client_id = data.get("clientId", "")
 
-                await session_manager.create_room(room_id, platform)
-                await connection_manager.connect(websocket, room_id)
+                def _build_composite_key(r: str, c: str) -> str:
+                    return f"{r}:{c}" if c else r
 
-                room_state = session_manager.get_room(room_id)
+                current_room_id = _build_composite_key(room_id, client_id)
+
+                await session_manager.create_room(current_room_id, platform)
+                await connection_manager.connect(websocket, current_room_id)
+
+                room_state = session_manager.get_room(current_room_id)
                 if room_state:
                     await websocket.send_json({
                         "event": "game:state",
@@ -114,19 +119,21 @@ async def websocket_endpoint(websocket: WebSocket):
                     connection_manager.disconnect(websocket, current_room_id)
 
             elif event == "game:guess":
-                room_id = data.get("roomId", current_room_id)
+                room_id = data.get("roomId", "default")
+                client_id = data.get("clientId", "")
+                effective_room_id = f"{room_id}:{client_id}" if client_id else (current_room_id or room_id)
                 user_id = data.get("userId", "unknown")
                 user_name = data.get("userName", "匿名")
                 guess = data.get("guess", "")
-                if room_id and guess:
-                    room_state = session_manager.get_room(room_id)
+                if effective_room_id and guess:
+                    room_state = session_manager.get_room(effective_room_id)
                     if room_state:
                         try:
                             result = await game_master.process_guess(
                                 room_state, user_id, user_name, guess
                             )
                         except Exception:
-                            logger.exception("process_guess failed for room=%s", room_id)
+                            logger.exception("process_guess failed for room=%s", effective_room_id)
                             await websocket.send_json({
                                 "event": "error",
                                 "data": {"message": "处理猜测时出错，请重试"},
@@ -135,18 +142,18 @@ async def websocket_endpoint(websocket: WebSocket):
                         if result:
                             record = result["record"]
                             await connection_manager.broadcast(
-                                room_id,
+                                effective_room_id,
                                 "game:guessResult",
                                 record.model_dump(by_alias=True),
                             )
                             await connection_manager.broadcast(
-                                room_id,
+                                effective_room_id,
                                 "game:state",
                                 room_state.model_dump(by_alias=True),
                             )
                             if result["solved"]:
                                 await connection_manager.broadcast(
-                                    room_id,
+                                    effective_room_id,
                                     "game:puzzleSolved",
                                     {
                                         "word": room_state.current_puzzle.word if room_state.current_puzzle else "",
@@ -154,21 +161,23 @@ async def websocket_endpoint(websocket: WebSocket):
                                     },
                                 )
                                 asyncio.create_task(
-                                    _auto_next_puzzle(room_id, 3.0)
+                                    _auto_next_puzzle(effective_room_id, 3.0)
                                 )
 
             elif event == "game:nextPuzzle":
-                room_id = data.get("roomId", current_room_id)
-                if room_id:
-                    room_state = await session_manager.next_puzzle(room_id)
+                room_id = data.get("roomId", "default")
+                client_id = data.get("clientId", "")
+                effective_room_id = f"{room_id}:{client_id}" if client_id else (current_room_id or room_id)
+                if effective_room_id:
+                    room_state = await session_manager.next_puzzle(effective_room_id)
                     if room_state and room_state.current_puzzle:
                         await connection_manager.broadcast(
-                            room_id,
+                            effective_room_id,
                             "game:newPuzzle",
                             room_state.current_puzzle.model_dump(by_alias=True),
                         )
                         await connection_manager.broadcast(
-                            room_id,
+                            effective_room_id,
                             "game:state",
                             room_state.model_dump(by_alias=True),
                         )
