@@ -21,11 +21,14 @@ watch(() => store.roomState.currentPuzzle, () => {
   showAnswer.value = false
 })
 
-const maskedWord = computed(() => {
+const puzzleChars = computed(() => {
   const puzzle = store.roomState.currentPuzzle
-  if (!puzzle) return '? '.repeat(3).trim()
-  if (showAnswer.value) return puzzle.word
-  return '? '.repeat(puzzle.wordLength).trim()
+  if (!puzzle) return Array(3).fill('?')
+  return puzzle.word.split('')
+})
+
+const revealedChars = computed(() => {
+  return store.roomState.revealedChars || []
 })
 
 const category = computed(() => {
@@ -40,13 +43,17 @@ const highestAffinity = computed(() => {
 <template>
   <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
     <div class="text-lg text-secondary mb-2">{{ category }}</div>
-    <div
-      :class="[
-        'text-4xl font-bold tracking-widest mb-4 transition-all duration-300',
-        showAnswer ? 'text-green-400 scale-110' : 'text-primary',
-      ]"
-    >
-      {{ maskedWord }}
+    <div class="text-4xl font-bold mb-4 flex justify-center gap-3">
+      <span
+        v-for="(char, i) in puzzleChars"
+        :key="i"
+        :class="[
+          'transition-all duration-300',
+          showAnswer ? 'text-green-400 scale-110' : revealedChars[i] ? 'text-green-400' : 'text-primary',
+        ]"
+      >
+        {{ showAnswer ? char : revealedChars[i] ? char : '?' }}
+      </span>
     </div>
     <div class="text-sm text-gray-400 mb-3">
       当前最高关联度：<span class="text-green-400 font-bold">{{ highestAffinity }}%</span>

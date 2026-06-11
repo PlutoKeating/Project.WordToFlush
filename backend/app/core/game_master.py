@@ -33,6 +33,7 @@ class GameMaster:
         room_state.current_puzzle = puzzle
         room_state.guess_board = []
         room_state.highest_affinity = 0.0
+        room_state.revealed_chars = [False] * len(puzzle.word)
         room_state.solved_by = None
 
         for p in room_state.leaderboard:
@@ -61,6 +62,11 @@ class GameMaster:
 
         if len(guess) != len(room_state.current_puzzle.word):
             return None
+
+        answer_word = room_state.current_puzzle.word
+        for i, (gc, ac) in enumerate(zip(guess, answer_word)):
+            if gc == ac:
+                room_state.revealed_chars[i] = True
 
         affinity = await self.vector_calculator.calculate_affinity(
             guess, room_state.current_puzzle.word

@@ -72,6 +72,8 @@ Client connect → WS /ws
               → 回复 game:state
 
   → game:guess → GameMaster.process_guess()
+              → 字数匹配校验 (guess 长度必须 == 谜底长度)
+              → 逐字位字符比较，匹配则更新 room_state.revealed_chars[i] = True
               → VectorCalculator.calculate_affinity()
               → 检测是否猜中 (affinity >= WIN_AFFINITY_THRESHOLD)
               → ConnectionManager.broadcast(game:guessResult)

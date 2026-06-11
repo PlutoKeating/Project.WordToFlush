@@ -36,6 +36,7 @@ export interface RoomState {
   leaderboard: Player[]
   previousPuzzle: string | null
   solvedBy: string | null
+  revealedChars: boolean[]
 }
 
 export interface RoomConfig {

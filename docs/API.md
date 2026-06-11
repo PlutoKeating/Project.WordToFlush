@@ -122,7 +122,8 @@
     "guessBoard": [ ... ],
     "leaderboard": [ ... ],
     "previousPuzzle": null,
-    "solvedBy": null
+    "solvedBy": null,
+    "revealedChars": [false, false, false]
   }
 }
 ```
@@ -201,6 +202,7 @@
 | `leaderboard` | Player[] | 积分排行榜 |
 | `previousPuzzle` | string \| null | 上一题谜底 |
 | `solvedBy` | string \| null | 本轮猜中者用户名 (null 表示未猜中) |
+| `revealedChars` | boolean[] | 逐字位揭示状态: 某位匹配过则 true，前端对应位显示绿色实际汉字 |
 
 ### WordPuzzle
 

@@ -48,3 +48,4 @@ class RoomState(CamelModel):
     leaderboard: list[Player] = []
     previous_puzzle: Optional[str] = None
     solved_by: Optional[str] = None
+    revealed_chars: list[bool] = []

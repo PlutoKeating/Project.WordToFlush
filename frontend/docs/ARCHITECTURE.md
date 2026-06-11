@@ -10,7 +10,7 @@ frontend/
 │   ├── env.d.ts                     # Vite 环境变量类型声明
 │   ├── components/
 │   │   ├── TopBar.vue               # 顶部: 赛季/换题按钮
-│   │   ├── DecryptZone.vue          # 中部: 分类/掩码/关联度/猜中揭示
+│   │   ├── DecryptZone.vue          # 中部: 分类/逐字掩码(红?绿字)/关联度/猜中揭示
 │   │   ├── GuessList.vue            # 左侧: 竞猜榜 (词汇去重, 按准确率排序)
 │   │   ├── GuessInput.vue           # 中部: 猜词输入/结果反馈/猜中弹窗
 │   │   └── Leaderboard.vue          # 右侧: 积分榜 (按总分排序)
@@ -41,7 +41,7 @@ WebSocket.onopen:
   → send({ event: "room:join", data: { roomId, platform } })
 
 WebSocket.onmessage:
-  → game:state        → Object.assign(roomState, msg.data)
+  → game:state        → Object.assign(roomState, msg.data) (含 revealedChars)
   → game:newPuzzle    → roomState.currentPuzzle = msg.data
   → game:guessResult  → lastGuessResult = msg.data
   → game:puzzleSolved → puzzleSolved = msg.data (触发 3s 揭示 + 猜中弹窗)
@@ -60,7 +60,7 @@ WebSocket.onmessage:
 ```text
 App.vue
 ├── TopBar.vue         (读取 roomState.streak, 触发 nextPuzzle)
-├── DecryptZone.vue    (读取 roomState.currentPuzzle, highestAffinity, puzzleSolved)
+├── DecryptZone.vue    (读取 roomState.currentPuzzle, highestAffinity, revealedChars, puzzleSolved)
 ├── GuessList.vue      (读取 roomState.guessBoard, 按词汇去重 + 准确率排序)
 ├── GuessInput.vue     (猜词输入 + 触发 sendGuess, 显示 guessResult 和 puzzleSolved 弹窗)
 └── Leaderboard.vue    (读取 roomState.leaderboard, 按 totalScore 排序)

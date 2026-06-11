@@ -18,6 +18,7 @@ export const useGameStore = defineStore('game', () => {
     leaderboard: [],
     previousPuzzle: null,
     solvedBy: null,
+    revealedChars: [],
   })
 
   function connect(platform: string, roomId: string) {
