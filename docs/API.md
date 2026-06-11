@@ -69,14 +69,15 @@
 ### 客户端 → 服务端事件
 
 #### `room:join`
-加入房间，建立 WebSocket 连接后发送。
+加入房间，建立 WebSocket 连接后发送。前端每次页面加载生成唯一的 `clientId`（UUID），后端使用复合键 `roomId:clientId` 实现会话隔离。
 
 ```json
 {
   "event": "room:join",
   "data": {
     "roomId": "room-102",
-    "platform": "bilibili"
+    "platform": "bilibili",
+    "clientId": "550e8400-e29b-41d4-a716-446655440000"
   }
 }
 ```
@@ -93,6 +94,22 @@
 }
 ```
 
+#### `game:guess`
+发送猜测词，供本地测试使用。
+
+```json
+{
+  "event": "game:guess",
+  "data": {
+    "roomId": "room-102",
+    "userId": "player-0001",
+    "userName": "小明",
+    "guess": "文具盒",
+    "clientId": "550e8400-e29b-41d4-a716-446655440000"
+  }
+}
+```
+
 #### `game:nextPuzzle`
 请求发下一题。
 
@@ -100,7 +117,8 @@
 {
   "event": "game:nextPuzzle",
   "data": {
-    "roomId": "room-102"
+    "roomId": "room-102",
+    "clientId": "550e8400-e29b-41d4-a716-446655440000"
   }
 }
 ```

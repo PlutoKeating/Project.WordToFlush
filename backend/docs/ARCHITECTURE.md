@@ -67,26 +67,37 @@ POST /api/rooms/{id}/next-puzzle
 
 ```
 Client connect → WS /ws
-  → room:join → SessionManager.create_room()
-              → ConnectionManager.connect()
-              → 回复 game:state
+  → room:join → 提取 roomId + clientId
+              → 构造复合键 "{roomId}:{clientId}"
+              → SessionManager.create_room(复合键)
+              → ConnectionManager.connect(复合键)
+              → 回复 game:state (仅当前客户端)
 
-  → game:guess → GameMaster.process_guess()
+  → game:guess → 通过 roomId + clientId 解析复合键
+              → GameMaster.process_guess()
               → 字数匹配校验 (guess 长度必须 == 谜底长度)
               → 逐字位字符比较，匹配则更新 room_state.revealed_chars[i] = True
               → VectorCalculator.calculate_affinity()
               → 检测是否猜中 (affinity >= WIN_AFFINITY_THRESHOLD)
-              → ConnectionManager.broadcast(game:guessResult)
-              → ConnectionManager.broadcast(game:state)
-              → 若猜中: broadcast(game:puzzleSolved)
+              → ConnectionManager.broadcast(复合键, game:guessResult)
+              → ConnectionManager.broadcast(复合键, game:state)
+              → 若猜中: broadcast(复合键, game:puzzleSolved)
               → 若猜中: 3s 后自动调用 next_puzzle()
 
-  → game:nextPuzzle → SessionManager.next_puzzle()
-                    → ConnectionManager.broadcast(game:newPuzzle)
-                    → ConnectionManager.broadcast(game:state)
+  → game:nextPuzzle → 通过 roomId + clientId 解析复合键
+                    → SessionManager.next_puzzle(复合键)
+                    → ConnectionManager.broadcast(复合键, game:newPuzzle)
+                    → ConnectionManager.broadcast(复合键, game:state)
 
 Client disconnect → ConnectionManager.disconnect()
 ```
+
+### 会话隔离机制
+
+- **前端会话标识**: 每次页面加载生成唯一 `clientId`（`crypto.randomUUID()`），包含在 `room:join` 及后续所有 WebSocket 消息中
+- **复合房间键**: 后端使用 `{roomId}:{clientId}` 作为内部房间键，实现每个浏览器页面独立游戏状态
+- **刷新/新标签页**: 新的 `clientId` → 新的复合键 → 全新游戏，无状态残留
+- **向后兼容**: 若未提供 `clientId`，回退到使用原始 `roomId`
 
 ## 数据持久化
 

@@ -35,10 +35,11 @@ frontend/
 App.vue (onMounted)
   → 解析 URL 参数 (platform, roomId)
     → gameStore.connect(platform, roomId)
+      → 生成 clientId = crypto.randomUUID()  // 每次页面加载唯一
       → new WebSocket(ws://<backend>/ws)
 
 WebSocket.onopen:
-  → send({ event: "room:join", data: { roomId, platform } })
+  → send({ event: "room:join", data: { roomId, platform, clientId } })
 
 WebSocket.onmessage:
   → game:state        → Object.assign(roomState, msg.data) (含 revealedChars)
@@ -48,11 +49,11 @@ WebSocket.onmessage:
 
 用户输入猜词:
   GuessInput → gameStore.sendGuess(userId, userName, guess)
-    → ws.send({ event: "game:guess", data: { roomId, userId, userName, guess } })
+    → ws.send({ event: "game:guess", data: { roomId, userId, userName, guess, clientId } })
 
 用户点击换题:
   TopBar → gameStore.nextPuzzle()
-    → ws.send({ event: "game:nextPuzzle", data: { roomId } })
+    → ws.send({ event: "game:nextPuzzle", data: { roomId, clientId } })
 ```
 
 ## 组件树
@@ -73,13 +74,14 @@ App.vue
 ```typescript
 ws: Ref<WebSocket | null>          // WebSocket 连接实例
 connected: Ref<boolean>            // 连接状态
+clientId: Ref<string>              // 唯一会话标识 (crypto.randomUUID，每次页面加载生成)
 roomState: RoomState (reactive)    // 房间完整状态
 lastGuessResult: Ref<GuessRecord | null>  // 最近一次猜测结果
 puzzleSolved: Ref<PuzzleSolvedEvent | null>  // 猜中事件
 
-connect(platform, roomId)          // 建立 WebSocket 连接
-sendGuess(userId, userName, guess) // 发送猜词
-nextPuzzle()                       // 请求下一题
+connect(platform, roomId)          // 生成 clientId，建立 WebSocket 连接
+sendGuess(userId, userName, guess) // 发送猜词 (含 clientId)
+nextPuzzle()                       // 请求下一题 (含 clientId)
 disconnect()                       // 断开连接
 ```
 
