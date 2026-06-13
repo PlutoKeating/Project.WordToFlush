@@ -107,12 +107,18 @@ async def websocket_endpoint(websocket: WebSocket):
                 await session_manager.create_room(current_room_id, platform)
                 await connection_manager.connect(websocket, current_room_id)
 
-                room_state = session_manager.get_room(current_room_id)
-                if room_state:
-                    await websocket.send_json({
-                        "event": "game:state",
-                        "data": room_state.model_dump(by_alias=True),
-                    })
+                room_state = await session_manager.next_puzzle(current_room_id)
+                if room_state and room_state.current_puzzle:
+                    await connection_manager.broadcast(
+                        current_room_id,
+                        "game:newPuzzle",
+                        room_state.current_puzzle.model_dump(by_alias=True),
+                    )
+                    await connection_manager.broadcast(
+                        current_room_id,
+                        "game:state",
+                        room_state.model_dump(by_alias=True),
+                    )
 
             elif event == "room:leave":
                 if current_room_id:

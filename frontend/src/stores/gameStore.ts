@@ -19,7 +19,7 @@ export const useGameStore = defineStore('game', () => {
   const lastGuessResult = ref<GuessRecord | null>(null)
   const puzzleSolved = ref<PuzzleSolvedEvent | null>(null)
   const clientId = ref('')
-  const compositeRoomId = ref('')
+  const localRoomId = ref('')
 
   const roomState = reactive<RoomState>({
     roomId: '',
@@ -36,7 +36,7 @@ export const useGameStore = defineStore('game', () => {
 
   function connect(platform: string, roomId: string) {
     clientId.value = generateUUID()
-    compositeRoomId.value = `${roomId}:${clientId.value}`
+    localRoomId.value = roomId
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
     const wsUrl = backendUrl.replace(/^http/, 'ws') + '/ws'
@@ -56,7 +56,10 @@ export const useGameStore = defineStore('game', () => {
     ws.value.onmessage = (event: MessageEvent) => {
       const msg = JSON.parse(event.data)
       if (msg.event === 'game:state') {
-        Object.assign(roomState, msg.data)
+        const data = msg.data
+        const restoredRoomId = roomState.roomId
+        Object.assign(roomState, data)
+        roomState.roomId = restoredRoomId
       } else if (msg.event === 'game:newPuzzle') {
         roomState.currentPuzzle = msg.data
         puzzleSolved.value = null
@@ -80,7 +83,7 @@ export const useGameStore = defineStore('game', () => {
     if (ws.value?.readyState === WebSocket.OPEN && guess.trim()) {
       ws.value.send(JSON.stringify({
         event: 'game:guess',
-        data: { roomId: roomState.roomId, userId, userName, guess: guess.trim(), clientId: clientId.value },
+        data: { roomId: localRoomId.value, userId, userName, guess: guess.trim(), clientId: clientId.value },
       }))
     }
   }
@@ -89,7 +92,7 @@ export const useGameStore = defineStore('game', () => {
     if (ws.value?.readyState === WebSocket.OPEN) {
       ws.value.send(JSON.stringify({
         event: 'game:nextPuzzle',
-        data: { roomId: roomState.roomId, clientId: clientId.value },
+        data: { roomId: localRoomId.value, clientId: clientId.value },
       }))
     }
   }
