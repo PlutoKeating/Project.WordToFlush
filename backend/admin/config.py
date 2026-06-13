@@ -15,10 +15,7 @@ if not ADMIN_USERNAME or not ADMIN_PASSWORD:
 ADMIN_HOST_BIND_PORT = int(os.getenv("ADMIN_HOST_BIND_PORT", "8001"))
 ADMIN_PORT = 8001
 
-FLASK_SECRET_KEY = os.getenv(
-    "FLASK_SECRET_KEY",
-    os.urandom(24).hex(),
-)
+FLASK_SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "") or os.urandom(24).hex()
 
 BACKEND_WS_URL = os.getenv(
     "BACKEND_WS_URL",

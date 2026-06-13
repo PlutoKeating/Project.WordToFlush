@@ -26,6 +26,7 @@ from flask import (
     Response,
 )
 import websockets
+from websockets.client import ClientConnection
 
 from admin.config import FLASK_SECRET_KEY
 from admin.auth import login_required, verify_credentials
@@ -181,7 +182,7 @@ def api_danmaku_stream():
 
 
 # Auto-guess bridge state
-_auto_guess_ws: websockets.ClientConnection | None = None
+_auto_guess_ws: ClientConnection | None = None
 _auto_guess_client_id: str = ""
 _auto_guess_loop: asyncio.AbstractEventLoop | None = None
 _auto_guess_user_ids: dict[str, str] = {}
