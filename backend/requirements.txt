@@ -6,3 +6,4 @@ redis>=5.0.0,<6.0.0
 flask>=3.0.0,<4.0.0
 websockets>=13.0,<14.0
 waitress>=3.0.0,<4.0.0
+brotli>=1.0.0

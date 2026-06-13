@@ -71,6 +71,14 @@ def _extract_cjk(text: str) -> str:
     return "".join(parts)
 
 
+def _clean_content(text: str) -> str:
+    """Return non-empty content if it contains any text, empty string if purely non-text."""
+    stripped = text.strip()
+    if not stripped:
+        return ""
+    return stripped
+
+
 class BilibiliCollector:
     def __init__(self, room_id: str, on_danmaku):
         """
@@ -258,37 +266,78 @@ class BilibiliCollector:
             await asyncio.sleep(30)
 
     def _handle_packet(self, data: bytes):
-        if len(data) < 16:
-            return
-
-        try:
-            total_len, header_len, proto_ver, op, seq = struct.unpack(
-                ">IHHII", data[:16]
-            )
-        except struct.error:
-            return
-
-        body = data[header_len:total_len]
-
-        if op == 3:
-            # OP_HEARTBEAT_REPLY - online count
+        """Parse one or more Bilibili protocol packets from a single WebSocket frame."""
+        offset = 0
+        while offset + 16 <= len(data):
             try:
-                j = json.loads(body.decode("utf-8"))
-                online_count = j.get("count", 0)
-                logger.debug("Bilibili room %s online: %s", self.room_id, online_count)
+                total_len, header_len, proto_ver, op, seq = struct.unpack(
+                    ">IHHII", data[offset:offset + 16]
+                )
+            except struct.error:
+                break
+
+            if header_len < 16 or total_len < header_len:
+                break
+            if offset + total_len > len(data):
+                break
+
+            body_start = offset + header_len
+            body_end = offset + total_len
+            body = data[body_start:body_end]
+
+            if op == 3:
+                try:
+                    j = json.loads(body.decode("utf-8"))
+                    online_count = j.get("count", 0)
+                    logger.debug("Bilibili room %s OP3 online: %s", self.room_id, online_count)
+                except Exception:
+                    pass
+
+            elif op == 5:
+                logger.debug("Bilibili room %s OP5 body_len=%d proto_ver=%d", self.room_id, len(body), proto_ver)
+                self._handle_op5_body(body, proto_ver)
+
+            elif op == 8:
+                logger.info("Bilibili room %s auth success", self.room_id)
+
+            else:
+                logger.info("Bilibili room %s op=%d seq=%d total=%d", self.room_id, op, seq, total_len)
+
+            offset += total_len
+
+    def _handle_op5_body(self, data: bytes, proto_ver: int):
+        """Parse OP 5 body. proto_ver 0: raw JSON, 1: [4B len][JSON]..., 2/3: compressed then [4B len][JSON]..."""
+        if proto_ver in (2, 3) and data:
+            try:
+                import brotli
+                for attempt in ("brotli", "brotli_prefix4", "zlib"):
+                    try:
+                        if attempt == "brotli":
+                            data = brotli.decompress(data)
+                        elif attempt == "brotli_prefix4":
+                            data = brotli.decompress(data[4:])
+                        elif attempt == "zlib":
+                            import zlib
+                            data = zlib.decompress(data)
+                        break
+                    except Exception:
+                        continue
+                else:
+                    logger.warning("Bilibili: cannot decompress proto_ver %d body (%d bytes)", proto_ver, len(data))
+                    return
+            except ImportError:
+                logger.warning("Bilibili: brotli not installed for proto_ver %d", proto_ver)
+                return
+
+        if proto_ver == 0:
+            try:
+                j = json.loads(data.decode("utf-8", errors="replace"))
             except Exception:
-                pass
+                return
+            self._process_single_json(j)
+            return
 
-        elif op == 5:
-            # OP_SEND_SMS_REPLY - danmaku message
-            self._handle_raw_packets(body)
-
-        elif op == 8:
-            # OP_AUTH_REPLY
-            logger.info("Bilibili room %s auth success", self.room_id)
-
-    def _handle_raw_packets(self, data: bytes):
-        """Parse Bilibili OP 5 body: each sub-packet is [4B len BE][JSON body]."""
+        # proto_ver 1/2/3 after decompress: [4B len BE][JSON][4B len BE][JSON]...
         offset = 0
         while offset + 4 <= len(data):
             try:
@@ -298,41 +347,50 @@ class BilibiliCollector:
             offset += 4
             if sub_len <= 0 or offset + sub_len > len(data):
                 break
-
             body_chunk = data[offset:offset + sub_len]
             offset += sub_len
-
             try:
                 j = json.loads(body_chunk.decode("utf-8", errors="replace"))
             except Exception:
                 continue
+            self._process_single_json(j)
 
-            cmd = j.get("cmd", "")
-            if cmd != "DANMU_MSG":
-                continue
+    def _process_single_json(self, j: dict):
+        cmd = j.get("cmd", "")
+        if not hasattr(self, '_seen_cmds'):
+            self._seen_cmds = set()
+        if cmd not in self._seen_cmds:
+            self._seen_cmds.add(cmd)
+            logger.info("Bilibili room %s OP5 cmd: %s", self.room_id, cmd)
+        else:
+            logger.debug("Bilibili room %s OP5 cmd: %s", self.room_id, cmd)
 
-            info_list = j.get("info", [])
-            if len(info_list) < 2:
-                continue
+        if cmd != "DANMU_MSG":
+            return
 
-            content = str(info_list[1])
-            user_arr = info_list[2] if len(info_list) > 2 else []
-            user_name = str(user_arr[1]) if len(user_arr) > 1 else "匿名"
+        info_list = j.get("info", [])
+        if len(info_list) < 2:
+            return
 
-            clean_content = _extract_cjk(content)
-            if not clean_content:
-                continue
+        content = str(info_list[1])
+        user_arr = info_list[2] if len(info_list) > 2 else []
+        user_name = str(user_arr[1]) if len(user_arr) > 1 else "匿名"
 
-            danmaku = {
-                "platform": "bilibili",
-                "room": self.room_id,
-                "userName": user_name,
-                "content": clean_content,
-                "timestamp": int(time.time() * 1000),
-            }
+        clean_content = _clean_content(content)
+        if not clean_content:
+            return
 
-            if self.on_danmaku:
-                try:
-                    self.on_danmaku(danmaku)
-                except Exception:
-                    pass
+        logger.info("Bilibili DANMU: %s: %s", user_name, clean_content)
+
+        danmaku = {
+            "platform": "bilibili",
+            "room": self.room_id,
+            "userName": user_name,
+            "content": clean_content,
+            "timestamp": int(time.time() * 1000),
+        }
+        if self.on_danmaku:
+            try:
+                self.on_danmaku(danmaku)
+            except Exception:
+                pass

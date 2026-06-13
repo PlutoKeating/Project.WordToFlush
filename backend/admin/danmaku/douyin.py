@@ -49,6 +49,13 @@ def _extract_cjk(text: str) -> str:
     return "".join(parts)
 
 
+def _clean_content(text: str) -> str:
+    stripped = text.strip()
+    if not stripped:
+        return ""
+    return stripped
+
+
 def _random_ms_token(length: int = 184) -> str:
     chars = string.ascii_letters + string.digits + "-_="
     return "".join(random.choice(chars) for _ in range(length))
@@ -401,7 +408,7 @@ class DouyinCollector:
             user_name = user_info.get("nickname", "匿名")
 
             # Filter: only pure CJK content
-            clean_content = _extract_cjk(content)
+            clean_content = _clean_content(content)
             if not clean_content:
                 continue
 
