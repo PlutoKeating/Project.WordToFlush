@@ -93,14 +93,23 @@ class BilibiliCollector:
         self._token = ""
         self._wbi_img_key: str = ""
         self._wbi_sub_key: str = ""
+        self.connected = False
 
     async def start(self):
         self._running = True
-        try:
-            await self._fetch_wbi_keys()
-            await self._connect()
-        except Exception as e:
-            logger.error("Bilibili collector failed for room %s: %s", self.room_id, e)
+        reconnect_delay = 1
+        await self._fetch_wbi_keys()
+        while self._running:
+            try:
+                await self._connect()
+            except Exception as e:
+                logger.error("Bilibili collector error for room %s: %s", self.room_id, e)
+            if self._running:
+                logger.info(
+                    "Bilibili: reconnecting to room %s in %ds...", self.room_id, reconnect_delay
+                )
+                await asyncio.sleep(reconnect_delay)
+                reconnect_delay = min(reconnect_delay * 2, 60)
 
     async def stop(self):
         self._running = False
@@ -159,12 +168,16 @@ class BilibiliCollector:
                 close_timeout=5,
             ) as ws:
                 self._ws = ws
+                self.connected = True
                 # Send auth packet
                 await self._send_auth(ws)
                 # Receive welcome + initial join message
                 await self._ws_loop(ws)
         except Exception as e:
             logger.error("Bilibili WSS error for room %s: %s", self.room_id, e)
+        finally:
+            self.connected = False
+            self._ws = None
 
     async def _get_danmu_info(self) -> Optional[dict]:
         try:

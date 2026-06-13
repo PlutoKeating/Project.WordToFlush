@@ -45,6 +45,7 @@
     }
     .btn-start { background: #27ae60; color: #fff; }
     .btn-start:hover { background: #219a52; }
+    .btn-start:disabled { background: #1a3a2a; color: #555; cursor: not-allowed; }
     .btn-stop { background: #e74c3c; color: #fff; }
     .btn-stop:hover { background: #c0392b; }
     .btn-toggle { background: #2a2a4a; color: #ccc; }
@@ -110,7 +111,7 @@
         <h2>抖音 弹幕源</h2>
         <div class="form-row">
           <input type="text" id="dyRoom" placeholder="抖音直播间号">
-          <button class="btn btn-start" onclick="startCollect('douyin')">开始采集</button>
+          <button class="btn btn-start" id="dyStartBtn" onclick="startCollect('douyin')">开始采集</button>
           <button class="btn btn-stop" onclick="stopCollect('douyin')">停止</button>
         </div>
         <div class="status-row" id="dyStatus">
@@ -122,7 +123,7 @@
         <h2>B站 弹幕源</h2>
         <div class="form-row">
           <input type="text" id="biliRoom" placeholder="B站直播间号">
-          <button class="btn btn-start" onclick="startCollect('bilibili')">开始采集</button>
+          <button class="btn btn-start" id="biliStartBtn" onclick="startCollect('bilibili')">开始采集</button>
           <button class="btn btn-stop" onclick="stopCollect('bilibili')">停止</button>
         </div>
         <div class="status-row" id="biliStatus">
@@ -188,41 +189,47 @@
       return d.innerHTML;
     }
 
-    async function startCollect(platform) {
+    async     function startCollect(platform) {
       const roomId = platform === 'douyin'
         ? document.getElementById('dyRoom').value.trim()
         : document.getElementById('biliRoom').value.trim();
       if (!roomId) return alert('请输入房间号');
 
+      setButtonsDisabled(platform, true);
+
       const targetRoomId = document.getElementById('targetRoomId').value.trim();
       const targetWordLength = parseInt(document.getElementById('targetWordLength').value) || 0;
 
-      const resp = await fetch('/api/danmaku/start', {
+      fetch('/api/danmaku/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ platform, room: roomId, targetRoomId, targetWordLength }),
+      }).then(resp => resp.json()).then(data => {
+        if (data.ok) {
+          updateStatus(platform, 'running', '采集中');
+        } else {
+          alert('启动失败: ' + (data.error || '未知错误'));
+          updateStatus(platform, 'stopped', '失败: ' + (data.error || ''));
+          setButtonsDisabled(platform, false);
+        }
+      }).catch(() => {
+        setButtonsDisabled(platform, false);
       });
-      const data = await resp.json();
-      if (data.ok) {
-        updateStatus(platform, 'running', '采集中');
-      } else {
-        alert('启动失败: ' + (data.error || '未知错误'));
-        updateStatus(platform, 'stopped', '失败: ' + (data.error || ''));
-      }
     }
 
-    async function stopCollect(platform) {
+    async     function stopCollect(platform) {
       const roomId = platform === 'douyin'
         ? document.getElementById('dyRoom').value.trim()
         : document.getElementById('biliRoom').value.trim();
       if (!roomId) return;
 
-      await fetch('/api/danmaku/stop', {
+      fetch('/api/danmaku/stop', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ platform, room: roomId }),
       });
       updateStatus(platform, 'stopped', '已停止');
+      setButtonsDisabled(platform, false);
     }
 
     function updateStatus(platform, cls, text) {
@@ -230,6 +237,17 @@
         ? document.getElementById('dyStatus')
         : document.getElementById('biliStatus');
       el.innerHTML = `<span class="status-badge ${cls}">${text}</span>`;
+    }
+
+    function setButtonsDisabled(platform, disabled) {
+      const btn = platform === 'douyin'
+        ? document.getElementById('dyStartBtn')
+        : document.getElementById('biliStartBtn');
+      const input = platform === 'douyin'
+        ? document.getElementById('dyRoom')
+        : document.getElementById('biliRoom');
+      btn.disabled = disabled;
+      input.disabled = disabled;
     }
 
     async function toggleAutoGuess() {
@@ -257,13 +275,19 @@
       try {
         const resp = await fetch('/api/status');
         const data = await resp.json();
+        const seenPlatforms = new Set();
         for (const c of data.collectors) {
+          seenPlatforms.add(c.platform);
           const text = c.running
-            ? (c.connected ? '已连接' : '连接中...')
+            ? (c.connected ? '已连接' : '重连中...')
             : c.error ? '错误: ' + c.error : '已停止';
-          const cls = c.running ? 'running' : 'stopped';
+          const cls = c.running ? (c.connected ? 'running' : 'stopped') : 'stopped';
           updateStatus(c.platform, cls, text);
+          setButtonsDisabled(c.platform, c.running);
         }
+        // Reset buttons for platforms with no collector
+        if (!seenPlatforms.has('douyin')) setButtonsDisabled('douyin', false);
+        if (!seenPlatforms.has('bilibili')) setButtonsDisabled('bilibili', false);
         if (data.autoGuess) {
           autoGuessEnabled = data.autoGuess.enabled;
           const btn = document.getElementById('autoGuessBtn');

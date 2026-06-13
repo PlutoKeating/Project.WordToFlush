@@ -114,13 +114,22 @@ class DouyinCollector:
         self._cursor = ""
         self._internal_ext = ""
         self._room_info: dict = {}
+        self.connected = False
 
     async def start(self):
         self._running = True
-        try:
-            await self._connect()
-        except Exception as e:
-            logger.error("Douyin collector failed for room %s: %s", self.room_number, e)
+        reconnect_delay = 1
+        while self._running:
+            try:
+                await self._connect()
+            except Exception as e:
+                logger.error("Douyin collector error for room %s: %s", self.room_number, e)
+            if self._running:
+                logger.info(
+                    "Douyin: reconnecting to room %s in %ds...", self.room_number, reconnect_delay
+                )
+                await asyncio.sleep(reconnect_delay)
+                reconnect_delay = min(reconnect_delay * 2, 60)
 
     async def stop(self):
         self._running = False
@@ -208,9 +217,13 @@ class DouyinCollector:
                 close_timeout=5,
             ) as ws:
                 self._ws = ws
+                self.connected = True
                 await self._ws_loop(ws)
         except Exception as e:
             logger.error("Douyin WSS error for room %s: %s", self.room_number, e)
+        finally:
+            self.connected = False
+            self._ws = None
 
     async def _get_live_html(self) -> str:
         url = f"{DOUYIN_LIVE_URL}/{self.room_number}"

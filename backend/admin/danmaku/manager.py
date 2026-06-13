@@ -71,7 +71,7 @@ class DanmakuManager:
                 "platform": c.platform,
                 "room": c.room,
                 "running": c.running,
-                "connected": c.connected,
+                "connected": c.collector.connected if c.collector else False,
                 "error": c.error,
             }
             for c in self._collectors
@@ -116,7 +116,6 @@ class DanmakuManager:
                 return
 
             state.collector = collector
-            state.connected = True
             task = asyncio.create_task(collector.start())
             state.task = task
         except Exception as e:
