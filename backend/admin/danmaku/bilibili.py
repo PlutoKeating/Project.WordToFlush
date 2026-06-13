@@ -10,12 +10,14 @@ Official API docs:
 """
 
 import asyncio
+import hashlib
 import json
 import logging
 import random
 import re
 import struct
 import time
+from functools import reduce
 from typing import Optional
 
 import httpx
@@ -27,9 +29,33 @@ logger = logging.getLogger(__name__)
 BILIBILI_API_LIVE_INFO = (
     "https://api.live.bilibili.com/room/v1/Room/room_init"
 )
-BILIBILI_API_DANMAKU_INFO = (
+BILIBILI_API_DANMU_INFO = (
     "https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo"
 )
+BILIBILI_API_NAV = (
+    "https://api.bilibili.com/x/web-interface/nav"
+)
+
+_MIXIN_KEY_ENC_TAB = [
+    46, 47, 18, 2, 53, 8, 23, 32, 15, 50, 10, 31, 58, 3, 45, 35,
+    27, 43, 5, 49, 33, 9, 42, 19, 29, 28, 14, 39, 12, 38, 41, 13,
+    37, 48, 7, 16, 24, 55, 40, 61, 26, 17, 0, 1, 60, 51, 30, 4,
+    22, 25, 54, 21, 56, 59, 6, 63, 57, 62, 11, 36, 20, 52, 44, 34,
+]
+
+
+def _get_mixin_key(orig: str) -> str:
+    return reduce(lambda s, i: s + orig[i], _MIXIN_KEY_ENC_TAB, "")[:32]
+
+
+def _sign_wbi_params(params: dict, img_key: str, sub_key: str) -> dict:
+    mixin_key = _get_mixin_key(img_key + sub_key)
+    params["wts"] = int(time.time())
+    params = dict(sorted(params.items()))
+    query = "&".join(f"{k}={v}" for k, v in params.items())
+    w_rid = hashlib.md5((query + mixin_key).encode()).hexdigest()
+    params["w_rid"] = w_rid
+    return params
 
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -65,10 +91,13 @@ class BilibiliCollector:
             follow_redirects=True,
         )
         self._token = ""
+        self._wbi_img_key: str = ""
+        self._wbi_sub_key: str = ""
 
     async def start(self):
         self._running = True
         try:
+            await self._fetch_wbi_keys()
             await self._connect()
         except Exception as e:
             logger.error("Bilibili collector failed for room %s: %s", self.room_id, e)
@@ -78,6 +107,23 @@ class BilibiliCollector:
         if self._ws:
             await self._ws.close()
         await self._client.aclose()
+
+    async def _fetch_wbi_keys(self):
+        try:
+            resp = await self._client.get(BILIBILI_API_NAV)
+            resp.raise_for_status()
+            data = resp.json()
+            wbi_img = data.get("data", {}).get("wbi_img", {})
+            img_url = wbi_img.get("img_url", "")
+            sub_url = wbi_img.get("sub_url", "")
+            if img_url and sub_url:
+                self._wbi_img_key = img_url.rsplit("/", 1)[-1].split(".")[0]
+                self._wbi_sub_key = sub_url.rsplit("/", 1)[-1].split(".")[0]
+                logger.debug("Bilibili: fetched Wbi keys for room %s", self.room_id)
+            else:
+                logger.warning("Bilibili: Wbi keys not found in nav response")
+        except Exception as e:
+            logger.warning("Bilibili: failed to fetch Wbi keys: %s", e)
 
     async def _connect(self):
         logger.info("Bilibili: fetching danmaku info for room %s", self.room_id)
@@ -105,9 +151,9 @@ class BilibiliCollector:
         try:
             async with ws_connect(
                 ws_url,
-                extra_headers={
+                origin="https://live.bilibili.com",
+                additional_headers={
                     "User-Agent": USER_AGENT,
-                    "Origin": "https://live.bilibili.com",
                 },
                 ping_interval=30,
                 ping_timeout=10,
@@ -123,9 +169,12 @@ class BilibiliCollector:
 
     async def _get_danmu_info(self) -> Optional[dict]:
         try:
+            params: dict = {"id": self.room_id, "type": "0"}
+            if self._wbi_img_key and self._wbi_sub_key:
+                params = _sign_wbi_params(params, self._wbi_img_key, self._wbi_sub_key)
             resp = await self._client.get(
                 BILIBILI_API_DANMU_INFO,
-                params={"id": self.room_id, "type": "0"},
+                params=params,
             )
             resp.raise_for_status()
             data = resp.json()
@@ -227,26 +276,40 @@ class BilibiliCollector:
             logger.info("Bilibili room %s auth success", self.room_id)
 
     def _handle_raw_packets(self, data: bytes):
-        """Handle proto_ver 0/1/2 raw packets (no brotli compression)."""
-        try:
-            j = json.loads(data.decode("utf-8", errors="replace"))
-        except Exception:
-            return
+        """Parse Bilibili OP 5 body: each sub-packet is [4B len BE][JSON body]."""
+        offset = 0
+        while offset + 4 <= len(data):
+            try:
+                sub_len = struct.unpack(">I", data[offset:offset + 4])[0]
+            except struct.error:
+                break
+            offset += 4
+            if sub_len <= 0 or offset + sub_len > len(data):
+                break
 
-        cmd = j.get("cmd", "")
+            body_chunk = data[offset:offset + sub_len]
+            offset += sub_len
 
-        if cmd == "DANMU_MSG":
+            try:
+                j = json.loads(body_chunk.decode("utf-8", errors="replace"))
+            except Exception:
+                continue
+
+            cmd = j.get("cmd", "")
+            if cmd != "DANMU_MSG":
+                continue
+
             info_list = j.get("info", [])
             if len(info_list) < 2:
-                return
+                continue
 
-            content = str(info_list[1]) if len(info_list) > 1 else ""
+            content = str(info_list[1])
             user_arr = info_list[2] if len(info_list) > 2 else []
             user_name = str(user_arr[1]) if len(user_arr) > 1 else "匿名"
 
             clean_content = _extract_cjk(content)
             if not clean_content:
-                return
+                continue
 
             danmaku = {
                 "platform": "bilibili",

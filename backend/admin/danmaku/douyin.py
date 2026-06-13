@@ -199,9 +199,9 @@ class DouyinCollector:
         try:
             async with ws_connect(
                 ws_url,
-                extra_headers={
+                origin=DOUYIN_LIVE_URL,
+                additional_headers={
                     "User-Agent": USER_AGENT,
-                    "Origin": DOUYIN_LIVE_URL,
                 },
                 ping_interval=10,
                 ping_timeout=5,
