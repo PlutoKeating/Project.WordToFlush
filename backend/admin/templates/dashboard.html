@@ -217,18 +217,27 @@
       });
     }
 
-    async     function stopCollect(platform) {
+    async function stopCollect(platform) {
       const roomId = platform === 'douyin'
         ? document.getElementById('dyRoom').value.trim()
         : document.getElementById('biliRoom').value.trim();
       if (!roomId) return;
 
-      fetch('/api/danmaku/stop', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ platform, room: roomId }),
-      });
-      updateStatus(platform, 'stopped', '已停止');
+      setButtonsDisabled(platform, true);
+      try {
+        const resp = await fetch('/api/danmaku/stop', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ platform, room: roomId }),
+        });
+        const data = await resp.json();
+        if (data.ok) {
+          updateStatus(platform, 'stopped', '已停止');
+        }
+      } catch (err) {
+        // still update UI even on error
+        updateStatus(platform, 'stopped', '已停止');
+      }
       setButtonsDisabled(platform, false);
     }
 

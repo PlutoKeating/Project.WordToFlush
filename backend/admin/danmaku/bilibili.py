@@ -110,6 +110,8 @@ class BilibiliCollector:
         while self._running:
             try:
                 await self._connect()
+            except asyncio.CancelledError:
+                break
             except Exception as e:
                 logger.error("Bilibili collector error for room %s: %s", self.room_id, e)
             if self._running:
@@ -319,6 +321,7 @@ class BilibiliCollector:
                         elif attempt == "zlib":
                             import zlib
                             data = zlib.decompress(data)
+                        logger.debug("Bilibili room %s OP5 decompress: %s -> %d bytes", self.room_id, attempt, len(data))
                         break
                     except Exception:
                         continue
@@ -339,6 +342,7 @@ class BilibiliCollector:
 
         # proto_ver 1/2/3 after decompress: [4B len BE][JSON][4B len BE][JSON]...
         offset = 0
+        sub_count = 0
         while offset + 4 <= len(data):
             try:
                 sub_len = struct.unpack(">I", data[offset:offset + 4])[0]
@@ -353,17 +357,19 @@ class BilibiliCollector:
                 j = json.loads(body_chunk.decode("utf-8", errors="replace"))
             except Exception:
                 continue
+            sub_count += 1
             self._process_single_json(j)
+        if sub_count > 0:
+            logger.debug("Bilibili room %s OP5 parsed %d sub-packets", self.room_id, sub_count)
 
     def _process_single_json(self, j: dict):
         cmd = j.get("cmd", "")
-        if not hasattr(self, '_seen_cmds'):
-            self._seen_cmds = set()
-        if cmd not in self._seen_cmds:
-            self._seen_cmds.add(cmd)
-            logger.info("Bilibili room %s OP5 cmd: %s", self.room_id, cmd)
-        else:
-            logger.debug("Bilibili room %s OP5 cmd: %s", self.room_id, cmd)
+        if cmd != "DANMU_MSG":
+            if cmd not in ("WATCHED_CHANGE", "ONLINE_RANK_COUNT", "ONLINE_RANK_V2",
+                           "INTERACT_WORD", "ENTRY_EFFECT", "COMBO_SEND", "SEND_GIFT"):
+                logger.info("Bilibili room %s OP5 cmd: %s", self.room_id, cmd)
+            else:
+                logger.debug("Bilibili room %s OP5 cmd: %s", self.room_id, cmd)
 
         if cmd != "DANMU_MSG":
             return
@@ -380,7 +386,7 @@ class BilibiliCollector:
         if not clean_content:
             return
 
-        logger.info("Bilibili DANMU: %s: %s", user_name, clean_content)
+        logger.info("Bilibili DANMU room %s: %s -> %s", self.room_id, user_name, clean_content)
 
         danmaku = {
             "platform": "bilibili",

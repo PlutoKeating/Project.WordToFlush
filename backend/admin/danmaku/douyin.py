@@ -129,6 +129,8 @@ class DouyinCollector:
         while self._running:
             try:
                 await self._connect()
+            except asyncio.CancelledError:
+                break
             except Exception as e:
                 logger.error("Douyin collector error for room %s: %s", self.room_number, e)
             if self._running:
