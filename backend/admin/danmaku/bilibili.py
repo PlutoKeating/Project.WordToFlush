@@ -155,8 +155,7 @@ class BilibiliCollector:
                 additional_headers={
                     "User-Agent": USER_AGENT,
                 },
-                ping_interval=30,
-                ping_timeout=10,
+                ping_interval=None,
                 close_timeout=5,
             ) as ws:
                 self._ws = ws
