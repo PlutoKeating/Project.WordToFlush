@@ -2,6 +2,17 @@ import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
 import type { RoomState, WordPuzzle, GuessRecord, PuzzleSolvedEvent } from '@shared/types/game'
 
+function generateUUID(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0
+    const v = c === 'x' ? r : (r & 0x3 | 0x8)
+    return v.toString(16)
+  })
+}
+
 export const useGameStore = defineStore('game', () => {
   const ws = ref<WebSocket | null>(null)
   const connected = ref(false)
@@ -24,7 +35,7 @@ export const useGameStore = defineStore('game', () => {
   })
 
   function connect(platform: string, roomId: string) {
-    clientId.value = crypto.randomUUID()
+    clientId.value = generateUUID()
     compositeRoomId.value = `${roomId}:${clientId.value}`
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
