@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { useGameStore } from '../stores/gameStore'
-import { storeToRefs } from 'pinia'
 import { computed, ref, watch } from 'vue'
 
 const store = useGameStore()
-const { timeLeft } = storeToRefs(store)
 
 const showAnswer = ref(false)
 const answerText = ref('')
@@ -40,21 +38,6 @@ const category = computed(() => {
 const highestAffinity = computed(() => {
   return Math.round(store.roomState.highestAffinity * 100)
 })
-
-const countdownText = computed(() => {
-  const t = timeLeft.value
-  const m = String(Math.floor(t / 60)).padStart(2, '0')
-  const s = String(t % 60).padStart(2, '0')
-  return `${m}:${s}`
-})
-
-const isCountdownUrgent = computed(() => {
-  return timeLeft.value <= 18
-})
-
-const hasPuzzle = computed(() => {
-  return store.roomState.currentPuzzle !== null
-})
 </script>
 
 <template>
@@ -82,8 +65,8 @@ const hasPuzzle = computed(() => {
       当前最高关联度：
       <span class="text-neon-pink font-bold glow-pink">{{ highestAffinity }}%</span>
     </div>
-    <div v-if="hasPuzzle" class="text-sm font-bold" :class="isCountdownUrgent ? 'text-neon-pink glow-pink' : 'text-ink-gray'">
-      倒计时：{{ countdownText }}
+    <div v-if="store.hasPuzzle" class="text-sm font-bold" :class="store.isCountdownUrgent ? 'text-neon-pink glow-pink' : 'text-ink-gray'">
+      倒计时：{{ store.countdownDisplay }}
     </div>
     <div v-if="store.roomState.previousPuzzle" class="text-xs text-ink-muted">
       上期谜底：<span class="text-ink-gray">{{ store.roomState.previousPuzzle }}</span>

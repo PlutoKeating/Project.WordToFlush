@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import type { RoomState, WordPuzzle, GuessRecord, PuzzleSolvedEvent } from '@shared/types/game'
 
 const TIMEOUT_SECONDS = 180
@@ -44,6 +44,17 @@ export const useGameStore = defineStore('game', () => {
       }
     }, 1000)
   }
+
+  const countdownDisplay = computed(() => {
+    const t = timeLeft.value
+    const m = String(Math.floor(t / 60)).padStart(2, '0')
+    const s = String(t % 60).padStart(2, '0')
+    return `${m}:${s}`
+  })
+
+  const isCountdownUrgent = computed(() => timeLeft.value <= 18)
+
+  const hasPuzzle = computed(() => roomState.currentPuzzle !== null)
 
   watch(() => roomState.currentPuzzle, (newPuzzle) => {
     if (newPuzzle) {
@@ -127,5 +138,5 @@ export const useGameStore = defineStore('game', () => {
     connected.value = false
   }
 
-  return { ws, connected, roomState, lastGuessResult, puzzleSolved, timeLeft, connect, sendGuess, nextPuzzle, disconnect }
+  return { ws, connected, roomState, lastGuessResult, puzzleSolved, timeLeft, countdownDisplay, isCountdownUrgent, hasPuzzle, connect, sendGuess, nextPuzzle, disconnect }
 })
