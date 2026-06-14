@@ -1,9 +1,8 @@
 """
 Douyin (抖音) live danmaku collector.
 
-Connects to douyin live room WebSocket to capture danmaku messages.
-Extracts username + pure Chinese text content, filtering out
-non-CJK characters, emojis, and system messages.
+Connects to douyin live room WebSocket to capture all danmaku messages.
+Extracts username + text content from WebcastChatMessage frames.
 """
 
 import asyncio
@@ -40,13 +39,6 @@ DOUYIN_LIVE_URL = "https://live.douyin.com"
 DOUYIN_IM_FETCH = "/webcast/im/fetch/"
 DOUYIN_WS_BASE = "wss://webcast100-ws-web-lq.douyin.com"
 DOUYIN_WS_PATH = "/webcast/im/push/v2/"
-
-_CJK_RE = re.compile(r"[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]+")
-
-
-def _extract_cjk(text: str) -> str:
-    parts = _CJK_RE.findall(text)
-    return "".join(parts)
 
 
 def _clean_content(text: str) -> str:
@@ -409,10 +401,11 @@ class DouyinCollector:
             user_info = chat.get("user", {})
             user_name = user_info.get("nickname", "匿名")
 
-            # Filter: only pure CJK content
             clean_content = _clean_content(content)
             if not clean_content:
                 continue
+
+            logger.info("Douyin DANMU room %s: %s -> %s", self.room_number, user_name, clean_content)
 
             danmaku = {
                 "platform": "douyin",
@@ -426,4 +419,4 @@ class DouyinCollector:
                 try:
                     self.on_danmaku(danmaku)
                 except Exception:
-                    pass
+                    logger.exception("Douyin on_danmaku callback failed")

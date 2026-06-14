@@ -23,18 +23,26 @@ logger = logging.getLogger("run_admin")
 
 def _run_flask_with_bridge():
     """Run Flask admin + auto-guess bridge in the same process."""
-    from admin.app import app, start_auto_guess_bridge
+    import admin.app as admin_app
     from admin.config import ADMIN_PORT, BACKEND_WS_URL
+
+    # Create readiness event so Flask waits for bridge callback registration
+    admin_app._auto_guess_ready = threading.Event()
 
     # Start auto-guess bridge in a background daemon thread
     def _bridge_main():
-        asyncio.run(start_auto_guess_bridge(BACKEND_WS_URL))
+        asyncio.run(admin_app.start_auto_guess_bridge(BACKEND_WS_URL))
 
     bridge_thread = threading.Thread(target=_bridge_main, daemon=True, name="auto-guess-bridge")
     bridge_thread.start()
     logger.info("Auto-guess bridge thread started")
 
+    # Wait for bridge to register callback (timeout 10s)
+    if not admin_app._auto_guess_ready.wait(timeout=10):
+        logger.warning("Auto-guess bridge callback not registered within 10s, starting Flask anyway")
+
     # Start Flask
+    app = admin_app.app
     try:
         from waitress import serve
         logger.info("Starting Flask (waitress) on port %d", ADMIN_PORT)

@@ -14,7 +14,6 @@ import hashlib
 import json
 import logging
 import random
-import re
 import struct
 import time
 from functools import reduce
@@ -62,13 +61,6 @@ USER_AGENT = (
     "AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/134.0.0.0 Safari/537.36"
 )
-
-_CJK_RE = re.compile(r"[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]+")
-
-
-def _extract_cjk(text: str) -> str:
-    parts = _CJK_RE.findall(text)
-    return "".join(parts)
 
 
 def _clean_content(text: str) -> str:
@@ -412,4 +404,4 @@ class BilibiliCollector:
             try:
                 self.on_danmaku(danmaku)
             except Exception:
-                pass
+                logger.exception("Bilibili on_danmaku callback failed")

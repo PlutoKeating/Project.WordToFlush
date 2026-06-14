@@ -13,6 +13,7 @@ import asyncio
 import json
 import logging
 import queue
+import threading
 import time
 
 from flask import (
@@ -170,6 +171,7 @@ _auto_guess_loop: asyncio.AbstractEventLoop | None = None
 _auto_guess_user_ids: dict[str, str] = {}
 _auto_guess_last_sent: dict[str, float] = {}
 _auto_guess_cleanup_counter: int = 0
+_auto_guess_ready: threading.Event | None = None
 GLOBAL_ROOM = "global"
 DANMAKU_MIN_INTERVAL = 1.0        # seconds per user cooldown
 DANMAKU_CLEANUP_EVERY = 100       # sweep stale entries every N calls
@@ -250,6 +252,9 @@ async def start_auto_guess_bridge(backend_ws_url: str):
     _auto_guess_loop = asyncio.get_running_loop()
 
     danmaku_manager.set_auto_guess_callback(_schedule_bridge_guess)
+    if _auto_guess_ready:
+        _auto_guess_ready.set()
+    logger.info("Auto-guess bridge callback registered")
 
     while True:
         try:

@@ -159,6 +159,8 @@ class DanmakuManager:
                 self._auto_guess_callback(danmaku)
             except Exception as e:
                 logger.warning("auto_guess_callback error: %s", e)
+        else:
+            logger.debug("auto_guess_callback not set, danmaku not forwarded to bridge")
 
     def register_sse(self, q: queue.Queue):
         self._sse_listeners.append(q)
