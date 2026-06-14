@@ -2,24 +2,11 @@ import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
 import type { RoomState, WordPuzzle, GuessRecord, PuzzleSolvedEvent } from '@shared/types/game'
 
-function generateUUID(): string {
-  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return crypto.randomUUID()
-  }
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = Math.random() * 16 | 0
-    const v = c === 'x' ? r : (r & 0x3 | 0x8)
-    return v.toString(16)
-  })
-}
-
 export const useGameStore = defineStore('game', () => {
   const ws = ref<WebSocket | null>(null)
   const connected = ref(false)
   const lastGuessResult = ref<GuessRecord | null>(null)
   const puzzleSolved = ref<PuzzleSolvedEvent | null>(null)
-  const clientId = ref('')
-  const localRoomId = ref('')
 
   const roomState = reactive<RoomState>({
     roomId: '',
@@ -34,10 +21,7 @@ export const useGameStore = defineStore('game', () => {
     revealedChars: [],
   })
 
-  function connect(platform: string, roomId: string) {
-    clientId.value = generateUUID()
-    localRoomId.value = roomId
-
+  function connect() {
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
     const wsUrl = backendUrl.replace(/^http/, 'ws') + '/ws'
 
@@ -45,11 +29,9 @@ export const useGameStore = defineStore('game', () => {
 
     ws.value.onopen = () => {
       connected.value = true
-      roomState.roomId = roomId
-      roomState.platform = platform as RoomState['platform']
       ws.value?.send(JSON.stringify({
         event: 'room:join',
-        data: { roomId, platform, clientId: clientId.value },
+        data: { roomId: 'global', platform: 'bilibili' },
       }))
     }
 
@@ -57,9 +39,7 @@ export const useGameStore = defineStore('game', () => {
       const msg = JSON.parse(event.data)
       if (msg.event === 'game:state') {
         const data = msg.data
-        const restoredRoomId = roomState.roomId
         Object.assign(roomState, data)
-        roomState.roomId = restoredRoomId
       } else if (msg.event === 'game:newPuzzle') {
         roomState.currentPuzzle = msg.data
         puzzleSolved.value = null
@@ -83,7 +63,7 @@ export const useGameStore = defineStore('game', () => {
     if (ws.value?.readyState === WebSocket.OPEN && guess.trim()) {
       ws.value.send(JSON.stringify({
         event: 'game:guess',
-        data: { roomId: localRoomId.value, userId, userName, guess: guess.trim(), clientId: clientId.value },
+        data: { userId, userName, guess: guess.trim() },
       }))
     }
   }
@@ -92,7 +72,7 @@ export const useGameStore = defineStore('game', () => {
     if (ws.value?.readyState === WebSocket.OPEN) {
       ws.value.send(JSON.stringify({
         event: 'game:nextPuzzle',
-        data: { roomId: localRoomId.value, clientId: clientId.value },
+        data: {},
       }))
     }
   }
@@ -101,7 +81,7 @@ export const useGameStore = defineStore('game', () => {
     if (ws.value?.readyState === WebSocket.OPEN) {
       ws.value.send(JSON.stringify({
         event: 'room:leave',
-        data: { roomId: roomState.roomId },
+        data: {},
       }))
     }
     ws.value?.close()
@@ -109,5 +89,5 @@ export const useGameStore = defineStore('game', () => {
     connected.value = false
   }
 
-  return { ws, connected, roomState, lastGuessResult, puzzleSolved, clientId, connect, sendGuess, nextPuzzle, disconnect }
+  return { ws, connected, roomState, lastGuessResult, puzzleSolved, connect, sendGuess, nextPuzzle, disconnect }
 })

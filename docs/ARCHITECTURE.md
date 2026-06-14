@@ -25,7 +25,7 @@
 │             │              │                          │
 │  ┌──────────▼──────────────▼────────────────────┐    │
 │  │          SessionManager                      │    │
-│  │   房间隔离 · 状态管理 · 多开支持                │    │
+│  │   全局会话 · 状态管理                │    │
 │  └──────────┬───────────────────────────────────┘    │
 │             │                                          │
 │  ┌──────────▼──────────┐  ┌────────────────────┐     │
@@ -60,18 +60,21 @@
 ### REST API (backend/)
 
 - `GET /health` — 健康检查
-- `GET /api/rooms` — 列出活跃房间
-- `POST /api/rooms/{room_id}/next-puzzle` — 触发房间发题
+- `GET /api/rooms` — 列出活跃会话
+- `POST /api/next-puzzle` — 触发发题
 
 API 文档自动生成: 启动后访问 `http://localhost:8000/docs` (Swagger UI)
 
 ### WebSocket 协议 (JSON over WebSocket)
 
+所有客户端（前端游戏页面、Admin 弹幕桥）连接到同一全局会话 `global`，共享游戏状态。
+
 客户端 → 服务端:
 ```json
-{"event": "room:join",      "data": {"roomId": "...", "platform": "..."}}
-{"event": "room:leave",     "data": {"roomId": "..."}}
-{"event": "game:nextPuzzle","data": {"roomId": "..."}}
+{"event": "room:join",      "data": {"roomId": "global", "platform": "bilibili"}}
+{"event": "room:leave",     "data": {}}
+{"event": "game:guess",     "data": {"userId": "...", "userName": "...", "guess": "..."}}
+{"event": "game:nextPuzzle","data": {}}
 ```
 
 服务端 → 客户端:

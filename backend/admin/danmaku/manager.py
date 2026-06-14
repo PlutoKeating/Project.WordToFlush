@@ -81,10 +81,9 @@ class DanmakuManager:
         self,
         platform: str,
         room: str,
-        target_puzzle_word_length: int = 0,
     ):
         """Synchronous entry point for starting collector (called from Flask)."""
-        self._run_async(self._start_collector_async(platform, room, target_puzzle_word_length))
+        self._run_async(self._start_collector_async(platform, room))
 
     def stop_collector(self, platform: str, room: str):
         """Synchronous entry point for stopping collector (called from Flask)."""
@@ -94,7 +93,6 @@ class DanmakuManager:
         self,
         platform: str,
         room: str,
-        target_puzzle_word_length: int = 0,
     ):
         # Stop existing collector for this platform+room
         await self._stop_collector_async(platform, room)

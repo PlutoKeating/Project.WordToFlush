@@ -24,18 +24,16 @@ npm run dev               # 默认 http://localhost:3000
 
 ### 浏览器
 
-直接在浏览器打开带平台和房间参数的 URL:
+直接在浏览器打开即可，所有页面共享同一全局游戏会话:
 
 ```
-http://localhost:3000/?platform=bilibili&roomId=102
-http://localhost:3000/?platform=douyin&roomId=888
-http://localhost:3000/?platform=kuaishou&roomId=666
+http://localhost:3000/
 ```
 
 ### Electron 单窗口
 
 ```bash
-npm run electron -- --platform=bilibili --roomId=102
+npm run electron
 ```
 
 ### Electron 多开 (3 窗口)
@@ -44,7 +42,7 @@ npm run electron -- --platform=bilibili --roomId=102
 npm run electron:multi
 ```
 
-自动启动 3 个独立 Electron 窗口 (B站 #102 / 抖音 #888 / 快手 #666)。
+自动启动 3 个独立 Electron 窗口，可用于多直播间 OBS 推流。所有窗口共享同一游戏状态。
 
 ## 依赖
 

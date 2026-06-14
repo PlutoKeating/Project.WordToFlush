@@ -25,28 +25,18 @@
 
 ### `GET /api/rooms`
 
-列出所有当前活跃的房间 ID。
+列出当前活跃的全局会话。
 
 **响应示例:**
 ```json
-{"rooms": ["room-102", "room-888"]}
+{"rooms": ["global"]}
 ```
 
 ---
 
-### `POST /api/rooms/{room_id}/next-puzzle`
+### `POST /api/next-puzzle`
 
-为指定房间触发发题。如果房间不存在则自动创建。
-
-**路径参数:**
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `room_id` | string | 房间标识符 |
-
-**查询参数:**
-| 参数 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `platform` | string | `"bilibili"` | 平台: bilibili / douyin / kuaishou |
+触发发题。系统使用全局唯一会话（`global`），首次调用自动创建会话。
 
 **响应示例:**
 ```json
@@ -68,46 +58,43 @@
 
 **端点:** `ws://<host>:8000/ws`
 
+所有客户端（前端页面、Admin 弹幕桥）连接到此同一端点，共享全局唯一游戏会话 `global`。
+
 ### 客户端 → 服务端事件
 
 #### `room:join`
-加入房间，建立 WebSocket 连接后发送。前端每次页面加载生成唯一的 `clientId`（UUID），后端使用复合键 `roomId:clientId` 实现会话隔离。
+加入全局会话。所有客户端加入同一会话，共享游戏状态。
 
 ```json
 {
   "event": "room:join",
   "data": {
-    "roomId": "room-102",
-    "platform": "bilibili",
-    "clientId": "550e8400-e29b-41d4-a716-446655440000"
+    "roomId": "global",
+    "platform": "bilibili"
   }
 }
 ```
 
 #### `room:leave`
-离开房间。
+离开全局会话。
 
 ```json
 {
   "event": "room:leave",
-  "data": {
-    "roomId": "room-102"
-  }
+  "data": {}
 }
 ```
 
 #### `game:guess`
-发送猜测词，供本地测试使用。
+发送猜测词。弹幕桥和前端测试输入均使用此事件。**字数校验由后端 `process_guess` 自动完成**——长度与谜底不符的猜测会被静默丢弃。
 
 ```json
 {
   "event": "game:guess",
   "data": {
-    "roomId": "room-102",
-    "userId": "player-0001",
+    "userId": "danmaku-12345",
     "userName": "小明",
-    "guess": "文具盒",
-    "clientId": "550e8400-e29b-41d4-a716-446655440000"
+    "guess": "文具盒"
   }
 }
 ```
@@ -118,29 +105,30 @@
 ```json
 {
   "event": "game:nextPuzzle",
-  "data": {
-    "roomId": "room-102",
-    "clientId": "550e8400-e29b-41d4-a716-446655440000"
-  }
+  "data": {}
 }
 ```
 
 ### 服务端 → 客户端事件
 
 #### `game:state`
-完整房间状态广播，加入房间时发送一次，发题时重新广播。
+完整游戏状态广播。发题时、猜词时广播给所有已连接客户端。
 
 ```json
 {
   "event": "game:state",
   "data": {
-    "roomId": "room-102",
+    "roomId": "global",
     "platform": "bilibili",
-    "currentPuzzle": { ... },
+    "currentPuzzle": { "id": "p001", "word": "笔记本", "wordLength": 3, "category": "学习用品", "difficulty": "easy" },
     "streak": 0,
     "highestAffinity": 0.85,
-    "guessBoard": [ ... ],
-    "leaderboard": [ ... ],
+    "guessBoard": [
+      { "userId": "danmaku-12345", "userName": "小明", "guess": "文具盒", "affinity": 0.87, "timestamp": 1718000000000 }
+    ],
+    "leaderboard": [
+      { "userId": "danmaku-12345", "userName": "小明", "totalScore": 87, "currentScore": 87, "guessCount": 1 }
+    ],
     "previousPuzzle": null,
     "solvedBy": null,
     "revealedChars": [false, false, false]
@@ -149,7 +137,7 @@
 ```
 
 #### `game:newPuzzle`
-新题广播，发题时广播给房间内所有客户端。
+新题广播。
 
 ```json
 {
@@ -165,13 +153,13 @@
 ```
 
 #### `game:guessResult`
-单条猜测结果广播，每次有用户成功猜词后发送。
+单条猜测结果广播，每次成功处理猜测后发送。
 
 ```json
 {
   "event": "game:guessResult",
   "data": {
-    "userId": "user-001",
+    "userId": "danmaku-12345",
     "userName": "小明",
     "guess": "文具盒",
     "affinity": 0.87,
@@ -180,20 +168,8 @@
 }
 ```
 
-#### `error`
-服务端处理出错时返回，WebSocket 连接不会断开。
-
-```json
-{
-  "event": "error",
-  "data": {
-    "message": "处理猜测时出错，请重试"
-  }
-}
-```
-
 #### `game:puzzleSolved`
-谜题被猜中时广播，包含谜底和猜中用户名。前端应显示正确答案 3 秒，之后后端自动推进到下一题。
+谜题被猜中时广播。
 
 ```json
 {
@@ -201,6 +177,18 @@
   "data": {
     "word": "铅笔盒",
     "solvedBy": "小明"
+  }
+}
+```
+
+#### `error`
+服务端处理出错时返回。
+
+```json
+{
+  "event": "error",
+  "data": {
+    "message": "处理猜测时出错，请重试"
   }
 }
 ```
@@ -213,16 +201,16 @@
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
-| `roomId` | string | 房间 ID |
-| `platform` | string | 平台: "bilibili" \| "douyin" \| "kuaishou" |
+| `roomId` | string | 固定为 `"global"` |
+| `platform` | string | 平台标识 |
 | `currentPuzzle` | WordPuzzle \| null | 当前谜题 |
 | `streak` | int | 连胜次数 |
 | `highestAffinity` | float | 当前最高关联度 (0.0-1.0) |
 | `guessBoard` | GuessRecord[] | 竞猜记录列表 |
 | `leaderboard` | Player[] | 积分排行榜 |
 | `previousPuzzle` | string \| null | 上一题谜底 |
-| `solvedBy` | string \| null | 本轮猜中者用户名 (null 表示未猜中) |
-| `revealedChars` | boolean[] | 逐字位揭示状态: 某位匹配过则 true，前端对应位显示绿色实际汉字 |
+| `solvedBy` | string \| null | 本轮猜中者用户名 |
+| `revealedChars` | boolean[] | 逐字位揭示状态 |
 
 ### WordPuzzle
 
@@ -239,7 +227,7 @@
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | `userId` | string | 用户 ID |
-| `userName` | string | 用户名 |
+| `userName` | string | 用户名（弹幕来源显示真实观众名） |
 | `guess` | string | 猜测词 |
 | `affinity` | float | 关联度 (0.0-1.0) |
 | `timestamp` | int | Unix 毫秒时间戳 |
@@ -262,7 +250,7 @@ Admin 控制面板 API，运行在端口 8001（容器内）。
 
 ### `POST /api/login`
 
-登录认证。用户名和密码通过 `backend/.env` 中的 `ADMIN_USERNAME` / `ADMIN_PASSWORD` 配置。
+登录认证。
 
 **请求体:**
 ```json
@@ -288,21 +276,19 @@ Admin 控制面板 API，运行在端口 8001（容器内）。
   "collectors": [
     {"platform": "douyin", "room": "123456", "running": true, "connected": true, "error": ""}
   ],
-  "autoGuess": {"enabled": true, "targetRoomId": "room-102", "targetPuzzleWordLength": 2}
+  "autoGuess": {"enabled": true}
 }
 ```
 
 ### `POST /api/danmaku/start`
 
-启动指定平台的弹幕采集。
+启动指定平台的弹幕采集。采集器抓取**所有纯文本弹幕**（不限字数），通过自动猜词桥全量发送到后端。
 
 **请求体:**
 ```json
 {
   "platform": "douyin",
-  "room": "123456",
-  "targetRoomId": "room-102",
-  "targetWordLength": 2
+  "room": "123456"
 }
 ```
 
@@ -317,14 +303,12 @@ Admin 控制面板 API，运行在端口 8001（容器内）。
 
 ### `POST /api/auto-guess`
 
-配置自动猜词参数。
+控制自动猜词开关。
 
 **请求体:**
 ```json
 {
-  "enabled": true,
-  "targetRoomId": "room-102",
-  "targetWordLength": 2
+  "enabled": true
 }
 ```
 
@@ -341,4 +325,23 @@ SSE 实时弹幕流（EventSource 协议）。
   "content": "文具盒",
   "timestamp": 1718000000000
 }
+```
+
+---
+
+## 核心数据流
+
+```
+直播间弹幕 → 平台采集器(DouyinCollector/BilibiliCollector)
+    → 过滤: 仅保留纯中文文本内容
+    → DanmakuManager._publish_danmaku()
+        ├─→ SSE 推送 (Admin Dashboard 实时展示)
+        └─→ Auto-Guess Bridge (_schedule_bridge_guess)
+            → WebSocket game:guess 事件 → FastAPI Backend (/ws)
+                → danmaku_filter.clean_danmaku() 清洗
+                → 字数校验 (长度必须 == 谜底字数)
+                → VectorCalculator.calculate_affinity() Ollama 语义计算
+                → 猜中判定 (affinity >= WIN_AFFINITY_THRESHOLD)
+                → 广播 game:guessResult + game:state + game:puzzleSolved
+                    → 所有连接的前端页面同步更新
 ```

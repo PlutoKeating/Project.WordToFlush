@@ -81,10 +81,7 @@
     .danmaku-content { color: #e0e0e0; word-break: break-all; }
     .danmaku-time { color: #666; font-size: 11px; flex-shrink: 0; }
     .empty { text-align: center; color: #666; padding: 40px; }
-    .auto-guess-ctrl { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
-    .auto-guess-ctrl input { width: 100px; }
-    .config-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
-    .config-row label { font-size: 13px; color: #888; }
+    .auto-guess-ctrl { display: flex; gap: 10px; align-items: center; margin-top: 6px; }
   </style>
 </head>
 <body>
@@ -95,14 +92,10 @@
 
   <div class="container">
     <div class="card" style="margin-bottom: 20px;">
-      <h2>自动猜词配置</h2>
-      <div class="config-row">
-        <label>目标房间 ID:</label>
-        <input type="text" id="targetRoomId" placeholder="如: room-102" style="width: 180px;">
-        <label>目标词长度:</label>
-        <input type="number" id="targetWordLength" value="0" min="0" max="4" style="width: 60px;">
+      <h2>自动猜词</h2>
+      <div class="auto-guess-ctrl">
         <button class="btn btn-toggle active" id="autoGuessBtn" onclick="toggleAutoGuess()">自动猜词: 开</button>
-        <span style="color:#888;font-size:12px;">（0=不限长度）</span>
+        <span style="color:#888;font-size:12px;">弹幕内容自动作为猜测词送入游戏管线（字数不符的由后端自动过滤）</span>
       </div>
     </div>
 
@@ -189,7 +182,7 @@
       return d.innerHTML;
     }
 
-    async     function startCollect(platform) {
+    async function startCollect(platform) {
       const roomId = platform === 'douyin'
         ? document.getElementById('dyRoom').value.trim()
         : document.getElementById('biliRoom').value.trim();
@@ -197,13 +190,10 @@
 
       setButtonsDisabled(platform, true);
 
-      const targetRoomId = document.getElementById('targetRoomId').value.trim();
-      const targetWordLength = parseInt(document.getElementById('targetWordLength').value) || 0;
-
       fetch('/api/danmaku/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ platform, room: roomId, targetRoomId, targetWordLength }),
+        body: JSON.stringify({ platform, room: roomId }),
       }).then(resp => resp.json()).then(data => {
         if (data.ok) {
           updateStatus(platform, 'running', '采集中');
@@ -235,7 +225,6 @@
           updateStatus(platform, 'stopped', '已停止');
         }
       } catch (err) {
-        // still update UI even on error
         updateStatus(platform, 'stopped', '已停止');
       }
       setButtonsDisabled(platform, false);
@@ -265,13 +254,10 @@
       btn.textContent = '自动猜词: ' + (autoGuessEnabled ? '开' : '关');
       btn.className = 'btn btn-toggle' + (autoGuessEnabled ? ' active' : '');
 
-      const targetRoomId = document.getElementById('targetRoomId').value.trim();
-      const targetWordLength = parseInt(document.getElementById('targetWordLength').value) || 0;
-
       await fetch('/api/auto-guess', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ enabled: autoGuessEnabled, targetRoomId, targetWordLength }),
+        body: JSON.stringify({ enabled: autoGuessEnabled }),
       });
     }
 
@@ -294,7 +280,6 @@
           updateStatus(c.platform, cls, text);
           setButtonsDisabled(c.platform, c.running);
         }
-        // Reset buttons for platforms with no collector
         if (!seenPlatforms.has('douyin')) setButtonsDisabled('douyin', false);
         if (!seenPlatforms.has('bilibili')) setButtonsDisabled('bilibili', false);
         if (data.autoGuess) {

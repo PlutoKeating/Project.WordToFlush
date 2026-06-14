@@ -6,7 +6,7 @@
 frontend/
 ├── src/
 │   ├── main.ts                      # Vue 应用入口 (createPinia)
-│   ├── App.vue                      # 根组件 (URL 参数解析 + 连接)
+│   ├── App.vue                      # 根组件 (连接全局会话)
 │   ├── env.d.ts                     # Vite 环境变量类型声明
 │   ├── components/
 │   │   ├── TopBar.vue               # 顶部: 赛季/换题按钮
@@ -33,13 +33,11 @@ frontend/
 
 ```text
 App.vue (onMounted)
-  → 解析 URL 参数 (platform, roomId)
-    → gameStore.connect(platform, roomId)
-      → 生成 clientId = crypto.randomUUID()  // 每次页面加载唯一
-      → new WebSocket(ws://<backend>/ws)
+  → store.connect()
+    → new WebSocket(ws://<backend>/ws)
 
 WebSocket.onopen:
-  → send({ event: "room:join", data: { roomId, platform, clientId } })
+  → send({ event: "room:join", data: { roomId: "global", platform: "bilibili" } })
 
 WebSocket.onmessage:
   → game:state        → Object.assign(roomState, msg.data) (含 revealedChars)
@@ -49,11 +47,11 @@ WebSocket.onmessage:
 
 用户输入猜词:
   GuessInput → gameStore.sendGuess(userId, userName, guess)
-    → ws.send({ event: "game:guess", data: { roomId, userId, userName, guess, clientId } })
+    → ws.send({ event: "game:guess", data: { userId, userName, guess } })
 
 用户点击换题:
   TopBar → gameStore.nextPuzzle()
-    → ws.send({ event: "game:nextPuzzle", data: { roomId, clientId } })
+    → ws.send({ event: "game:nextPuzzle", data: {} })
 ```
 
 ## 组件树
@@ -74,14 +72,13 @@ App.vue
 ```typescript
 ws: Ref<WebSocket | null>          // WebSocket 连接实例
 connected: Ref<boolean>            // 连接状态
-clientId: Ref<string>              // 唯一会话标识 (crypto.randomUUID，每次页面加载生成)
-roomState: RoomState (reactive)    // 房间完整状态
+roomState: RoomState (reactive)    // 全局房间状态
 lastGuessResult: Ref<GuessRecord | null>  // 最近一次猜测结果
 puzzleSolved: Ref<PuzzleSolvedEvent | null>  // 猜中事件
 
-connect(platform, roomId)          // 生成 clientId，建立 WebSocket 连接
-sendGuess(userId, userName, guess) // 发送猜词 (含 clientId)
-nextPuzzle()                       // 请求下一题 (含 clientId)
+connect()                          // 建立 WebSocket 连接到全局会话
+sendGuess(userId, userName, guess) // 发送猜词
+nextPuzzle()                       // 请求下一题
 disconnect()                       // 断开连接
 ```
 

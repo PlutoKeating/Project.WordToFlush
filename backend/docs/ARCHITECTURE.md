@@ -115,27 +115,27 @@ POST /api/rooms/{id}/next-puzzle
 
 ```
 Client connect → WS /ws
-  → room:join → 提取 roomId + clientId
-              → 构造复合键 "{roomId}:{clientId}"
-              → SessionManager.create_room(复合键)
-              → ConnectionManager.connect(复合键)
-              → 回复 game:state (仅当前客户端)
+  → room:join → 固定使用全局房间键 "global"
+              → 首次加入: SessionManager.create_room("global")
+                         → SessionManager.next_puzzle("global")
+                         → 广播 game:newPuzzle + game:state
+              → 后续加入: 仅向新客户端发送当前 game:state
+              → ConnectionManager.connect(websocket, "global")
 
-  → game:guess → 通过 roomId + clientId 解析复合键
+  → game:guess → 直接路由到 "global" 全局会话
               → GameMaster.process_guess()
               → 字数匹配校验 (guess 长度必须 == 谜底长度)
               → 逐字位字符比较，匹配则更新 room_state.revealed_chars[i] = True
               → VectorCalculator.calculate_affinity()
               → 检测是否猜中 (affinity >= WIN_AFFINITY_THRESHOLD)
-              → ConnectionManager.broadcast(复合键, game:guessResult)
-              → ConnectionManager.broadcast(复合键, game:state)
-              → 若猜中: broadcast(复合键, game:puzzleSolved)
+              → ConnectionManager.broadcast("global", game:guessResult)
+              → ConnectionManager.broadcast("global", game:state)
+              → 若猜中: broadcast("global", game:puzzleSolved)
               → 若猜中: 3s 后自动调用 next_puzzle()
 
-  → game:nextPuzzle → 通过 roomId + clientId 解析复合键
-                    → SessionManager.next_puzzle(复合键)
-                    → ConnectionManager.broadcast(复合键, game:newPuzzle)
-                    → ConnectionManager.broadcast(复合键, game:state)
+  → game:nextPuzzle → SessionManager.next_puzzle("global")
+                    → ConnectionManager.broadcast("global", game:newPuzzle)
+                    → ConnectionManager.broadcast("global", game:state)
 
 Client disconnect → ConnectionManager.disconnect()
 ```
@@ -152,20 +152,22 @@ Admin Dashboard → POST /api/danmaku/start
         → SSE 推送到 Dashboard 前端
         → Auto-Guess Bridge:
           → 检查是否开启自动猜词
-          → 字数匹配校验 (与当前谜底字数一致)
-          → WSS → FastAPI /ws 发送 game:guess
+          → 全量转发弹幕内容作为 game:guess 事件 (不限字数)
+          → WSS → FastAPI /ws
 
-Auto-Guess Bridge → 维持 WSS 连接到 FastAPI
-  → 监听 game:state 获取当前谜底字数
-  → 将弹幕用户+内容组装为 game:guess 事件提交
+Backend process_guess():
+  → danmaku_filter.clean_danmaku() 清洗
+  → 字数校验 (长度 == 谜底字数，不符合的静默丢弃)
+  → 语义计算 + 判定 + 广播
 ```
 
-### 会话隔离机制
+### 会话隔离机制 (已移除)
 
-- **前端会话标识**: 每次页面加载生成唯一 `clientId`（`crypto.randomUUID()`），包含在 `room:join` 及后续所有 WebSocket 消息中
-- **复合房间键**: 后端使用 `{roomId}:{clientId}` 作为内部房间键，实现每个浏览器页面独立游戏状态
-- **刷新/新标签页**: 新的 `clientId` → 新的复合键 → 全新游戏，无状态残留
-- **向后兼容**: 若未提供 `clientId`，回退到使用原始 `roomId`
+旧版本使用复合键 `{roomId}:{clientId}` 实现每个浏览器页面的独立游戏状态。
+当前版本已移除 clientId 隔离机制，改为全局唯一会话 `global`：
+- 所有前端页面连接到同一全局会话
+- 所有 clientId 参数从 WebSocket 协议中移除
+- 同一时刻只有一场游戏，所有页面同步显示相同状态
 
 ## 数据持久化
 

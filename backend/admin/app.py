@@ -13,7 +13,6 @@ import asyncio
 import json
 import logging
 import queue
-import uuid
 
 from flask import (
     Flask,
@@ -42,8 +41,6 @@ app.secret_key = FLASK_SECRET_KEY
 
 _auto_guess_state: dict = {
     "enabled": True,
-    "target_room_id": "",
-    "target_puzzle_word_length": 0,
 }
 
 
@@ -98,21 +95,14 @@ def api_danmaku_start():
     data = request.get_json(silent=True) or {}
     platform = data.get("platform", "").strip().lower()
     room = data.get("room", "").strip()
-    target_room_id = data.get("targetRoomId", "").strip()
-    target_word_length = int(data.get("targetWordLength", 0))
 
     if not platform or platform not in ("douyin", "bilibili"):
         return jsonify({"ok": False, "error": "平台仅支持 douyin 或 bilibili"}), 400
     if not room:
         return jsonify({"ok": False, "error": "请输入房间号"}), 400
 
-    _auto_guess_state["target_room_id"] = target_room_id
-    _auto_guess_state["target_puzzle_word_length"] = target_word_length
-
     try:
-        # danmaku_manager.start_collector blocks briefly to set up the collector
-        # The long-running task runs in the background event loop
-        danmaku_manager.start_collector(platform, room, target_word_length)
+        danmaku_manager.start_collector(platform, room)
         return jsonify({"ok": True})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
@@ -140,14 +130,8 @@ def api_danmaku_stop():
 def api_auto_guess_toggle():
     data = request.get_json(silent=True) or {}
     enabled = data.get("enabled", True)
-    target_room_id = data.get("targetRoomId", "")
-    target_word_length = int(data.get("targetWordLength", 0))
 
     _auto_guess_state["enabled"] = enabled
-    if target_room_id:
-        _auto_guess_state["target_room_id"] = target_room_id
-    if target_word_length:
-        _auto_guess_state["target_puzzle_word_length"] = target_word_length
 
     return jsonify({"ok": True, "state": _auto_guess_state})
 
@@ -180,15 +164,14 @@ def api_danmaku_stream():
     )
 
 
-# Auto-guess bridge state
 _auto_guess_ws: ClientConnection | None = None
-_auto_guess_client_id: str = ""
 _auto_guess_loop: asyncio.AbstractEventLoop | None = None
 _auto_guess_user_ids: dict[str, str] = {}
+GLOBAL_ROOM = "global"
 
 
 def _schedule_bridge_guess(danmaku: dict):
-    """Called from _publish_danmaku (thread context). Schedule via asyncio."""
+    """Called from _publish_danmaku (thread context). Forward danmaku to backend as guess."""
     global _auto_guess_loop, _auto_guess_ws, _auto_guess_user_ids
     if not _auto_guess_state["enabled"]:
         return
@@ -197,15 +180,10 @@ def _schedule_bridge_guess(danmaku: dict):
 
     content = danmaku.get("content", "")
     user_name = danmaku.get("userName", "匿名")
-    target_room = _auto_guess_state["target_room_id"]
-    target_len = _auto_guess_state["target_puzzle_word_length"]
 
-    if not target_room:
-        return
-    if target_len > 0 and len(content) != target_len:
+    if not content:
         return
 
-    # Stable user ID within session
     platform = danmaku.get("platform", "unknown")
     room = danmaku.get("room", "0")
     uid_key = f"{platform}:{room}:{user_name}"
@@ -214,15 +192,14 @@ def _schedule_bridge_guess(danmaku: dict):
     user_id = _auto_guess_user_ids[uid_key]
 
     async def _send_guess():
-        global _auto_guess_ws, _auto_guess_client_id
+        global _auto_guess_ws
         if not _auto_guess_ws:
             return
         try:
             msg = json.dumps({
                 "event": "game:guess",
                 "data": {
-                    "roomId": target_room,
-                    "clientId": _auto_guess_client_id,
+                    "roomId": GLOBAL_ROOM,
                     "userId": user_id,
                     "userName": user_name,
                     "guess": content,
@@ -239,9 +216,8 @@ def _schedule_bridge_guess(danmaku: dict):
 
 
 async def start_auto_guess_bridge(backend_ws_url: str):
-    """Connect to main backend WebSocket for auto-guess submission."""
-    global _auto_guess_ws, _auto_guess_client_id, _auto_guess_loop
-    _auto_guess_client_id = f"admin-{uuid.uuid4().hex[:12]}"
+    """Connect to main backend WebSocket for forwarding danmaku as guesses."""
+    global _auto_guess_ws, _auto_guess_loop
     _auto_guess_loop = asyncio.get_running_loop()
 
     danmaku_manager.set_auto_guess_callback(_schedule_bridge_guess)
@@ -255,27 +231,15 @@ async def start_auto_guess_bridge(backend_ws_url: str):
                 join_msg = json.dumps({
                     "event": "room:join",
                     "data": {
-                        "roomId": _auto_guess_state.get("target_room_id", "admin-default"),
+                        "roomId": GLOBAL_ROOM,
                         "platform": "bilibili",
-                        "clientId": _auto_guess_client_id,
                     },
                 }, ensure_ascii=False)
                 await ws.send(join_msg)
 
                 async for raw in ws:
-                    try:
-                        msg = json.loads(raw)
-                        event = msg.get("event", "")
-                        data = msg.get("data", {})
+                    pass
 
-                        if event == "game:state":
-                            puzzle = data.get("currentPuzzle")
-                            if puzzle:
-                                _auto_guess_state["target_puzzle_word_length"] = puzzle.get(
-                                    "wordLength", 0
-                                )
-                    except Exception:
-                        pass
         except Exception as e:
             logger.warning("Auto-guess bridge disconnected: %s. Reconnecting in 5s...", e)
             _auto_guess_ws = None

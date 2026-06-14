@@ -1,25 +1,20 @@
 const { app, BrowserWindow } = require('electron')
-const path = require('path')
 
-const configs = [
-  { platform: 'bilibili', roomId: '102' },
-  { platform: 'douyin', roomId: '888' },
-  { platform: 'kuaishou', roomId: '666' },
-]
+const labels = ['Window-1', 'Window-2', 'Window-3']
 
 app.whenReady().then(() => {
-  configs.forEach(({ platform, roomId }) => {
+  labels.forEach((label) => {
     const win = new BrowserWindow({
       width: 480,
       height: 854,
-      title: `WordToFlush-${platform.toUpperCase()}-${roomId}`,
+      title: `WordToFlush-${label}`,
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
       },
     })
 
-    const url = `http://localhost:3000/?platform=${platform}&roomId=${roomId}`
+    const url = 'http://localhost:3000/'
     win.loadURL(url)
   })
 })

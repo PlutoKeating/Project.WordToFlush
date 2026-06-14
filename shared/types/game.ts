@@ -39,22 +39,16 @@ export interface RoomState {
   revealedChars: boolean[]
 }
 
-export interface RoomConfig {
-  roomId: string
-  platform: Platform
-  autoNextDelay: number
-}
-
 export interface PuzzleSolvedEvent {
   word: string
   solvedBy: string
 }
 
 export interface SocketEvents {
-  'room:join': { roomId: string; platform: Platform; clientId: string }
-  'room:leave': { roomId: string }
+  'room:join': { roomId?: string; platform?: Platform }
+  'room:leave': Record<string, never>
   'game:newPuzzle': WordPuzzle
-  'game:guess': { roomId: string; userId: string; userName: string; guess: string; clientId: string }
+  'game:guess': { userId: string; userName: string; guess: string }
   'game:guessResult': GuessRecord
   'game:state': RoomState
   'game:leaderboard': Player[]

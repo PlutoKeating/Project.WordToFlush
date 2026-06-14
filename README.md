@@ -253,13 +253,15 @@ npm run dev
 
 **多开进程示例：**
 
+所有打开的页面共享同一个全局游戏会话。直接用浏览器打开即可:
+
 | 进程 | URL | 用途 |
 |:---|:---|:---|
-| 窗口 1 | `http://localhost:3000/?platform=bilibili&roomId=102` | B站直播间 #102 |
-| 窗口 2 | `http://localhost:3000/?platform=douyin&roomId=888` | 抖音直播间 #888 |
-| 窗口 3 | `http://localhost:3000/?platform=kuaishou&roomId=666` | 快手直播间 #666 |
+| 窗口 1 | `http://localhost:3000/` | 游戏画面 #1 |
+| 窗口 2 | `http://localhost:3000/` | 游戏画面 #2 |
+| 窗口 3 | `http://localhost:3000/` | 游戏画面 #3 |
 
-> 💡 **Electron 多开**：运行 `npm run electron:multi` 自动启动 3 个独立渲染进程，每个进程对应一个直播间，可直接被 OBS 窗口捕获。
+> 💡 **Electron 多开**：运行 `npm run electron:multi` 自动启动 3 个独立渲染进程，可直接被 OBS 窗口捕获。所有窗口共享同一全局游戏状态。
 
 ---
 

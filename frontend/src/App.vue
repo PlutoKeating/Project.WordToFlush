@@ -10,10 +10,7 @@ import { onMounted } from 'vue'
 const store = useGameStore()
 
 onMounted(() => {
-  const params = new URLSearchParams(window.location.search)
-  const platform = params.get('platform') || 'bilibili'
-  const roomId = params.get('roomId') || 'default'
-  store.connect(platform, roomId)
+  store.connect()
 })
 </script>
 
