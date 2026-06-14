@@ -54,7 +54,7 @@ WebSocket.onmessage:
 ```text
 App.vue
 ├── TopBar.vue         (读取 roomState.streak, 触发 nextPuzzle)
-├── DecryptZone.vue    (读取 roomState.currentPuzzle, highestAffinity, revealedChars, puzzleSolved, timeLeft)
+├── DecryptZone.vue    (读取 roomState.currentPuzzle, highestAffinity, revealedChars, puzzleSolved; 本地管理 180s 倒计时)
 ├── GuessList.vue      (读取 roomState.guessBoard, 按词汇去重 + 准确率排序)
 └── Leaderboard.vue    (读取 roomState.leaderboard, 按 totalScore 排序)
 ```
@@ -69,22 +69,18 @@ connected: Ref<boolean>            // 连接状态
 roomState: RoomState (reactive)    // 全局房间状态
 lastGuessResult: Ref<GuessRecord | null>  // 最近一次猜测结果
 puzzleSolved: Ref<PuzzleSolvedEvent | null>  // 猜中事件
-timeLeft: Ref<number>              // 当前题剩余秒数 (初始 180)
 
 connect()                          // 建立 WebSocket 连接到全局会话
 sendGuess(userId, userName, guess) // 发送猜词
 nextPuzzle()                       // 请求下一题
 disconnect()                       // 断开连接
 
-// 计时器管理 (内部)
-startTimer()                       // 启动 180 秒倒计时
-stopTimer()                        // 停止倒计时
-// 自动行为: 新题到达自动启动计时, 猜中自动停止, 超时自动调用 nextPuzzle()
-
-// DecryptZone.vue 本地 computed (读取 store.timeLeft / store.roomState.currentPuzzle):
-//   hasPuzzle: boolean             // 当前是否有活跃谜题
-//   countdownDisplay: string       // 倒计时格式化 "MM:SS"
-//   isCountdownUrgent: boolean     // 剩余 ≤18 秒时为 true
+// 倒计时 (DecryptZone.vue 本地管理)
+//   timeLeft: Ref<number>         // 剩余秒数, 初始 180
+//   startTimer() / clearTimer()   // setInterval 驱动, onUnmounted 清理
+//   watch(currentPuzzle) → start  // 新题到来自动启动
+//   watch(puzzleSolved) → stop    // 猜中自动停止
+//   归零自动调用 store.nextPuzzle()
 ```
 
 ## 样式约定

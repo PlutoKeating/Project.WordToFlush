@@ -1,15 +1,12 @@
 import { defineStore } from 'pinia'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive } from 'vue'
 import type { RoomState, WordPuzzle, GuessRecord, PuzzleSolvedEvent } from '@shared/types/game'
-
-const TIMEOUT_SECONDS = 180
 
 export const useGameStore = defineStore('game', () => {
   const ws = ref<WebSocket | null>(null)
   const connected = ref(false)
   const lastGuessResult = ref<GuessRecord | null>(null)
   const puzzleSolved = ref<PuzzleSolvedEvent | null>(null)
-  const timeLeft = ref(TIMEOUT_SECONDS)
 
   const roomState = reactive<RoomState>({
     roomId: '',
@@ -22,41 +19,6 @@ export const useGameStore = defineStore('game', () => {
     previousPuzzle: null,
     solvedBy: null,
     revealedChars: [],
-  })
-
-  let timerHandle: ReturnType<typeof setInterval> | null = null
-
-  function stopTimer() {
-    if (timerHandle !== null) {
-      clearInterval(timerHandle)
-      timerHandle = null
-    }
-  }
-
-  function startTimer() {
-    stopTimer()
-    timeLeft.value = TIMEOUT_SECONDS
-    timerHandle = setInterval(() => {
-      timeLeft.value -= 1
-      if (timeLeft.value <= 0) {
-        stopTimer()
-        nextPuzzle()
-      }
-    }, 1000)
-  }
-
-  watch(() => roomState.currentPuzzle, (newPuzzle) => {
-    if (newPuzzle) {
-      startTimer()
-    } else {
-      stopTimer()
-    }
-  })
-
-  watch(puzzleSolved, (solved) => {
-    if (solved) {
-      stopTimer()
-    }
   })
 
   function connect() {
@@ -127,5 +89,5 @@ export const useGameStore = defineStore('game', () => {
     connected.value = false
   }
 
-  return { ws, connected, roomState, lastGuessResult, puzzleSolved, timeLeft, connect, sendGuess, nextPuzzle, disconnect }
+  return { ws, connected, roomState, lastGuessResult, puzzleSolved, connect, sendGuess, nextPuzzle, disconnect }
 })
