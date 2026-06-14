@@ -25,8 +25,8 @@ from websockets.asyncio.client import connect as ws_connect
 
 logger = logging.getLogger(__name__)
 
-BILIBILI_API_LIVE_INFO = (
-    "https://api.live.bilibili.com/room/v1/Room/room_init"
+BILIBILI_API_GET_INFO = (
+    "https://api.live.bilibili.com/room/v1/Room/get_info"
 )
 BILIBILI_API_DANMU_INFO = (
     "https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo"
@@ -34,6 +34,7 @@ BILIBILI_API_DANMU_INFO = (
 BILIBILI_API_NAV = (
     "https://api.bilibili.com/x/web-interface/nav"
 )
+BILIBILI_HOME = "https://www.bilibili.com/"
 
 _MIXIN_KEY_ENC_TAB = [
     46, 47, 18, 2, 53, 8, 23, 32, 15, 50, 10, 31, 58, 3, 45, 35,
@@ -74,11 +75,12 @@ def _clean_content(text: str) -> str:
 class BilibiliCollector:
     def __init__(self, room_id: str, on_danmaku):
         """
-        room_id: bilibili live room ID (numeric string)
+        room_id: bilibili live room ID (numeric string, supports short IDs)
         on_danmaku: callback receiving dict with keys:
             platform, room, userName, content, timestamp
         """
         self.room_id = room_id
+        self.real_room_id = room_id  # resolved via get_info
         self.on_danmaku = on_danmaku
         self._ws: Optional[websockets.asyncio.client.ClientConnection] = None
         self._running = False
@@ -93,15 +95,19 @@ class BilibiliCollector:
         self._token = ""
         self._wbi_img_key: str = ""
         self._wbi_sub_key: str = ""
+        self._buvid: str = ""
         self.connected = False
 
     async def start(self):
         self._running = True
         reconnect_delay = 1
         await self._fetch_wbi_keys()
+        await self._init_room_id()
+        await self._init_buvid()
         while self._running:
             try:
                 await self._connect()
+                reconnect_delay = 1  # reset on successful connection cycle
             except asyncio.CancelledError:
                 break
             except Exception as e:
@@ -135,6 +141,51 @@ class BilibiliCollector:
                 logger.warning("Bilibili: Wbi keys not found in nav response")
         except Exception as e:
             logger.warning("Bilibili: failed to fetch Wbi keys: %s", e)
+
+    async def _init_room_id(self):
+        """Resolve short room ID to real room ID via get_info API."""
+        try:
+            resp = await self._client.get(
+                BILIBILI_API_GET_INFO,
+                params={"room_id": self.room_id},
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            if data.get("code") == 0 and data.get("data", {}).get("room_id"):
+                real_id = str(data["data"]["room_id"])
+                if real_id != self.room_id:
+                    logger.info(
+                        "Bilibili: resolved room %s → real room %s",
+                        self.room_id, real_id,
+                    )
+                self.real_room_id = real_id
+            else:
+                logger.warning(
+                    "Bilibili: get_info failed for room %s, code=%s msg=%s",
+                    self.room_id, data.get("code"), data.get("message", ""),
+                )
+        except Exception as e:
+            logger.warning("Bilibili: get_info request failed: %s, using raw room_id", e)
+
+    async def _init_buvid(self):
+        """Fetch a buvid3 cookie from Bilibili home page if not already set."""
+        try:
+            # Visit bilibili.com to get buvid3 cookie from Set-Cookie header
+            resp = await self._client.get(BILIBILI_HOME)
+            # httpx stores cookies from Set-Cookie in the client's cookie jar
+            for cookie in self._client.cookies.jar:
+                if cookie.name == "buvid3" and cookie.value:
+                    self._buvid = cookie.value
+                    logger.debug("Bilibili: got buvid3=%s...", self._buvid[:12])
+                    return
+            # Fallback: generate a synthetic buvid
+            self._buvid = "".join(
+                random.choices("0123456789ABCDEF", k=32)
+            )
+            logger.debug("Bilibili: generated synthetic buvid=%s...", self._buvid[:12])
+        except Exception as e:
+            logger.warning("Bilibili: failed to init buvid: %s", e)
+            self._buvid = "".join(random.choices("0123456789ABCDEF", k=32))
 
     async def _connect(self):
         logger.info("Bilibili: fetching danmaku info for room %s", self.room_id)
@@ -183,7 +234,7 @@ class BilibiliCollector:
 
     async def _get_danmu_info(self) -> Optional[dict]:
         try:
-            params: dict = {"id": self.room_id, "type": "0"}
+            params: dict = {"id": self.real_room_id, "type": "0"}
             if self._wbi_img_key and self._wbi_sub_key:
                 params = _sign_wbi_params(params, self._wbi_img_key, self._wbi_sub_key)
             resp = await self._client.get(
@@ -206,14 +257,19 @@ class BilibiliCollector:
 
     async def _send_auth(self, ws):
         """Send bilibili live WebSocket auth packet."""
-        auth_packet = json.dumps({
+        auth_body: dict = {
             "uid": 0,
-            "roomid": int(self.room_id),
+            "roomid": int(self.real_room_id),
             "protover": 3,
             "platform": "web",
             "type": 2,
-            "key": self._token,
-        }, ensure_ascii=False)
+        }
+        if self._token:
+            auth_body["key"] = self._token
+        if self._buvid:
+            auth_body["buvid"] = self._buvid
+
+        auth_packet = json.dumps(auth_body, ensure_ascii=False)
 
         # Bilibili WebSocket protocol: header + body
         # Header: 16 bytes total
@@ -249,11 +305,11 @@ class BilibiliCollector:
                 pass
 
     async def _heartbeat_loop(self, ws):
-        """Send heartbeat every 30 seconds."""
+        """Send heartbeat every 30 seconds with {} body (Bilibili protocol standard)."""
+        heartbeat_body = b"{}"
         while self._running:
             try:
-                # OP_HEARTBEAT = 2
-                hb = struct.pack(">IHHII", 16, 16, 1, 2, 1)
+                hb = struct.pack(">IHHII", 16 + len(heartbeat_body), 16, 1, 2, 1) + heartbeat_body
                 await ws.send(hb)
             except Exception:
                 break
@@ -317,40 +373,40 @@ class BilibiliCollector:
             skip_count = 0  # reset on successful parse
 
     def _handle_op5_body(self, data: bytes, proto_ver: int):
-        """Parse OP 5 body. proto_ver 0: raw JSON, 1: [4B len][JSON]..., 2/3: compressed then nested Bilibili packets."""
+        """Parse OP 5 body.
+
+        proto_ver 0: raw JSON
+        proto_ver 1: [4B len BE][JSON]... (uncompressed, rarely used)
+        proto_ver 2: zlib-compressed, then nested Bilibili packets
+        proto_ver 3: brotli-compressed, then nested Bilibili packets
+        """
         if proto_ver in (2, 3) and data:
-            try:
-                import brotli
-            except ImportError:
-                logger.warning("Bilibili: brotli not installed for proto_ver %d", proto_ver)
-                return
             original_len = len(data)
-            for attempt in ("brotli", "brotli_prefix4", "zlib"):
-                try:
-                    if attempt == "brotli":
+            try:
+                if proto_ver == 2:
+                    import zlib
+                    data = zlib.decompress(data)
+                    logger.debug("Bilibili room %s zlib: %d→%d bytes", self.room_id, original_len, len(data))
+                elif proto_ver == 3:
+                    import brotli
+                    try:
                         data = brotli.decompress(data)
-                    elif attempt == "brotli_prefix4":
+                    except Exception:
+                        # Some servers prepend a 4-byte length prefix
                         data = brotli.decompress(data[4:])
-                    elif attempt == "zlib":
-                        import zlib
-                        data = zlib.decompress(data)
-                    # Successfully decompressed. The result contains nested Bilibili
-                    # packets with standard 16-byte headers. Recursively parse them.
-                    logger.debug(
-                        "Bilibili room %s decompressed %d→%d bytes (%s)",
-                        self.room_id, original_len, len(data), attempt,
-                    )
-                    if len(data) >= 16:
-                        self._handle_packet(data)
-                    else:
-                        logger.warning(
-                            "Bilibili room %s decompressed data too small (%d bytes), discarding",
-                            self.room_id, len(data),
-                        )
-                    return
-                except Exception:
-                    continue
-            logger.warning("Bilibili: cannot decompress proto_ver %d body (%d bytes)", proto_ver, original_len)
+                    logger.debug("Bilibili room %s brotli: %d→%d bytes", self.room_id, original_len, len(data))
+            except ImportError as e:
+                logger.warning("Bilibili: decompression library missing for proto_ver %d: %s", proto_ver, e)
+                return
+            except Exception as e:
+                logger.warning("Bilibili: decompression failed for proto_ver %d (%d bytes): %s", proto_ver, original_len, e)
+                return
+
+            if len(data) >= 16:
+                # Decompressed data contains nested Bilibili packets with 16-byte headers
+                self._handle_packet(data)
+            else:
+                logger.warning("Bilibili room %s decompressed data too small (%d bytes)", self.room_id, len(data))
             return
 
         if proto_ver == 0:
@@ -361,32 +417,42 @@ class BilibiliCollector:
             self._process_single_json(j)
             return
 
-        # proto_ver 1/2/3 after decompress: [4B len BE][JSON][4B len BE][JSON]...
+        # proto_ver 1: [4B len BE][JSON][4B len BE][JSON]...
         offset = 0
         sub_count = 0
-        first_error = None
+        skip_count = 0
+        max_skips = len(data)
         while offset + 4 <= len(data):
             try:
                 sub_len = struct.unpack(">I", data[offset:offset + 4])[0]
             except struct.error:
-                break
+                offset += 1
+                skip_count += 1
+                if skip_count > max_skips:
+                    break
+                continue
             offset += 4
             if sub_len <= 0 or offset + sub_len > len(data):
-                if first_error is None:
-                    first_error = f"bad sub_len={sub_len} at offset={offset-4} total={len(data)}"
-                break
+                logger.debug(
+                    "Bilibili room %s bad sub_len=%d at offset=%d total=%d",
+                    self.room_id, sub_len, offset - 4, len(data),
+                )
+                offset += 1
+                skip_count += 1
+                if skip_count > max_skips:
+                    break
+                continue
             body_chunk = data[offset:offset + sub_len]
             offset += sub_len
             try:
                 j = json.loads(body_chunk.decode("utf-8", errors="replace"))
-            except Exception as e:
-                if first_error is None:
-                    first_error = f"json err at offset={offset-sub_len}: {e}"
+            except Exception:
                 continue
             sub_count += 1
             self._process_single_json(j)
-        if sub_count == 0 and first_error:
-            logger.debug("Bilibili room %s OP5 parse failed: %s", self.room_id, first_error)
+            skip_count = 0
+        if sub_count == 0 and skip_count > 0:
+            logger.debug("Bilibili room %s OP5 proto_ver=1 parse: no valid sub-packets found", self.room_id)
         elif sub_count > 0:
             logger.debug("Bilibili room %s OP5 parsed %d sub-packets", self.room_id, sub_count)
 
@@ -421,7 +487,7 @@ class BilibiliCollector:
 
         danmaku = {
             "platform": "bilibili",
-            "room": self.room_id,
+            "room": self.real_room_id,
             "userName": user_name,
             "content": clean_content,
             "timestamp": int(time.time() * 1000),
