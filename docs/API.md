@@ -282,7 +282,7 @@ Admin 控制面板 API，运行在端口 8001（容器内）。
 
 ### `POST /api/danmaku/start`
 
-启动指定平台的弹幕采集。采集器抓取**所有非空文本弹幕**（不限字数、不限制 CJK），通过自动猜词桥全量发送到后端。每条弹幕按用户做 1 秒冷却，同一用户 1 秒内多条弹幕仅转发第一条。
+启动指定平台的弹幕采集。采集器抓取**所有非空文本弹幕**（不限字数、不限制 CJK），通过自动猜词桥全量发送到后端。无冷却限制，每条弹幕即时转发。
 
 **请求体:**
 ```json
@@ -339,7 +339,7 @@ SSE 实时弹幕流（EventSource 协议）。
         ├─→ SSE 推送 (Admin Dashboard 实时展示)
         └─→ Auto-Guess Bridge (_schedule_bridge_guess)
             → 自动猜词开关检查
-            → 按用户 1s 冷却去重 (同用户多条弹幕仅首条送入)
+            → 无冷却，每条弹幕即时转发
             → WebSocket game:guess 事件 → FastAPI Backend (/ws)
                 → danmaku_filter.clean_danmaku() 清洗 (去表情/标点/非CJK)
                 → 字数校验 (长度必须 == 谜底字数)

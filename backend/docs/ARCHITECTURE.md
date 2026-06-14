@@ -93,8 +93,14 @@ Admin Dashboard (Flask, port 8001)
     │   ├── HTTP: 获取 IM 信息 (webcast/im/fetch)
     │   └── WSS:  实时弹幕连接 (webcast100-ws-*.douyin.com)
     ├── BilibiliCollector   # B站 WSS 弹幕采集
-    │   ├── HTTP: 获取弹幕服务器信息 (api.live.bilibili.com)
+    │   ├── HTTP: 房间号解析 — room/v1/Room/get_info 短号→真实ID
+    │   ├── HTTP: 获取 buvid3 cookie (www.bilibili.com)
+    │   ├── HTTP: 获取 Wbi 签名密钥 (x/web-interface/nav)
+    │   ├── HTTP: 获取弹幕服务器 token + host_list (getDanmuInfo)
     │   └── WSS:  实时弹幕连接
+    │       ├── protover=3 auth (brotli 压缩) + buvid 字段
+    │       ├── heartbeat 30s ({} body)
+    │       └── 数据包自愈解析 (逐字节跳过畸形数据)
     └── Auto-Guess Bridge   # 自动猜词桥 (全量转发弹幕)
 ```
 
@@ -145,14 +151,15 @@ Client disconnect → ConnectionManager.disconnect()
 Admin Dashboard → POST /api/danmaku/start
   → DanmakuManager.start_collector(platform, room)
     → DouyinCollector.start() / BilibiliCollector.start()
-      → WSS 连接直播间, 实时接收弹幕
+      → WSS 连接直播间, 实时接收弹幕 (protover=3 brotli 压缩)
+      → 启动前: 房间号解析 + buvid3 反爬初始化 + Wbi 签名
       → 过滤: 仅保留非空文本内容 (无 CJK 限制，全量捕获)
       → logger.info 记录每条弹幕 (用户名+内容)
       → _on_danmaku → DanmakuManager._publish_danmaku()
         → SSE 推送到 Dashboard 前端
         → Auto-Guess Bridge (_schedule_bridge_guess):
           → 检查是否开启自动猜词
-          → 按用户 1s 冷却去重 (同用户多条弹幕仅首条送入)
+          → 无冷却限制，每条弹幕即时转发
           → 全量转发弹幕内容作为 game:guess 事件
           → WSS → FastAPI /ws
 
