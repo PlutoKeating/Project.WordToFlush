@@ -9,6 +9,7 @@ const store = useGameStore()
 const showAnswer = ref(false)
 const answerText = ref('')
 const timeLeft = ref(TIMEOUT_SECONDS)
+const currentPuzzleId = ref<string | null>(null)
 
 let timerHandle: ReturnType<typeof setInterval> | null = null
 
@@ -31,10 +32,12 @@ function startTimer() {
   }, 1000)
 }
 
-watch(() => store.roomState.currentPuzzle, (newPuzzle) => {
-  if (newPuzzle) {
+watch(() => store.roomState.currentPuzzle?.id, (newId) => {
+  if (newId && newId !== currentPuzzleId.value) {
+    currentPuzzleId.value = newId
     startTimer()
-  } else {
+  } else if (!newId) {
+    currentPuzzleId.value = null
     clearTimer()
   }
 })
@@ -43,7 +46,6 @@ watch(() => store.puzzleSolved, (solved) => {
   if (solved) {
     answerText.value = solved.word
     showAnswer.value = true
-    clearTimer()
     setTimeout(() => {
       showAnswer.value = false
     }, 3000)
