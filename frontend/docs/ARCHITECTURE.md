@@ -39,8 +39,8 @@ WebSocket.onopen:
   → send({ event: "room:join", data: { roomId: "global", platform: "bilibili" } })
 
 WebSocket.onmessage:
-  → game:state        → Object.assign(roomState, msg.data) (含 revealedChars), 自动启动 180s 倒计时
-  → game:newPuzzle    → roomState.currentPuzzle = msg.data, 复位计时
+  → game:state        → Object.assign(roomState, msg.data) (含 revealedChars)
+  → game:newPuzzle    → roomState.currentPuzzle = msg.data, 新谜题 id 变化 → 复位 180s 倒计时
   → game:guessResult  → lastGuessResult = msg.data
   → game:puzzleSolved → puzzleSolved = msg.data (触发 3s 揭示 + 猜中弹窗), 停止计时
 
@@ -54,7 +54,7 @@ WebSocket.onmessage:
 ```text
 App.vue
 ├── TopBar.vue         (读取 roomState.streak, 触发 nextPuzzle)
-├── DecryptZone.vue    (读取 roomState.currentPuzzle, highestAffinity, revealedChars, puzzleSolved; 本地管理 180s 倒计时)
+├── DecryptZone.vue    (读取 roomState.currentPuzzle, highestAffinity, revealedChars, puzzleSolved; 本地管理 180s 倒计时, 按谜题 id 判新题)
 ├── GuessList.vue      (读取 roomState.guessBoard, 按词汇去重 + 准确率排序)
 └── Leaderboard.vue    (读取 roomState.leaderboard, 按 totalScore 排序)
 ```
@@ -77,9 +77,10 @@ disconnect()                       // 断开连接
 
 // 倒计时 (DecryptZone.vue 本地管理)
 //   timeLeft: Ref<number>         // 剩余秒数, 初始 180
+//   currentPuzzleId: Ref<string>  // 当前谜题 id, 用于判新题
 //   startTimer() / clearTimer()   // setInterval 驱动, onUnmounted 清理
-//   watch(currentPuzzle) → start  // 新题到来自动启动
-//   watch(puzzleSolved) → stop    // 猜中自动停止
+//   watch(currentPuzzle?.id) → start  // 仅 id 变化时启动 (同题 game:state 不触发)
+//   watch(puzzleSolved) → stop    // 猜中停止
 //   归零自动调用 store.nextPuzzle()
 ```
 
