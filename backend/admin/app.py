@@ -167,12 +167,19 @@ def api_danmaku_stream():
 _auto_guess_ws: ClientConnection | None = None
 _auto_guess_loop: asyncio.AbstractEventLoop | None = None
 _auto_guess_user_ids: dict[str, str] = {}
+_auto_guess_last_sent: dict[str, float] = {}
 GLOBAL_ROOM = "global"
+DANMAKU_MIN_INTERVAL = 1.0  # seconds per user
 
 
 def _schedule_bridge_guess(danmaku: dict):
-    """Called from _publish_danmaku (thread context). Forward danmaku to backend as guess."""
-    global _auto_guess_loop, _auto_guess_ws, _auto_guess_user_ids
+    """Called from _publish_danmaku (thread context). Forward danmaku to backend as guess.
+
+    Rate-limited: at most one guess per user per second.
+    """
+    global _auto_guess_loop, _auto_guess_ws, _auto_guess_user_ids, _auto_guess_last_sent
+    import time as _time
+
     if not _auto_guess_state["enabled"]:
         return
     if _auto_guess_loop is None or _auto_guess_loop.is_closed():
@@ -187,6 +194,13 @@ def _schedule_bridge_guess(danmaku: dict):
     platform = danmaku.get("platform", "unknown")
     room = danmaku.get("room", "0")
     uid_key = f"{platform}:{room}:{user_name}"
+
+    now = _time.time()
+    last = _auto_guess_last_sent.get(uid_key, 0)
+    if now - last < DANMAKU_MIN_INTERVAL:
+        return
+    _auto_guess_last_sent[uid_key] = now
+
     if uid_key not in _auto_guess_user_ids:
         _auto_guess_user_ids[uid_key] = f"danmaku-{abs(hash(uid_key)) % 100000}"
     user_id = _auto_guess_user_ids[uid_key]
