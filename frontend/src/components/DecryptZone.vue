@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useGameStore } from '../stores/gameStore'
+import { storeToRefs } from 'pinia'
 import { computed, ref, watch } from 'vue'
 
 const store = useGameStore()
+const { timeLeft } = storeToRefs(store)
 
 const showAnswer = ref(false)
 const answerText = ref('')
@@ -40,14 +42,14 @@ const highestAffinity = computed(() => {
 })
 
 const countdownText = computed(() => {
-  const t = store.timeLeft
+  const t = timeLeft.value
   const m = String(Math.floor(t / 60)).padStart(2, '0')
   const s = String(t % 60).padStart(2, '0')
   return `${m}:${s}`
 })
 
 const isCountdownUrgent = computed(() => {
-  return store.timeLeft <= 18
+  return timeLeft.value <= 18
 })
 
 const hasPuzzle = computed(() => {
