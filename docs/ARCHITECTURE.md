@@ -7,13 +7,16 @@
 │                    Live Platforms                     │
 │        抖音直播间 · 快手直播间 · B站直播间               │
 └────────────────────────┬─────────────────────────────┘
-                         │ 弹幕数据
+                         │ 弹幕数据 (WSS)
 ┌────────────────────────▼─────────────────────────────┐
-│                 Live Driver SDK                       │
-│   抖音驱动器(WSS) · 快手驱动器(Web) · B站驱动器(bili)     │
-│              → 统一弹幕抽象接口 IDanmakuDriver          │
+│              Admin Danmaku Collectors                 │
+│   DouyinCollector · BilibiliCollector                │
+│   → 全量捕获非空文本弹幕，logger 记录每条              │
 └────────────────────────┬─────────────────────────────┘
-                         │ 标准化弹幕消息
+                         │ _publish_danmaku()
+                         ├─→ SSE (Admin Dashboard)
+                         └─→ Auto-Guess Bridge (1s/user 冷却)
+                                ↓ game:guess (WS)
 ┌────────────────────────▼─────────────────────────────┐
 │               Core Server (backend/)                  │
 │  ┌──────────────────────────────────────────────┐    │

@@ -59,7 +59,7 @@ backend/
 4. admin.run_admin 通过 `multiprocessing.Process` 启动三个子进程:
    - **FastAPI** (主进程): `uvicorn app.main:app` 监听 8000
    - **Flask Admin**: `waitress admin.app:app` 监听 8001
-   - **Auto-Guess Bridge**: WebSocket 连接到 FastAPI 后端，监听 puzzle 状态
+   - **Auto-Guess Bridge**: WebSocket 连接到 FastAPI 后端，全量转发弹幕为 game:guess
 5. 宿主机按 `HOST_BIND_PORT` 映射 8000, `ADMIN_HOST_BIND_PORT` 映射 8001
 
 ## 服务实例化
@@ -95,8 +95,7 @@ Admin Dashboard (Flask, port 8001)
     ├── BilibiliCollector   # B站 WSS 弹幕采集
     │   ├── HTTP: 获取弹幕服务器信息 (api.live.bilibili.com)
     │   └── WSS:  实时弹幕连接
-    └── Auto-Guess Bridge   # 自动猜词桥
-        └── WSS → FastAPI /ws (game:guess 事件提交)
+    └── Auto-Guess Bridge   # 自动猜词桥 (全量转发弹幕)
 ```
 
 ## 核心调用链
@@ -147,16 +146,23 @@ Admin Dashboard → POST /api/danmaku/start
   → DanmakuManager.start_collector(platform, room)
     → DouyinCollector.start() / BilibiliCollector.start()
       → WSS 连接直播间, 实时接收弹幕
-      → 过滤: 仅保留纯中文文本内容
+      → 过滤: 仅保留非空文本内容 (无 CJK 限制，全量捕获)
+      → logger.info 记录每条弹幕 (用户名+内容)
       → _on_danmaku → DanmakuManager._publish_danmaku()
         → SSE 推送到 Dashboard 前端
-        → Auto-Guess Bridge:
+        → Auto-Guess Bridge (_schedule_bridge_guess):
           → 检查是否开启自动猜词
-          → 全量转发弹幕内容作为 game:guess 事件 (不限字数)
+          → 按用户 1s 冷却去重 (同用户多条弹幕仅首条送入)
+          → 全量转发弹幕内容作为 game:guess 事件
           → WSS → FastAPI /ws
 
+Bridge 启动顺序:
+  run_admin.py → 创建 threading.Event
+    → bridge 线程: start_auto_guess_bridge() → set_auto_guess_callback() → Event.set()
+    → 主线程: Event.wait(10s) → 确保回调已注册 → 启动 Flask
+
 Backend process_guess():
-  → danmaku_filter.clean_danmaku() 清洗
+  → danmaku_filter.clean_danmaku() 清洗 (去表情/标点/非CJK)
   → 字数校验 (长度 == 谜底字数，不符合的静默丢弃)
   → 语义计算 + 判定 + 广播
 ```
