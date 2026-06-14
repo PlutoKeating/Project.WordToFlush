@@ -46,6 +46,7 @@
 │              Frontend Clients (frontend/)              │
 │  浏览器窗口 · Electron 窗口 · OBS 窗口捕获              │
 │  Vue 3 + Pinia + TailwindCSS + 原生 WebSocket         │
+│  180s 倒计时 · 超时自动换题 · 临近 18s 红字提醒        │
 └──────────────────────────────────────────────────────┘
 ```
 
