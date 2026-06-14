@@ -46,6 +46,7 @@ watch(() => store.puzzleSolved, (solved) => {
   if (solved) {
     answerText.value = solved.word
     showAnswer.value = true
+    clearTimer()
     setTimeout(() => {
       showAnswer.value = false
     }, 3000)
