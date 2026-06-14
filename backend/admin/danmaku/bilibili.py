@@ -296,14 +296,13 @@ class BilibiliCollector:
                     pass
 
             elif op == 5:
-                logger.debug("Bilibili room %s OP5 body_len=%d proto_ver=%d", self.room_id, len(body), proto_ver)
                 self._handle_op5_body(body, proto_ver)
 
             elif op == 8:
                 logger.info("Bilibili room %s auth success", self.room_id)
 
             else:
-                logger.info("Bilibili room %s op=%d seq=%d total=%d", self.room_id, op, seq, total_len)
+                logger.debug("Bilibili room %s op=%d seq=%d total=%d", self.room_id, op, seq, total_len)
 
             offset += total_len
 
@@ -321,7 +320,11 @@ class BilibiliCollector:
                         elif attempt == "zlib":
                             import zlib
                             data = zlib.decompress(data)
-                        logger.debug("Bilibili room %s OP5 decompress: %s -> %d bytes", self.room_id, attempt, len(data))
+                        # After decompression, the data may be a nested Bilibili packet
+                        # with its own header. Recursively handle it.
+                        if len(data) >= 16:
+                            self._handle_packet(data)
+                            return
                         break
                     except Exception:
                         continue
@@ -343,6 +346,7 @@ class BilibiliCollector:
         # proto_ver 1/2/3 after decompress: [4B len BE][JSON][4B len BE][JSON]...
         offset = 0
         sub_count = 0
+        first_error = None
         while offset + 4 <= len(data):
             try:
                 sub_len = struct.unpack(">I", data[offset:offset + 4])[0]
@@ -350,26 +354,35 @@ class BilibiliCollector:
                 break
             offset += 4
             if sub_len <= 0 or offset + sub_len > len(data):
+                if first_error is None:
+                    first_error = f"bad sub_len={sub_len} at offset={offset-4} total={len(data)}"
                 break
             body_chunk = data[offset:offset + sub_len]
             offset += sub_len
             try:
                 j = json.loads(body_chunk.decode("utf-8", errors="replace"))
-            except Exception:
+            except Exception as e:
+                if first_error is None:
+                    first_error = f"json err at offset={offset-sub_len}: {e}"
                 continue
             sub_count += 1
             self._process_single_json(j)
-        if sub_count > 0:
+        if sub_count == 0 and first_error:
+            logger.debug("Bilibili room %s OP5 parse failed: %s", self.room_id, first_error)
+        elif sub_count > 0:
             logger.debug("Bilibili room %s OP5 parsed %d sub-packets", self.room_id, sub_count)
 
     def _process_single_json(self, j: dict):
         cmd = j.get("cmd", "")
-        if cmd != "DANMU_MSG":
-            if cmd not in ("WATCHED_CHANGE", "ONLINE_RANK_COUNT", "ONLINE_RANK_V2",
-                           "INTERACT_WORD", "ENTRY_EFFECT", "COMBO_SEND", "SEND_GIFT"):
+        if cmd == "DANMU_MSG":
+            logger.info("Bilibili room %s OP5 cmd: DANMU_MSG (processing...)", self.room_id)
+        else:
+            # Log non-repeating cmds at INFO, common ones at DEBUG
+            if not hasattr(self, '_seen_cmds'):
+                self._seen_cmds = set()
+            if cmd not in self._seen_cmds:
+                self._seen_cmds.add(cmd)
                 logger.info("Bilibili room %s OP5 cmd: %s", self.room_id, cmd)
-            else:
-                logger.debug("Bilibili room %s OP5 cmd: %s", self.room_id, cmd)
 
         if cmd != "DANMU_MSG":
             return

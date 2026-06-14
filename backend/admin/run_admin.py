@@ -38,7 +38,7 @@ def _run_flask_with_bridge():
     try:
         from waitress import serve
         logger.info("Starting Flask (waitress) on port %d", ADMIN_PORT)
-        serve(app, host="0.0.0.0", port=ADMIN_PORT, threads=4)
+        serve(app, host="0.0.0.0", port=ADMIN_PORT, threads=4, send_bytes=1)
     except ImportError:
         logger.info("Starting Flask (dev server) on port %d", ADMIN_PORT)
         app.run(host="0.0.0.0", port=ADMIN_PORT, debug=False, threaded=True)

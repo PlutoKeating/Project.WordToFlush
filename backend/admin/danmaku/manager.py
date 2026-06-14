@@ -102,7 +102,7 @@ class DanmakuManager:
         state = CollectorState(platform=platform, room=room, running=True)
         self._collectors.append(state)
 
-        async def _on_danmaku(d: dict):
+        def _on_danmaku(d: dict):
             self._publish_danmaku(d)
 
         try:
