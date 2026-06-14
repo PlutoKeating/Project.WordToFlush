@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useGameStore } from '../stores/gameStore'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, toRef, watch } from 'vue'
 
 const store = useGameStore()
+const timeLeft = toRef(store, 'timeLeft')
 
 const showAnswer = ref(false)
 const answerText = ref('')
@@ -42,13 +43,13 @@ const highestAffinity = computed(() => {
 const hasPuzzle = computed(() => store.roomState.currentPuzzle !== null)
 
 const countdownDisplay = computed(() => {
-  const t = store.timeLeft
+  const t = timeLeft.value
   const m = String(Math.floor(t / 60)).padStart(2, '0')
   const s = String(t % 60).padStart(2, '0')
   return `${m}:${s}`
 })
 
-const isCountdownUrgent = computed(() => store.timeLeft <= 18)
+const isCountdownUrgent = computed(() => timeLeft.value <= 18)
 </script>
 
 <template>
