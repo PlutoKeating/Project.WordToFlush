@@ -173,15 +173,16 @@ _auto_guess_last_sent: dict[str, float] = {}
 _auto_guess_cleanup_counter: int = 0
 _auto_guess_ready: threading.Event | None = None
 GLOBAL_ROOM = "global"
-DANMAKU_MIN_INTERVAL = 1.0        # seconds per user cooldown
+DANMAKU_MIN_INTERVAL = 0.0        # seconds per user cooldown (disabled: forward every danmaku)
 DANMAKU_CLEANUP_EVERY = 100       # sweep stale entries every N calls
 DANMAKU_MAX_AGE = 60.0            # seconds before an entry is considered stale
 
 
 def _schedule_bridge_guess(danmaku: dict):
-    """Called from _publish_danmaku (thread context). Forward danmaku to backend as guess.
+    """Called from _publish_danmaku (thread context). Forward every danmaku to backend as guess.
 
-    Rate-limited: at most one guess per user per second.
+    No per-user rate limiting — every danmaku is forwarded. Backend filtering
+    (CJK check, word-length match) handles de-duplication at the game level.
     """
     global _auto_guess_loop, _auto_guess_ws, _auto_guess_user_ids, _auto_guess_last_sent
     global _auto_guess_cleanup_counter

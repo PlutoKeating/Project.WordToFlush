@@ -209,7 +209,7 @@ class BilibiliCollector:
         auth_packet = json.dumps({
             "uid": 0,
             "roomid": int(self.room_id),
-            "protover": 1,
+            "protover": 3,
             "platform": "web",
             "type": 2,
             "key": self._token,
@@ -260,19 +260,36 @@ class BilibiliCollector:
             await asyncio.sleep(30)
 
     def _handle_packet(self, data: bytes):
-        """Parse one or more Bilibili protocol packets from a single WebSocket frame."""
+        """Parse one or more Bilibili protocol packets from a single WebSocket frame.
+
+        On malformed data, skips forward byte-by-byte to find the next valid header
+        instead of abandoning all remaining data.
+        """
         offset = 0
+        skip_count = 0
+        max_skips = len(data)  # safety bound
         while offset + 16 <= len(data):
             try:
                 total_len, header_len, proto_ver, op, seq = struct.unpack(
                     ">IHHII", data[offset:offset + 16]
                 )
             except struct.error:
-                break
+                logger.debug("Bilibili room %s struct.unpack failed at offset=%d, skipping 1 byte", self.room_id, offset)
+                offset += 1
+                skip_count += 1
+                if skip_count > max_skips:
+                    break
+                continue
 
             if header_len < 16 or total_len < header_len:
-                break
+                logger.debug("Bilibili room %s bad header_len=%d total_len=%d at offset=%d", self.room_id, header_len, total_len, offset)
+                offset += 1
+                skip_count += 1
+                if skip_count > max_skips:
+                    break
+                continue
             if offset + total_len > len(data):
+                logger.debug("Bilibili room %s packet truncated: total_len=%d beyond buffer at offset=%d", self.room_id, total_len, offset)
                 break
 
             body_start = offset + header_len
@@ -297,35 +314,44 @@ class BilibiliCollector:
                 logger.debug("Bilibili room %s op=%d seq=%d total=%d", self.room_id, op, seq, total_len)
 
             offset += total_len
+            skip_count = 0  # reset on successful parse
 
     def _handle_op5_body(self, data: bytes, proto_ver: int):
-        """Parse OP 5 body. proto_ver 0: raw JSON, 1: [4B len][JSON]..., 2/3: compressed then [4B len][JSON]..."""
+        """Parse OP 5 body. proto_ver 0: raw JSON, 1: [4B len][JSON]..., 2/3: compressed then nested Bilibili packets."""
         if proto_ver in (2, 3) and data:
             try:
                 import brotli
-                for attempt in ("brotli", "brotli_prefix4", "zlib"):
-                    try:
-                        if attempt == "brotli":
-                            data = brotli.decompress(data)
-                        elif attempt == "brotli_prefix4":
-                            data = brotli.decompress(data[4:])
-                        elif attempt == "zlib":
-                            import zlib
-                            data = zlib.decompress(data)
-                        # After decompression, the data may be a nested Bilibili packet
-                        # with its own header. Recursively handle it.
-                        if len(data) >= 16:
-                            self._handle_packet(data)
-                            return
-                        break
-                    except Exception:
-                        continue
-                else:
-                    logger.warning("Bilibili: cannot decompress proto_ver %d body (%d bytes)", proto_ver, len(data))
-                    return
             except ImportError:
                 logger.warning("Bilibili: brotli not installed for proto_ver %d", proto_ver)
                 return
+            original_len = len(data)
+            for attempt in ("brotli", "brotli_prefix4", "zlib"):
+                try:
+                    if attempt == "brotli":
+                        data = brotli.decompress(data)
+                    elif attempt == "brotli_prefix4":
+                        data = brotli.decompress(data[4:])
+                    elif attempt == "zlib":
+                        import zlib
+                        data = zlib.decompress(data)
+                    # Successfully decompressed. The result contains nested Bilibili
+                    # packets with standard 16-byte headers. Recursively parse them.
+                    logger.debug(
+                        "Bilibili room %s decompressed %d→%d bytes (%s)",
+                        self.room_id, original_len, len(data), attempt,
+                    )
+                    if len(data) >= 16:
+                        self._handle_packet(data)
+                    else:
+                        logger.warning(
+                            "Bilibili room %s decompressed data too small (%d bytes), discarding",
+                            self.room_id, len(data),
+                        )
+                    return
+                except Exception:
+                    continue
+            logger.warning("Bilibili: cannot decompress proto_ver %d body (%d bytes)", proto_ver, original_len)
+            return
 
         if proto_ver == 0:
             try:
