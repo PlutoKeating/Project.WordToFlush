@@ -13,6 +13,7 @@ import asyncio
 import json
 import logging
 import queue
+import time
 
 from flask import (
     Flask,
@@ -168,8 +169,11 @@ _auto_guess_ws: ClientConnection | None = None
 _auto_guess_loop: asyncio.AbstractEventLoop | None = None
 _auto_guess_user_ids: dict[str, str] = {}
 _auto_guess_last_sent: dict[str, float] = {}
+_auto_guess_cleanup_counter: int = 0
 GLOBAL_ROOM = "global"
-DANMAKU_MIN_INTERVAL = 1.0  # seconds per user
+DANMAKU_MIN_INTERVAL = 1.0        # seconds per user cooldown
+DANMAKU_CLEANUP_EVERY = 100       # sweep stale entries every N calls
+DANMAKU_MAX_AGE = 60.0            # seconds before an entry is considered stale
 
 
 def _schedule_bridge_guess(danmaku: dict):
@@ -178,7 +182,7 @@ def _schedule_bridge_guess(danmaku: dict):
     Rate-limited: at most one guess per user per second.
     """
     global _auto_guess_loop, _auto_guess_ws, _auto_guess_user_ids, _auto_guess_last_sent
-    import time as _time
+    global _auto_guess_cleanup_counter
 
     if not _auto_guess_state["enabled"]:
         return
@@ -195,7 +199,18 @@ def _schedule_bridge_guess(danmaku: dict):
     room = danmaku.get("room", "0")
     uid_key = f"{platform}:{room}:{user_name}"
 
-    now = _time.time()
+    now = time.time()
+
+    # Periodic cleanup of stale entries to prevent unbounded growth
+    _auto_guess_cleanup_counter += 1
+    if _auto_guess_cleanup_counter >= DANMAKU_CLEANUP_EVERY:
+        _auto_guess_cleanup_counter = 0
+        cutoff = now - DANMAKU_MAX_AGE
+        stale = [k for k, v in _auto_guess_last_sent.items() if v < cutoff]
+        for k in stale:
+            del _auto_guess_last_sent[k]
+            _auto_guess_user_ids.pop(k, None)
+
     last = _auto_guess_last_sent.get(uid_key, 0)
     if now - last < DANMAKU_MIN_INTERVAL:
         return
