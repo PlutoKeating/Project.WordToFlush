@@ -1,0 +1,212 @@
+[
+  {
+    "id": "zw001",
+    "word": "树",
+    "wordLength": 1,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw002",
+    "word": "草",
+    "wordLength": 1,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw003",
+    "word": "花",
+    "wordLength": 1,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw004",
+    "word": "柳树",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw005",
+    "word": "松树",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw006",
+    "word": "竹子",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw007",
+    "word": "梅花",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw008",
+    "word": "桃花",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw009",
+    "word": "荷花",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw010",
+    "word": "菊花",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw011",
+    "word": "玫瑰",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw012",
+    "word": "百合",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw013",
+    "word": "牡丹",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw014",
+    "word": "兰花",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw015",
+    "word": "樱花",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw016",
+    "word": "向日葵",
+    "wordLength": 3,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw017",
+    "word": "仙人掌",
+    "wordLength": 3,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw018",
+    "word": "蒲公英",
+    "wordLength": 3,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw019",
+    "word": "含羞草",
+    "wordLength": 3,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw020",
+    "word": "牵牛花",
+    "wordLength": 3,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw021",
+    "word": "银杏树",
+    "wordLength": 3,
+    "category": "植物",
+    "difficulty": "medium"
+  },
+  {
+    "id": "zw022",
+    "word": "枫树",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw023",
+    "word": "梧桐",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw024",
+    "word": "榕树",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "medium"
+  },
+  {
+    "id": "zw025",
+    "word": "核桃树",
+    "wordLength": 3,
+    "category": "植物",
+    "difficulty": "medium"
+  },
+  {
+    "id": "zw026",
+    "word": "苹果树",
+    "wordLength": 3,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw027",
+    "word": "草莓",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw028",
+    "word": "葡萄",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw029",
+    "word": "黄瓜",
+    "wordLength": 2,
+    "category": "植物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zw030",
+    "word": "西红柿",
+    "wordLength": 3,
+    "category": "植物",
+    "difficulty": "easy"
+  }
+]

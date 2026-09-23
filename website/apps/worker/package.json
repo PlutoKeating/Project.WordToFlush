@@ -1,0 +1,12 @@
+{
+  "name": "@wtf/worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "wrangler types --check >/dev/null 2>&1 || wrangler types; tsc --noEmit"
+  },
+  "dependencies": { "@wtf/shared": "workspace:*" },
+  "devDependencies": { "typescript": "^5.6.0", "wrangler": "^4.137.0" }
+}

@@ -1,0 +1,219 @@
+[
+  {
+    "id": "ms001",
+    "word": "火锅",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms002",
+    "word": "饺子",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms003",
+    "word": "面条",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms004",
+    "word": "米饭",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms005",
+    "word": "包子",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms006",
+    "word": "粽子",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms007",
+    "word": "月饼",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms008",
+    "word": "蛋糕",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms009",
+    "word": "面包",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms010",
+    "word": "豆腐",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms011",
+    "word": "烤鸭",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms012",
+    "word": "馒头",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms013",
+    "word": "汤圆",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms014",
+    "word": "寿司",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ms015",
+    "word": "披萨",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms016",
+    "word": "汉堡",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms017",
+    "word": "炸鸡",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms018",
+    "word": "薯条",
+    "wordLength": 2,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms019",
+    "word": "冰淇淋",
+    "wordLength": 3,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms020",
+    "word": "麻辣烫",
+    "wordLength": 3,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms021",
+    "word": "酸菜鱼",
+    "wordLength": 3,
+    "category": "美食",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ms022",
+    "word": "蛋炒饭",
+    "wordLength": 3,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms023",
+    "word": "红烧肉",
+    "wordLength": 3,
+    "category": "美食",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ms024",
+    "word": "糖醋鱼",
+    "wordLength": 3,
+    "category": "美食",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ms025",
+    "word": "牛肉面",
+    "wordLength": 3,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms026",
+    "word": "烤羊肉串",
+    "wordLength": 4,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms027",
+    "word": "珍珠奶茶",
+    "wordLength": 4,
+    "category": "美食",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ms028",
+    "word": "小笼包子",
+    "wordLength": 4,
+    "category": "美食",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ms029",
+    "word": "方便面",
+    "wordLength": 3,
+    "category": "美食",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ms030",
+    "word": "煎饼果子",
+    "wordLength": 4,
+    "category": "美食",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ms031",
+    "word": "糖葫芦",
+    "wordLength": 3,
+    "category": "美食",
+    "difficulty": "easy"
+  }
+]

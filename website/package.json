@@ -1,0 +1,13 @@
+{
+  "name": "wordtoflush-website",
+  "private": true,
+  "packageManager": "pnpm@11.21.0",
+  "scripts": {
+    "dev:web": "pnpm --filter @wtf/web dev",
+    "dev:worker": "pnpm --filter @wtf/worker dev",
+    "build": "pnpm --filter @wtf/web build",
+    "typecheck": "pnpm -r typecheck",
+    "deploy:worker": "pnpm --filter @wtf/worker deploy",
+    "deploy:web": "pnpm --filter @wtf/web deploy"
+  }
+}

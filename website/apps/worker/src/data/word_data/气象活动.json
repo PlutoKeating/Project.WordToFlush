@@ -1,0 +1,212 @@
+[
+  {
+    "id": "qx001",
+    "word": "晴天",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx002",
+    "word": "阴天",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx003",
+    "word": "下雨",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx004",
+    "word": "下雪",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx005",
+    "word": "多云",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx006",
+    "word": "大风",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx007",
+    "word": "台风",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx008",
+    "word": "闪电",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx009",
+    "word": "打雷",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx010",
+    "word": "彩虹",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx011",
+    "word": "冰雹",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx012",
+    "word": "大雾",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx013",
+    "word": "暴雨",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx014",
+    "word": "暴雪",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx015",
+    "word": "寒潮",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "medium"
+  },
+  {
+    "id": "qx016",
+    "word": "微风",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx017",
+    "word": "霜降",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "medium"
+  },
+  {
+    "id": "qx018",
+    "word": "露水",
+    "wordLength": 2,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx019",
+    "word": "沙尘暴",
+    "wordLength": 3,
+    "category": "气象活动",
+    "difficulty": "medium"
+  },
+  {
+    "id": "qx020",
+    "word": "龙卷风",
+    "wordLength": 3,
+    "category": "气象活动",
+    "difficulty": "medium"
+  },
+  {
+    "id": "qx021",
+    "word": "暴风雨",
+    "wordLength": 3,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx022",
+    "word": "毛毛雨",
+    "wordLength": 3,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx023",
+    "word": "雷阵雨",
+    "wordLength": 3,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx024",
+    "word": "鹅毛大雪",
+    "wordLength": 4,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx025",
+    "word": "和风细雨",
+    "wordLength": 4,
+    "category": "气象活动",
+    "difficulty": "medium"
+  },
+  {
+    "id": "qx026",
+    "word": "晴空万里",
+    "wordLength": 4,
+    "category": "气象活动",
+    "difficulty": "medium"
+  },
+  {
+    "id": "qx027",
+    "word": "倾盆大雨",
+    "wordLength": 4,
+    "category": "气象活动",
+    "difficulty": "medium"
+  },
+  {
+    "id": "qx028",
+    "word": "乌云密布",
+    "wordLength": 4,
+    "category": "气象活动",
+    "difficulty": "easy"
+  },
+  {
+    "id": "qx029",
+    "word": "万里无云",
+    "wordLength": 4,
+    "category": "气象活动",
+    "difficulty": "medium"
+  },
+  {
+    "id": "qx030",
+    "word": "风平浪静",
+    "wordLength": 4,
+    "category": "气象活动",
+    "difficulty": "medium"
+  }
+]

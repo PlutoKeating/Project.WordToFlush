@@ -1,0 +1,226 @@
+[
+  {
+    "id": "dw001",
+    "word": "猫",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw002",
+    "word": "狗",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw003",
+    "word": "鱼",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw004",
+    "word": "鸟",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw005",
+    "word": "兔子",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw006",
+    "word": "老鼠",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw007",
+    "word": "老虎",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw008",
+    "word": "狮子",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw009",
+    "word": "大象",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw010",
+    "word": "熊猫",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw011",
+    "word": "猴子",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw012",
+    "word": "蛇",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw013",
+    "word": "青蛙",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw014",
+    "word": "蝴蝶",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw015",
+    "word": "蜻蜓",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw016",
+    "word": "蚂蚁",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw017",
+    "word": "蜜蜂",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw018",
+    "word": "蜘蛛",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw019",
+    "word": "蜗牛",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw020",
+    "word": "乌龟",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw021",
+    "word": "海豚",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw022",
+    "word": "鲸鱼",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw023",
+    "word": "鲨鱼",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw024",
+    "word": "企鹅",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw025",
+    "word": "孔雀",
+    "wordLength": 2,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw026",
+    "word": "马",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw027",
+    "word": "牛",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw028",
+    "word": "羊",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw029",
+    "word": "鸡",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw030",
+    "word": "鸭",
+    "wordLength": 1,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw031",
+    "word": "猫头鹰",
+    "wordLength": 3,
+    "category": "动物",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dw032",
+    "word": "长颈鹿",
+    "wordLength": 3,
+    "category": "动物",
+    "difficulty": "easy"
+  }
+]

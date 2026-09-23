@@ -1,0 +1,226 @@
+[
+  {
+    "id": "zy001",
+    "word": "老师",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy002",
+    "word": "医生",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy003",
+    "word": "警察",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy004",
+    "word": "消防员",
+    "wordLength": 3,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy005",
+    "word": "厨师",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy006",
+    "word": "司机",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy007",
+    "word": "农民",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy008",
+    "word": "工人",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy009",
+    "word": "护士",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy010",
+    "word": "程序员",
+    "wordLength": 3,
+    "category": "职业",
+    "difficulty": "medium"
+  },
+  {
+    "id": "zy011",
+    "word": "科学家",
+    "wordLength": 3,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy012",
+    "word": "画家",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy013",
+    "word": "歌手",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy014",
+    "word": "演员",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy015",
+    "word": "运动员",
+    "wordLength": 3,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy016",
+    "word": "作家",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy017",
+    "word": "记者",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy018",
+    "word": "律师",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy019",
+    "word": "军人",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy020",
+    "word": "快递员",
+    "wordLength": 3,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy021",
+    "word": "理发师",
+    "wordLength": 3,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy022",
+    "word": "建筑师",
+    "wordLength": 3,
+    "category": "职业",
+    "difficulty": "medium"
+  },
+  {
+    "id": "zy023",
+    "word": "设计师",
+    "wordLength": 3,
+    "category": "职业",
+    "difficulty": "medium"
+  },
+  {
+    "id": "zy024",
+    "word": "飞行员",
+    "wordLength": 3,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy025",
+    "word": "导游",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy026",
+    "word": "摄影师",
+    "wordLength": 3,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy027",
+    "word": "翻译",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "medium"
+  },
+  {
+    "id": "zy028",
+    "word": "教授",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy029",
+    "word": "会计",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "medium"
+  },
+  {
+    "id": "zy030",
+    "word": "快递小哥",
+    "wordLength": 4,
+    "category": "职业",
+    "difficulty": "easy"
+  },
+  {
+    "id": "zy031",
+    "word": "工程师",
+    "wordLength": 3,
+    "category": "职业",
+    "difficulty": "medium"
+  },
+  {
+    "id": "zy032",
+    "word": "保安",
+    "wordLength": 2,
+    "category": "职业",
+    "difficulty": "easy"
+  }
+]

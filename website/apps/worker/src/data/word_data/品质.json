@@ -1,0 +1,226 @@
+[
+  {
+    "id": "pz001",
+    "word": "勇敢",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz002",
+    "word": "善良",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz003",
+    "word": "诚实",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz004",
+    "word": "勤奋",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz005",
+    "word": "坚强",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz006",
+    "word": "乐观",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz007",
+    "word": "谦虚",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz008",
+    "word": "宽容",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz009",
+    "word": "正直",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz010",
+    "word": "忠诚",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz011",
+    "word": "自信",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz012",
+    "word": "耐心",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz013",
+    "word": "细心",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz014",
+    "word": "果断",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "medium"
+  },
+  {
+    "id": "pz015",
+    "word": "大方",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz016",
+    "word": "聪明",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz017",
+    "word": "冷静",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz018",
+    "word": "慷慨",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "medium"
+  },
+  {
+    "id": "pz019",
+    "word": "温柔",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz020",
+    "word": "体贴",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz021",
+    "word": "负责",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz022",
+    "word": "认真",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz023",
+    "word": "努力",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz024",
+    "word": "坚持",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz025",
+    "word": "团结",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz026",
+    "word": "友善",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz027",
+    "word": "无私",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz028",
+    "word": "公正",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz029",
+    "word": "幽默",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz030",
+    "word": "开朗",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz031",
+    "word": "节俭",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "easy"
+  },
+  {
+    "id": "pz032",
+    "word": "创新",
+    "wordLength": 2,
+    "category": "品质",
+    "difficulty": "medium"
+  }
+]

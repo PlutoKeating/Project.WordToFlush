@@ -1,0 +1,226 @@
+[
+  {
+    "id": "xx001",
+    "word": "笔",
+    "wordLength": 1,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx002",
+    "word": "尺",
+    "wordLength": 1,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx003",
+    "word": "橡皮",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx004",
+    "word": "铅笔",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx005",
+    "word": "钢笔",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx006",
+    "word": "毛笔",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx007",
+    "word": "书包",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx008",
+    "word": "课本",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx009",
+    "word": "练习册",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx010",
+    "word": "笔记本",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx011",
+    "word": "铅笔盒",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx012",
+    "word": "橡皮擦",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx013",
+    "word": "削笔刀",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx014",
+    "word": "修正带",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx015",
+    "word": "圆规",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx016",
+    "word": "三角板",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx017",
+    "word": "量角器",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx018",
+    "word": "文具盒",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx019",
+    "word": "剪刀",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx020",
+    "word": "胶水",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx021",
+    "word": "胶带",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx022",
+    "word": "字典",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx023",
+    "word": "彩笔",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx024",
+    "word": "蜡笔",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx025",
+    "word": "水彩笔",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx026",
+    "word": "粉笔",
+    "wordLength": 2,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx027",
+    "word": "黑板擦",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx028",
+    "word": "文件夹",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx029",
+    "word": "订书机",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "xx030",
+    "word": "便签纸",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "xx031",
+    "word": "马克笔",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "xx032",
+    "word": "作业本",
+    "wordLength": 3,
+    "category": "学习用品",
+    "difficulty": "easy"
+  }
+]

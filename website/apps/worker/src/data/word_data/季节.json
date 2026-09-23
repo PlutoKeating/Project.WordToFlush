@@ -1,0 +1,170 @@
+[
+  {
+    "id": "jj001",
+    "word": "春",
+    "wordLength": 1,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj002",
+    "word": "夏",
+    "wordLength": 1,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj003",
+    "word": "秋",
+    "wordLength": 1,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj004",
+    "word": "冬",
+    "wordLength": 1,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj005",
+    "word": "春天",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj006",
+    "word": "夏天",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj007",
+    "word": "秋天",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj008",
+    "word": "冬天",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj009",
+    "word": "春季",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj010",
+    "word": "夏季",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj011",
+    "word": "秋季",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj012",
+    "word": "冬季",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj013",
+    "word": "立春",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "medium"
+  },
+  {
+    "id": "jj014",
+    "word": "立夏",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "medium"
+  },
+  {
+    "id": "jj015",
+    "word": "立秋",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "medium"
+  },
+  {
+    "id": "jj016",
+    "word": "立冬",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "medium"
+  },
+  {
+    "id": "jj017",
+    "word": "春分",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "medium"
+  },
+  {
+    "id": "jj018",
+    "word": "夏至",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "medium"
+  },
+  {
+    "id": "jj019",
+    "word": "秋分",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "medium"
+  },
+  {
+    "id": "jj020",
+    "word": "冬至",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "medium"
+  },
+  {
+    "id": "jj021",
+    "word": "惊蛰",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "medium"
+  },
+  {
+    "id": "jj022",
+    "word": "清明",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj023",
+    "word": "小雪",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "easy"
+  },
+  {
+    "id": "jj024",
+    "word": "大雪",
+    "wordLength": 2,
+    "category": "季节",
+    "difficulty": "easy"
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "wordtoflush-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  // 不开放 *.workers.dev；生产访问经 Pages Service Binding，自定义域名 wtf.williamhvollita.dpdns.org 在控制台绑定
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+  "ai": { "binding": "AI" },
+  "kv_namespaces": [{ "binding": "JUDGE_CACHE", "id": "97bb705d16ab4c6981f59000e3b8952d" }],
+  "durable_objects": {
+    "bindings": [
+      { "name": "ROOM", "class_name": "GameRoom" },
+      { "name": "MATCHMAKER", "class_name": "Matchmaker" }
+    ]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["GameRoom", "Matchmaker"] }],
+  "vars": {
+    "JEV_PROVIDER": "typesafe",
+    "ALLOWED_ORIGINS": "https://wtf.plutokeating.beer,http://localhost:5173"
+  }
+}

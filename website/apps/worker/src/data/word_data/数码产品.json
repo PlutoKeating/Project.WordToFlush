@@ -1,0 +1,226 @@
+[
+  {
+    "id": "sm001",
+    "word": "手机",
+    "wordLength": 2,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm002",
+    "word": "电脑",
+    "wordLength": 2,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm003",
+    "word": "平板",
+    "wordLength": 2,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm004",
+    "word": "耳机",
+    "wordLength": 2,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm005",
+    "word": "键盘",
+    "wordLength": 2,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm006",
+    "word": "鼠标",
+    "wordLength": 2,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm007",
+    "word": "音箱",
+    "wordLength": 2,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm008",
+    "word": "手表",
+    "wordLength": 2,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm009",
+    "word": "相机",
+    "wordLength": 2,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm010",
+    "word": "电视",
+    "wordLength": 2,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm011",
+    "word": "手机壳",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm012",
+    "word": "充电宝",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm013",
+    "word": "路由器",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "sm014",
+    "word": "投影仪",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "sm015",
+    "word": "打印机",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "sm016",
+    "word": "摄像头",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm017",
+    "word": "麦克风",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "sm018",
+    "word": "游戏机",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm019",
+    "word": "遥控器",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm020",
+    "word": "显示器",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm021",
+    "word": "扫描仪",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "sm022",
+    "word": "无人机",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "sm023",
+    "word": "充电器",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm024",
+    "word": "数据线",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm025",
+    "word": "计算器",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm026",
+    "word": "电子书",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "sm027",
+    "word": "录音笔",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "sm028",
+    "word": "自拍杆",
+    "wordLength": 3,
+    "category": "数码产品",
+    "difficulty": "easy"
+  },
+  {
+    "id": "sm029",
+    "word": "蓝牙耳机",
+    "wordLength": 4,
+    "category": "数码产品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "sm030",
+    "word": "智能手环",
+    "wordLength": 4,
+    "category": "数码产品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "sm031",
+    "word": "移动硬盘",
+    "wordLength": 4,
+    "category": "数码产品",
+    "difficulty": "medium"
+  },
+  {
+    "id": "sm032",
+    "word": "智能手机",
+    "wordLength": 4,
+    "category": "数码产品",
+    "difficulty": "easy"
+  }
+]
