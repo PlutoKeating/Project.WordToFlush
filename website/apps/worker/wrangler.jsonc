@@ -18,6 +18,6 @@
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["GameRoom", "Matchmaker"] }],
   "vars": {
     "JEV_PROVIDER": "typesafe",
-    "ALLOWED_ORIGINS": "https://wtf.plutokeating.beer,http://localhost:5173"
+    "ALLOWED_ORIGINS": "https://wtf.plutokeating.beer,https://wordtoflush-web.pages.dev,http://localhost:5173"
   }
 }

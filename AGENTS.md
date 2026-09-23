@@ -13,27 +13,21 @@
 每次需求开始前必须阅读：
 
 - `README.md`
-- `docs/ARCHITECTURE.md`
-- `docs/API.md`
+- `website/README.md`
+- `website/ARCHITECTURE.md`
+- `website/API.md`
 
-如任务明显涉及启动、环境、部署或本地运行，还必须阅读：
+如任务涉及启动、环境、部署或本地运行，还必须阅读：
 
-- `Dockerfile`
-- `docker-compose.yml`
-- `.env.example`
+- `website/apps/worker/wrangler.jsonc`
+- `website/apps/web/wrangler.toml`
+- `website/apps/worker/.dev.vars.example`
 
-### 1.2 必读模块文档
+### 1.2 模块与归档
 
-如果任务涉及某个二级核心模块，Agent 必须阅读该模块根目录文档，以 `README.md` 和 `ARCHITECTURE.md` 为主：
-
-- 用户前端任务：阅读 `frontend/docs/README.md`、`frontend/docs/ARCHITECTURE.md`
-- 后端任务：阅读 `backend/docs/README.md`、`backend/docs/ARCHITECTURE.md`
-
-如任务涉及模块启动、环境变量、脚本或部署，还必须阅读该模块的：
-
-- `Dockerfile`
-- `docker-compose.yml`
-- `.env.example`
+- 当前项目全部位于 `website/`：前端 `apps/web`、后端 `apps/worker`、共享 `packages/shared`，边界见 `website/ARCHITECTURE.md`。
+- `legacy/` 是已归档的直播弹幕版，不得修改、不得作为新功能依赖；仅在需要参考旧实现时阅读 `legacy/README.md` 与 `legacy/docs/`。
+- 修改目录结构、协议或部署方式时，必须同步更新 `README.md` 与 `website/` 下三份文档。
 
 ### 1.3 阅读后的执行要求
 
