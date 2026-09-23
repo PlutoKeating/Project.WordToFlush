@@ -1,0 +1,11 @@
+# Cloudflare Pages 项目配置（wrangler pages deploy 读取）
+# 公开域名 wtf.plutokeating.beer 在 Pages 控制台绑定
+name = "wordtoflush-web"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-09-01"
+
+# Pages Functions 通过 Service Binding 同源转发 /api/* 与 /ws/* 到 Worker，
+# 前端代码与浏览器都不会接触 Worker 域名
+[[services]]
+binding = "API"
+service = "wordtoflush-api"
