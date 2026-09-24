@@ -4,209 +4,248 @@
     "word": "树",
     "wordLength": 1,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.511
   },
   {
     "id": "zw002",
     "word": "草",
     "wordLength": 1,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.486
   },
   {
     "id": "zw003",
     "word": "花",
     "wordLength": 1,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.481
   },
   {
     "id": "zw004",
     "word": "柳树",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.428
   },
   {
     "id": "zw005",
     "word": "松树",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.434
   },
   {
     "id": "zw006",
     "word": "竹子",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.439
   },
   {
     "id": "zw007",
     "word": "梅花",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.402
   },
   {
     "id": "zw008",
     "word": "桃花",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.396
   },
   {
     "id": "zw009",
     "word": "荷花",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.486,
+    "aliases": [
+      "莲花"
+    ]
   },
   {
     "id": "zw010",
     "word": "菊花",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.407
   },
   {
     "id": "zw011",
     "word": "玫瑰",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.464
   },
   {
     "id": "zw012",
     "word": "百合",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.433
   },
   {
     "id": "zw013",
     "word": "牡丹",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.414
   },
   {
     "id": "zw014",
     "word": "兰花",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.427
   },
   {
     "id": "zw015",
     "word": "樱花",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.41
   },
   {
     "id": "zw016",
     "word": "向日葵",
     "wordLength": 3,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.47,
+    "aliases": [
+      "太阳花"
+    ]
   },
   {
     "id": "zw017",
     "word": "仙人掌",
     "wordLength": 3,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.436
   },
   {
     "id": "zw018",
     "word": "蒲公英",
     "wordLength": 3,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.421
   },
   {
     "id": "zw019",
     "word": "含羞草",
     "wordLength": 3,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.435
   },
   {
     "id": "zw020",
     "word": "牵牛花",
     "wordLength": 3,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.399
   },
   {
     "id": "zw021",
     "word": "银杏树",
     "wordLength": 3,
     "category": "植物",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.424,
+    "aliases": [
+      "白果树"
+    ]
   },
   {
     "id": "zw022",
     "word": "枫树",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.431
   },
   {
     "id": "zw023",
     "word": "梧桐",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.427
   },
   {
     "id": "zw024",
     "word": "榕树",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.462
   },
   {
     "id": "zw025",
     "word": "核桃树",
     "wordLength": 3,
     "category": "植物",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.438
   },
   {
     "id": "zw026",
     "word": "苹果树",
     "wordLength": 3,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.479
   },
   {
     "id": "zw027",
     "word": "草莓",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.486
   },
   {
     "id": "zw028",
     "word": "葡萄",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.481
   },
   {
     "id": "zw029",
     "word": "黄瓜",
     "wordLength": 2,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.398
   },
   {
     "id": "zw030",
     "word": "西红柿",
     "wordLength": 3,
     "category": "植物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.466
   }
 ]

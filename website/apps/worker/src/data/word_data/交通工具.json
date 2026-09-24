@@ -4,209 +4,267 @@
     "word": "汽车",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.509,
+    "aliases": [
+      "轿车"
+    ]
   },
   {
     "id": "jt002",
     "word": "自行车",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.509,
+    "aliases": [
+      "脚踏车"
+    ]
   },
   {
     "id": "jt003",
     "word": "摩托车",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.484
   },
   {
     "id": "jt004",
     "word": "公交车",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.526
   },
   {
     "id": "jt005",
     "word": "出租车",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.501,
+    "aliases": [
+      "计程车"
+    ]
   },
   {
     "id": "jt006",
     "word": "地铁",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.501
   },
   {
     "id": "jt007",
     "word": "火车",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.516,
+    "aliases": [
+      "列车"
+    ]
   },
   {
     "id": "jt008",
     "word": "高铁",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.469,
+    "aliases": [
+      "动车"
+    ]
   },
   {
     "id": "jt009",
     "word": "飞机",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.529
   },
   {
     "id": "jt010",
     "word": "轮船",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.467,
+    "aliases": [
+      "轮渡"
+    ]
   },
   {
     "id": "jt011",
     "word": "帆船",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.492
   },
   {
     "id": "jt012",
     "word": "直升机",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.456
   },
   {
     "id": "jt013",
     "word": "卡车",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.474,
+    "aliases": [
+      "货车"
+    ]
   },
   {
     "id": "jt014",
     "word": "电动车",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.47,
+    "aliases": [
+      "电瓶车",
+      "电单车"
+    ]
   },
   {
     "id": "jt015",
     "word": "三轮车",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.403
   },
   {
     "id": "jt016",
     "word": "滑板",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.481
   },
   {
     "id": "jt017",
     "word": "救护车",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.453
   },
   {
     "id": "jt018",
     "word": "消防车",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.437
   },
   {
     "id": "jt019",
     "word": "警车",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.479
   },
   {
     "id": "jt020",
     "word": "校车",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.461
   },
   {
     "id": "jt021",
     "word": "缆车",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.478
   },
   {
     "id": "jt022",
     "word": "热气球",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.443
   },
   {
     "id": "jt023",
     "word": "潜水艇",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.433
   },
   {
     "id": "jt024",
     "word": "快艇",
     "wordLength": 2,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.435
   },
   {
     "id": "jt025",
     "word": "平衡车",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.43
   },
   {
     "id": "jt026",
     "word": "公共汽车",
     "wordLength": 4,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.486,
+    "aliases": [
+      "公交汽车"
+    ]
   },
   {
     "id": "jt027",
     "word": "拖拉机",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.469
   },
   {
     "id": "jt028",
     "word": "面包车",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.449
   },
   {
     "id": "jt029",
     "word": "吉普车",
     "wordLength": 3,
     "category": "交通工具",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.424
   },
   {
     "id": "jt030",
     "word": "高铁列车",
     "wordLength": 4,
     "category": "交通工具",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.451
   }
 ]

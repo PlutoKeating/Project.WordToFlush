@@ -4,223 +4,338 @@
     "word": "勇敢",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.428
   },
   {
     "id": "pz002",
     "word": "善良",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.444,
+    "aliases": [
+      "和善"
+    ]
   },
   {
     "id": "pz003",
     "word": "诚实",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.428,
+    "aliases": [
+      "老实",
+      "诚恳"
+    ]
   },
   {
     "id": "pz004",
     "word": "勤奋",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.496,
+    "aliases": [
+      "勤劳",
+      "勤快"
+    ]
   },
   {
     "id": "pz005",
     "word": "坚强",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.491,
+    "aliases": [
+      "刚强"
+    ]
   },
   {
     "id": "pz006",
     "word": "乐观",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.473
   },
   {
     "id": "pz007",
     "word": "谦虚",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.433,
+    "aliases": [
+      "谦逊",
+      "谦卑"
+    ]
   },
   {
     "id": "pz008",
     "word": "宽容",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.452,
+    "aliases": [
+      "包容",
+      "宽厚"
+    ]
   },
   {
     "id": "pz009",
     "word": "正直",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.444,
+    "aliases": [
+      "耿直"
+    ]
   },
   {
     "id": "pz010",
     "word": "忠诚",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.416,
+    "aliases": [
+      "忠心",
+      "忠实"
+    ]
   },
   {
     "id": "pz011",
     "word": "自信",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.491
   },
   {
     "id": "pz012",
     "word": "耐心",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.505
   },
   {
     "id": "pz013",
     "word": "细心",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.491,
+    "aliases": [
+      "仔细",
+      "心细"
+    ]
   },
   {
     "id": "pz014",
     "word": "果断",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.397,
+    "aliases": [
+      "果敢"
+    ]
   },
   {
     "id": "pz015",
     "word": "大方",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.441,
+    "aliases": [
+      "慷慨"
+    ]
   },
   {
     "id": "pz016",
     "word": "聪明",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.455,
+    "aliases": [
+      "机灵",
+      "聪慧",
+      "机智"
+    ]
   },
   {
     "id": "pz017",
     "word": "冷静",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.495,
+    "aliases": [
+      "镇定",
+      "沉着"
+    ]
   },
   {
     "id": "pz018",
     "word": "慷慨",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.419,
+    "aliases": [
+      "大方"
+    ]
   },
   {
     "id": "pz019",
     "word": "温柔",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.464,
+    "aliases": [
+      "温和",
+      "柔和"
+    ]
   },
   {
     "id": "pz020",
     "word": "体贴",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.462
   },
   {
     "id": "pz021",
     "word": "负责",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.476,
+    "aliases": [
+      "尽责"
+    ]
   },
   {
     "id": "pz022",
     "word": "认真",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.499,
+    "aliases": [
+      "用心"
+    ]
   },
   {
     "id": "pz023",
     "word": "努力",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.531,
+    "aliases": [
+      "用功",
+      "勤奋"
+    ]
   },
   {
     "id": "pz024",
     "word": "坚持",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.503,
+    "aliases": [
+      "坚守",
+      "执着"
+    ]
   },
   {
     "id": "pz025",
     "word": "团结",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.427,
+    "aliases": [
+      "齐心"
+    ]
   },
   {
     "id": "pz026",
     "word": "友善",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.482,
+    "aliases": [
+      "友好"
+    ]
   },
   {
     "id": "pz027",
     "word": "无私",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.44
   },
   {
     "id": "pz028",
     "word": "公正",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.439,
+    "aliases": [
+      "公平",
+      "公道"
+    ]
   },
   {
     "id": "pz029",
     "word": "幽默",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.489
   },
   {
     "id": "pz030",
     "word": "开朗",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.4
   },
   {
     "id": "pz031",
     "word": "节俭",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.454,
+    "aliases": [
+      "节约",
+      "勤俭"
+    ]
   },
   {
     "id": "pz032",
     "word": "创新",
     "wordLength": 2,
     "category": "品质",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.436
   }
 ]

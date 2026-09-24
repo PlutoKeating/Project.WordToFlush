@@ -4,209 +4,248 @@
     "word": "篮球",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.488
   },
   {
     "id": "yd002",
     "word": "足球",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.5
   },
   {
     "id": "yd003",
     "word": "排球",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.456
   },
   {
     "id": "yd004",
     "word": "乒乓球",
     "wordLength": 3,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.467
   },
   {
     "id": "yd005",
     "word": "羽毛球",
     "wordLength": 3,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.449
   },
   {
     "id": "yd006",
     "word": "网球",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.463
   },
   {
     "id": "yd007",
     "word": "棒球",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.45
   },
   {
     "id": "yd008",
     "word": "游泳",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.497
   },
   {
     "id": "yd009",
     "word": "跑步",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.533,
+    "aliases": [
+      "赛跑"
+    ]
   },
   {
     "id": "yd010",
     "word": "跳高",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.479
   },
   {
     "id": "yd011",
     "word": "跳远",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.424
   },
   {
     "id": "yd012",
     "word": "体操",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.456
   },
   {
     "id": "yd013",
     "word": "击剑",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.422
   },
   {
     "id": "yd014",
     "word": "柔道",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.391
   },
   {
     "id": "yd015",
     "word": "跆拳道",
     "wordLength": 3,
     "category": "运动项目",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.421
   },
   {
     "id": "yd016",
     "word": "拳击",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.46
   },
   {
     "id": "yd017",
     "word": "滑雪",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.485
   },
   {
     "id": "yd018",
     "word": "滑冰",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.472
   },
   {
     "id": "yd019",
     "word": "自行车",
     "wordLength": 3,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.509,
+    "aliases": [
+      "脚踏车"
+    ]
   },
   {
     "id": "yd020",
     "word": "马拉松",
     "wordLength": 3,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.47
   },
   {
     "id": "yd021",
     "word": "跳水",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.464
   },
   {
     "id": "yd022",
     "word": "举重",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.473
   },
   {
     "id": "yd023",
     "word": "射击",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.477
   },
   {
     "id": "yd024",
     "word": "射箭",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.455
   },
   {
     "id": "yd025",
     "word": "龙舟",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.39
   },
   {
     "id": "yd026",
     "word": "武术",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.477,
+    "aliases": [
+      "功夫"
+    ]
   },
   {
     "id": "yd027",
     "word": "太极",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.418
   },
   {
     "id": "yd028",
     "word": "跳绳",
     "wordLength": 2,
     "category": "运动项目",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.463
   },
   {
     "id": "yd029",
     "word": "高尔夫",
     "wordLength": 3,
     "category": "运动项目",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.441
   },
   {
     "id": "yd030",
     "word": "保龄球",
     "wordLength": 3,
     "category": "运动项目",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.466
   }
 ]

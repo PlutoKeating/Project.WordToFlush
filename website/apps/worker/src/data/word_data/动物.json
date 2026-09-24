@@ -4,223 +4,282 @@
     "word": "猫",
     "wordLength": 1,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.514,
+    "aliases": [
+      "喵"
+    ]
   },
   {
     "id": "dw002",
     "word": "狗",
     "wordLength": 1,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.512,
+    "aliases": [
+      "犬"
+    ]
   },
   {
     "id": "dw003",
     "word": "鱼",
     "wordLength": 1,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.491
   },
   {
     "id": "dw004",
     "word": "鸟",
     "wordLength": 1,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.497
   },
   {
     "id": "dw005",
     "word": "兔子",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.482,
+    "aliases": [
+      "小兔"
+    ]
   },
   {
     "id": "dw006",
     "word": "老鼠",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.487,
+    "aliases": [
+      "耗子"
+    ]
   },
   {
     "id": "dw007",
     "word": "老虎",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.484,
+    "aliases": [
+      "大虫"
+    ]
   },
   {
     "id": "dw008",
     "word": "狮子",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.471
   },
   {
     "id": "dw009",
     "word": "大象",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.453
   },
   {
     "id": "dw010",
     "word": "熊猫",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.429
   },
   {
     "id": "dw011",
     "word": "猴子",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.481,
+    "aliases": [
+      "猕猴"
+    ]
   },
   {
     "id": "dw012",
     "word": "蛇",
     "wordLength": 1,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.491
   },
   {
     "id": "dw013",
     "word": "青蛙",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.449,
+    "aliases": [
+      "田鸡"
+    ]
   },
   {
     "id": "dw014",
     "word": "蝴蝶",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.483
   },
   {
     "id": "dw015",
     "word": "蜻蜓",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.465
   },
   {
     "id": "dw016",
     "word": "蚂蚁",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.47
   },
   {
     "id": "dw017",
     "word": "蜜蜂",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.447
   },
   {
     "id": "dw018",
     "word": "蜘蛛",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.483
   },
   {
     "id": "dw019",
     "word": "蜗牛",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.438
   },
   {
     "id": "dw020",
     "word": "乌龟",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.459,
+    "aliases": [
+      "王八"
+    ]
   },
   {
     "id": "dw021",
     "word": "海豚",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.44
   },
   {
     "id": "dw022",
     "word": "鲸鱼",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.427
   },
   {
     "id": "dw023",
     "word": "鲨鱼",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.443
   },
   {
     "id": "dw024",
     "word": "企鹅",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.465
   },
   {
     "id": "dw025",
     "word": "孔雀",
     "wordLength": 2,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.423
   },
   {
     "id": "dw026",
     "word": "马",
     "wordLength": 1,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.392
   },
   {
     "id": "dw027",
     "word": "牛",
     "wordLength": 1,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.479
   },
   {
     "id": "dw028",
     "word": "羊",
     "wordLength": 1,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.466
   },
   {
     "id": "dw029",
     "word": "鸡",
     "wordLength": 1,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.487
   },
   {
     "id": "dw030",
     "word": "鸭",
     "wordLength": 1,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.456
   },
   {
     "id": "dw031",
     "word": "猫头鹰",
     "wordLength": 3,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.416,
+    "aliases": [
+      "夜猫子"
+    ]
   },
   {
     "id": "dw032",
     "word": "长颈鹿",
     "wordLength": 3,
     "category": "动物",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.411
   }
 ]

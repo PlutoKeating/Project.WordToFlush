@@ -4,209 +4,268 @@
     "word": "唱歌",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.541
   },
   {
     "id": "yl002",
     "word": "跳舞",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.541
   },
   {
     "id": "yl003",
     "word": "画画",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.531,
+    "aliases": [
+      "绘画"
+    ]
   },
   {
     "id": "yl004",
     "word": "下棋",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.478,
+    "aliases": [
+      "对弈"
+    ]
   },
   {
     "id": "yl005",
     "word": "打牌",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.522
   },
   {
     "id": "yl006",
     "word": "钓鱼",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.499
   },
   {
     "id": "yl007",
     "word": "看电影",
     "wordLength": 3,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.532,
+    "aliases": [
+      "看影片"
+    ]
   },
   {
     "id": "yl008",
     "word": "玩游戏",
     "wordLength": 3,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.55,
+    "aliases": [
+      "打游戏"
+    ]
   },
   {
     "id": "yl009",
     "word": "听音乐",
     "wordLength": 3,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.538
   },
   {
     "id": "yl010",
     "word": "看书",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.537,
+    "aliases": [
+      "读书",
+      "阅读"
+    ]
   },
   {
     "id": "yl011",
     "word": "旅游",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.49,
+    "aliases": [
+      "旅行"
+    ]
   },
   {
     "id": "yl012",
     "word": "逛街",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.534
   },
   {
     "id": "yl013",
     "word": "拍照",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.54,
+    "aliases": [
+      "照相"
+    ]
   },
   {
     "id": "yl014",
     "word": "露营",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.486
   },
   {
     "id": "yl015",
     "word": "野餐",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.489
   },
   {
     "id": "yl016",
     "word": "登山",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.502,
+    "aliases": [
+      "爬山"
+    ]
   },
   {
     "id": "yl017",
     "word": "滑雪",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.485
   },
   {
     "id": "yl018",
     "word": "滑冰",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.472
   },
   {
     "id": "yl019",
     "word": "手工",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.534
   },
   {
     "id": "yl020",
     "word": "园艺",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.464
   },
   {
     "id": "yl021",
     "word": "烹饪",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.482,
+    "aliases": [
+      "做饭",
+      "下厨"
+    ]
   },
   {
     "id": "yl022",
     "word": "集邮",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.465
   },
   {
     "id": "yl023",
     "word": "拼图",
     "wordLength": 2,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.475
   },
   {
     "id": "yl024",
     "word": "弹吉他",
     "wordLength": 3,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.492
   },
   {
     "id": "yl025",
     "word": "弹钢琴",
     "wordLength": 3,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.532
   },
   {
     "id": "yl026",
     "word": "写日记",
     "wordLength": 3,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.501
   },
   {
     "id": "yl027",
     "word": "养宠物",
     "wordLength": 3,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.474
   },
   {
     "id": "yl028",
     "word": "放风筝",
     "wordLength": 3,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.481
   },
   {
     "id": "yl029",
     "word": "捉迷藏",
     "wordLength": 3,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.452
   },
   {
     "id": "yl030",
     "word": "看电视",
     "wordLength": 3,
     "category": "娱乐活动",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.527
   }
 ]

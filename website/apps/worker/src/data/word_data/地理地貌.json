@@ -4,209 +4,262 @@
     "word": "山",
     "wordLength": 1,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.459
   },
   {
     "id": "dl002",
     "word": "河",
     "wordLength": 1,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.455,
+    "aliases": [
+      "江"
+    ]
   },
   {
     "id": "dl003",
     "word": "海",
     "wordLength": 1,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.463
   },
   {
     "id": "dl004",
     "word": "湖",
     "wordLength": 1,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.403
   },
   {
     "id": "dl005",
     "word": "岛",
     "wordLength": 1,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.419,
+    "aliases": [
+      "屿"
+    ]
   },
   {
     "id": "dl006",
     "word": "山脉",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.457
   },
   {
     "id": "dl007",
     "word": "火山",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.469
   },
   {
     "id": "dl008",
     "word": "雪山",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.426
   },
   {
     "id": "dl009",
     "word": "沙漠",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.468
   },
   {
     "id": "dl010",
     "word": "草原",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.463
   },
   {
     "id": "dl011",
     "word": "森林",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.499
   },
   {
     "id": "dl012",
     "word": "平原",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.462
   },
   {
     "id": "dl013",
     "word": "高原",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.426
   },
   {
     "id": "dl014",
     "word": "盆地",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.457
   },
   {
     "id": "dl015",
     "word": "峡谷",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.458
   },
   {
     "id": "dl016",
     "word": "瀑布",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.517
   },
   {
     "id": "dl017",
     "word": "冰川",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.428
   },
   {
     "id": "dl018",
     "word": "温泉",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.472
   },
   {
     "id": "dl019",
     "word": "沼泽",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.44
   },
   {
     "id": "dl020",
     "word": "洞穴",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.446,
+    "aliases": [
+      "山洞",
+      "岩洞"
+    ]
   },
   {
     "id": "dl021",
     "word": "悬崖",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.49,
+    "aliases": [
+      "峭壁"
+    ]
   },
   {
     "id": "dl022",
     "word": "丘陵",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.463
   },
   {
     "id": "dl023",
     "word": "岛屿",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.472,
+    "aliases": [
+      "海岛"
+    ]
   },
   {
     "id": "dl024",
     "word": "半岛",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.431
   },
   {
     "id": "dl025",
     "word": "珊瑚礁",
     "wordLength": 3,
     "category": "地理地貌",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.432
   },
   {
     "id": "dl026",
     "word": "三角洲",
     "wordLength": 3,
     "category": "地理地貌",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.386
   },
   {
     "id": "dl027",
     "word": "河流",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.474,
+    "aliases": [
+      "江河"
+    ]
   },
   {
     "id": "dl028",
     "word": "湖泊",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.452
   },
   {
     "id": "dl029",
     "word": "海岸",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.487,
+    "aliases": [
+      "海边",
+      "海滨"
+    ]
   },
   {
     "id": "dl030",
     "word": "山谷",
     "wordLength": 2,
     "category": "地理地貌",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.441
   }
 ]

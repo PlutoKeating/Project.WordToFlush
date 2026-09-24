@@ -4,167 +4,215 @@
     "word": "春",
     "wordLength": 1,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.423
   },
   {
     "id": "jj002",
     "word": "夏",
     "wordLength": 1,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.387
   },
   {
     "id": "jj003",
     "word": "秋",
     "wordLength": 1,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.477
   },
   {
     "id": "jj004",
     "word": "冬",
     "wordLength": 1,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.453
   },
   {
     "id": "jj005",
     "word": "春天",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.492,
+    "aliases": [
+      "春季"
+    ]
   },
   {
     "id": "jj006",
     "word": "夏天",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.523,
+    "aliases": [
+      "夏季"
+    ]
   },
   {
     "id": "jj007",
     "word": "秋天",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.528,
+    "aliases": [
+      "秋季"
+    ]
   },
   {
     "id": "jj008",
     "word": "冬天",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.515,
+    "aliases": [
+      "冬季"
+    ]
   },
   {
     "id": "jj009",
     "word": "春季",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.499,
+    "aliases": [
+      "春天"
+    ]
   },
   {
     "id": "jj010",
     "word": "夏季",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.526,
+    "aliases": [
+      "夏天"
+    ]
   },
   {
     "id": "jj011",
     "word": "秋季",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.513,
+    "aliases": [
+      "秋天"
+    ]
   },
   {
     "id": "jj012",
     "word": "冬季",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.525,
+    "aliases": [
+      "冬天"
+    ]
   },
   {
     "id": "jj013",
     "word": "立春",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.341
   },
   {
     "id": "jj014",
     "word": "立夏",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.324
   },
   {
     "id": "jj015",
     "word": "立秋",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.39
   },
   {
     "id": "jj016",
     "word": "立冬",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.384
   },
   {
     "id": "jj017",
     "word": "春分",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.447
   },
   {
     "id": "jj018",
     "word": "夏至",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.396
   },
   {
     "id": "jj019",
     "word": "秋分",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.463
   },
   {
     "id": "jj020",
     "word": "冬至",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.398
   },
   {
     "id": "jj021",
     "word": "惊蛰",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "baseline": 0.391
   },
   {
     "id": "jj022",
     "word": "清明",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.474
   },
   {
     "id": "jj023",
     "word": "小雪",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.412
   },
   {
     "id": "jj024",
     "word": "大雪",
     "wordLength": 2,
     "category": "季节",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "baseline": 0.479
   }
 ]
