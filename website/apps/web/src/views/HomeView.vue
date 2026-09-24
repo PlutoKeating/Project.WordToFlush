@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { NICKNAME_MAX, ROOM_CODE_LENGTH, ROUND_SECONDS, ROUNDS_PER_GAME } from '@wtf/shared'
-import { nickname } from '../lib/identity'
+import { myUid, nickname } from '../lib/identity'
 import { go } from '../lib/router'
 
 const joinCode = ref('')
@@ -15,7 +15,7 @@ async function create(mode: 'solo' | 'private') {
     const res = await fetch('/api/rooms', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mode }),
+      body: JSON.stringify({ mode, uid: myUid }),
     })
     if (!res.ok) throw new Error()
     const { code } = (await res.json()) as { code: string }

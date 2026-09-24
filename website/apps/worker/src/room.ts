@@ -86,16 +86,17 @@ export class GameRoom extends DurableObject<Env> {
 
     if (url.pathname === '/init') {
       if (await this.load()) return new Response('exists', { status: 409 })
-      const { code, mode, expectedPlayers } = (await request.json()) as {
+      const { code, mode, expectedPlayers, hostUid } = (await request.json()) as {
         code: string
         mode: RoomMode
         expectedPlayers?: number
+        hostUid?: string
       }
       this.data = {
         code,
         mode,
         phase: 'lobby',
-        hostUid: null,
+        hostUid: hostUid ?? null,
         expectedPlayers: expectedPlayers ?? 0,
         round: 0,
         puzzle: null,

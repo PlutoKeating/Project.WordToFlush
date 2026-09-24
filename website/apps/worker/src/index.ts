@@ -53,7 +53,8 @@ export default {
     if (path === '/api/rooms' && request.method === 'POST') {
       const body = (await request.json().catch(() => ({}))) as Partial<CreateRoomRequest>
       const mode = body.mode === 'solo' ? 'solo' : 'private'
-      return json({ code: await createRoom(env, mode) }, 200, cors)
+      const hostUid = typeof body.uid === 'string' && UID_RE.test(body.uid) ? body.uid : undefined
+      return json({ code: await createRoom(env, mode, { hostUid }) }, 200, cors)
     }
 
     const roomInfo = path.match(/^\/api\/rooms\/([^/]+)$/)

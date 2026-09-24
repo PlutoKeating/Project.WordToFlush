@@ -11,7 +11,7 @@
 | 方法 | 路径 | 说明 |
 |---|---|---|
 | GET | `/api/health` | `{ status: "ok" }` |
-| POST | `/api/rooms` | body `{ mode: "solo" \| "private" }` → `{ code }` |
+| POST | `/api/rooms` | body `{ mode: "solo" \| "private", uid? }` → `{ code }`；`uid` 为创建者，预设为房主 |
 | GET | `/api/rooms/:code` | `{ code, mode, phase, players }`；不存在 404 |
 
 ## WebSocket

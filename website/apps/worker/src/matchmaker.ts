@@ -88,7 +88,7 @@ export class Matchmaker extends DurableObject<Env> {
   }
 
   private async formRoom(members: WebSocket[]) {
-    const code = await createRoom(this.env, 'match', members.length)
+    const code = await createRoom(this.env, 'match', { expectedPlayers: members.length })
     const msg = JSON.stringify({ event: 'match:found', data: { code } } satisfies MatchServerMessage)
     for (const ws of members) {
       ws.send(msg)

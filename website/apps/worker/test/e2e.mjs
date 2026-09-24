@@ -24,8 +24,8 @@ function check(ok, msg) {
   if (!ok) failed++
 }
 
-const post = (mode) =>
-  fetch(`${B}/api/rooms`, { method: 'POST', body: JSON.stringify({ mode }) }).then((r) => r.json())
+const post = (mode, uid) =>
+  fetch(`${B}/api/rooms`, { method: 'POST', body: JSON.stringify({ mode, uid }) }).then((r) => r.json())
 
 // ---------- 单人 ----------
 const { code } = await post('solo')
@@ -56,21 +56,24 @@ check(s.state.phase === 'playing' && s.state.round === 2, '3 秒后 alarm 进入
 s.ws.close()
 
 // ---------- 房号联机 ----------
-const { code: pc } = await post('private')
+const { code: pc } = await post('private', 'host-user-0001')
 const info = await fetch(`${B}/api/rooms/${pc}`).then((r) => r.json())
 check(info.mode === 'private', 'GET /api/rooms/:code')
-const a = client(`/ws/room/${pc}`, 'host-user-0001', '房主')
+// 好友先于创建者进入房间，房主仍应是创建者
 const b = client(`/ws/room/${pc}`, 'guest-user-001', '客人')
-await a.open
 await b.open
+await sleep(300)
+const a = client(`/ws/room/${pc}`, 'host-user-0001', '房主')
+await a.open
 await sleep(400)
 check(a.state.phase === 'lobby' && a.state.players.length === 2, '私房等待 2 人')
+check(a.state.hostUid === 'host-user-0001', '好友抢先入房，创建者仍是房主')
 b.send({ event: 'game:start' })
 await sleep(300)
 check(a.state.phase === 'lobby', '非房主不能开局')
 a.send({ event: 'game:start' })
 await sleep(400)
-check(b.state.phase === 'playing', '房主开局，双方同步')
+check(a.state.phase === 'playing' && b.state.phase === 'playing', '房主开局，双方同步')
 a.send({ event: 'game:guess', data: { guess: '人'.repeat(a.state.puzzle.wordLength) } })
 await sleep(3000)
 check(b.state.guesses.some((g) => g.name === '房主'), '对手的猜测对所有人可见')

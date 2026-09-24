@@ -74,6 +74,8 @@ export type MatchServerMessage =
 // ---------- REST ----------
 export interface CreateRoomRequest {
   mode: 'solo' | 'private'
+  /** 创建者 uid，成为房主（即使好友先于创建者进入房间） */
+  uid?: string
 }
 export interface CreateRoomResponse {
   code: string
