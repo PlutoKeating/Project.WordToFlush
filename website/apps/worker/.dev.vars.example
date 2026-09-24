@@ -1,3 +1,2 @@
-# 本地开发变量（复制为 .dev.vars）。mock = 不调用 Jev，用伪分数跑通流程
-JEV_PROVIDER=mock
-# TYPESAFE_API_KEY=
+# 本地开发变量（复制为 .dev.vars）。mock = 不调用 Workers AI，用伪向量跑通流程；删掉此行则走真实 bge-m3（消耗每日免费额度）
+JUDGE_PROVIDER=mock
