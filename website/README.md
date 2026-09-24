@@ -1,6 +1,6 @@
 # WordToFlush Website
 
-AI 语义猜词网页游戏：单人练习、约定房号联机、随机匹配。前端部署在 Cloudflare Pages，后端（房间状态 + 判定器）部署在 Cloudflare Worker，语义判定由 TypeSafe **Jev** 完成。
+AI 语义猜词网页游戏：单人练习、约定房号联机、随机匹配。前端部署在 Cloudflare Pages，后端（房间状态 + 判定器）部署在 Cloudflare Worker，语义判定使用 Workers AI 的 `@cf/baai/bge-m3` 词向量（免费额度内，无需密钥）。
 
 ## 目录
 
@@ -17,9 +17,10 @@ website/
 │           ├── index.ts     路由、来源白名单、身份参数校验
 │           ├── room.ts      GameRoom Durable Object（每房号一个，权威状态 + alarm 计时）
 │           ├── matchmaker.ts Matchmaker Durable Object（全局匹配队列）
-│           ├── judge.ts     Jev 判定器（score→关联度，noul→猜中）+ KV 缓存
+│           ├── judge.ts     判定器：bge-m3 余弦相似度 → 关联度；别名命中 → 猜中
 │           ├── puzzles.ts   题库加载
-│           └── data/word_data/  题库 JSON（14 个分类）
+│           ├── data/word_data/  题库 JSON（14 个分类，含 baseline 与 aliases）
+│       └── test/e2e.mjs     端到端测试（单人 / 房号 / 匹配）
 ├── packages/shared/         前后端共享：规则常量、猜测词清洗、协议类型
 ├── ARCHITECTURE.md
 └── API.md
@@ -30,33 +31,29 @@ website/
 ```bash
 cd website
 pnpm install
-cp apps/worker/.dev.vars.example apps/worker/.dev.vars   # 默认 JEV_PROVIDER=mock，不联网
+cp apps/worker/.dev.vars.example apps/worker/.dev.vars   # 默认 JUDGE_PROVIDER=mock，不联网
 pnpm dev:worker    # wrangler dev，:8787
 pnpm dev:web       # vite，:5173，/api 与 /ws 代理到 :8787
 ```
 
-`pnpm typecheck` 对三个包做类型检查。
+`pnpm typecheck` 对三个包做类型检查；Worker 运行时执行 `node apps/worker/test/e2e.mjs` 做端到端测试（删掉 `.dev.vars` 中的 mock 即测试真实 bge-m3）。
 
 ## 部署
 
-```bash
-cd website
-pnpm deploy:worker   # wrangler deploy（apps/worker/wrangler.jsonc）
-pnpm deploy:web      # vite build + wrangler pages deploy（apps/web/wrangler.toml）
-```
+推送 `main` 后由 Cloudflare 的 Git 集成自动部署（控制台配置，根目录均为 `website`）：
 
-- 先部署 Worker，再部署 Pages（Pages 的 Service Binding 依赖 Worker 已存在）。
+| 项目 | 部署命令 / 构建命令 | 监视路径 |
+|---|---|---|
+| Worker `wordtoflush-api` | `cd apps/worker && npx wrangler deploy` | `website/apps/worker/*`、`website/packages/shared/*` |
+| Pages `wordtoflush-web` | `pnpm install --frozen-lockfile && pnpm build`，输出 `apps/web/dist` | `website/apps/web/*`、`website/packages/shared/*` |
+
+手动部署：`pnpm deploy:worker`、`pnpm deploy:web`（先 Worker 后 Pages，Pages 的 Service Binding 依赖 Worker）。
+
 - Worker 设置了 `workers_dev: false`，不暴露 `*.workers.dev`；浏览器只访问 Pages 域名。
 - 自定义域名在控制台绑定：Pages → `wtf.plutokeating.beer`；Worker → `wtf.williamhvollita.dpdns.org`（可选，仅用于运维排障，不在前端出现）。
 
-### Jev 判定通道
+### 判定器与题库
 
-`apps/worker/wrangler.jsonc` 的 `JEV_PROVIDER` 选择主通道，另一通道可用时自动作为备用：
-
-| 值 | 通道 | 前提 |
-|---|---|---|
-| `typesafe` | TypeSafe 直连 `api.typesafe.ai/v1/systemone` | `wrangler secret put TYPESAFE_API_KEY` |
-| `workers-ai` | Workers AI binding `typesafe/jev` | 账户已充值 AI Gateway credits（不走每日免费 neurons） |
-| `mock` | 本地伪分数 | 仅限本地开发 |
-
-修改 `judge.ts` 中的评分量表后必须递增 `RUBRIC_VERSION`，使 KV 旧缓存失效。
+- `JUDGE_PROVIDER`：默认走 Workers AI；本地 `.dev.vars` 可设为 `mock`（伪向量，不联网）。
+- 题库每项的 `baseline` 由 bge-m3 离线校准；**更换模型必须重新计算全部 baseline**。
+- `aliases` 只收录与谜底字数相同的同义词/别称，命中即判猜中；新增谜底时按需补充。

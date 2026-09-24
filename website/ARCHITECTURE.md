@@ -8,8 +8,7 @@ graph LR
   W -- idFromName(房号) --> R[GameRoom DO]
   W -- idFromName('global') --> M[Matchmaker DO]
   M -- 成局: /init --> R
-  R -- judge() --> K[(KV 判定缓存)]
-  R -- 未命中 --> J[Jev<br/>TypeSafe / Workers AI]
+  R -- judge()：内存向量缓存未命中 --> J[Workers AI<br/>@cf/baai/bge-m3]
 ```
 
 ## 模块边界
@@ -21,7 +20,7 @@ graph LR
 | 路由 | `apps/worker/src/index.ts` | 来源白名单、uid/昵称规范化、分发到 DO |
 | 房间 | `apps/worker/src/room.ts` | 权威游戏状态、计分、字位揭示、alarm 计时、广播 |
 | 匹配 | `apps/worker/src/matchmaker.ts` | 排队、成局、分配房号 |
-| 判定 | `apps/worker/src/judge.ts` | Jev 调用、通道切换、KV 缓存；可整体替换 |
+| 判定 | `apps/worker/src/judge.ts` | 词向量、余弦相似度、归一化、别名判猜中；可整体替换 |
 | 共享 | `packages/shared` | 规则常量、清洗函数、协议类型，前后端同源 |
 
 ## 关键设计
@@ -29,7 +28,10 @@ graph LR
 - **谜底不出 DO**：`RoomView` 在 `reveal` / `finished` 之前不含答案，字位只下发已点亮的字。
 - **服务端计时**：回合超时、揭晓 3 秒后进下一题、匹配房等人超时，全部由 DO `alarm()` 驱动；前端用 `deadline` 与 `now` 校正时钟后展示倒计时。
 - **Hibernation**：DO 使用 `ctx.acceptWebSocket`，空闲时不常驻；状态持久化在 `ctx.storage`（SQLite 后端）。alarm 触发时无人在线则清空房间。
-- **判定**：一次 Jev 请求携带两个问题——`score`（10 级量表，加权均值 / 9 → 关联度）与 `noul`（是否同一事物，≥ 0.9 判猜中）；字面相等直接猜中不调用。结果按 `(谜底 id, 猜测词)` 缓存，保证同词同分。
+- **判定**：Workers AI `@cf/baai/bge-m3` 词向量（每日免费 10,000 neurons ≈ 930 万 token，按每词 3–6 token 计每天百万次以上）。
+  - 关联度 = `(cos − baseline) / (0.85 − baseline)`，截断到 [0, 0.99]。`baseline` 是每个谜底与 20 个无关参照词的平均余弦（离线校准写入题库），用于抹平不同谜底的底噪差异（实测 0.32–0.57）。
+  - 猜中 = 与谜底或 `aliases`（等长同义词/别称）字面相同。向量无法区分同义词与强相关词（如"单车"与"骑行"同为 0.82），因此不用阈值判猜中。
+  - 向量缓存在 DO 内存（LRU 2000），谜底向量每题只算一次。不使用 KV（免费套餐每日仅 1,000 次写入）。
 - **并发**：`judge()` 期间 DO 可能处理其他消息，返回后重新校验阶段与题目 id，避免旧结果写入新题。
 
 ## 游戏流程
