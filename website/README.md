@@ -40,12 +40,15 @@ pnpm dev:web       # vite，:5173，/api 与 /ws 代理到 :8787
 
 ## 部署
 
-推送 `main` 后由 Cloudflare 的 Git 集成自动部署（控制台配置，根目录均为 `website`）：
+推送 `main` 后由 Cloudflare 的 Git 集成自动部署（控制台配置）：
 
-| 项目 | 部署命令 / 构建命令 | 监视路径 |
-|---|---|---|
-| Worker `wordtoflush-api` | `cd apps/worker && npx wrangler deploy` | `website/apps/worker/*`、`website/packages/shared/*` |
-| Pages `wordtoflush-web` | `pnpm install --frozen-lockfile && pnpm build`，输出 `apps/web/dist` | `website/apps/web/*`、`website/packages/shared/*` |
+| 项目 | 根目录 | 构建 / 部署命令 | 输出目录 | 监视路径 |
+|---|---|---|---|---|
+| Worker `wordtoflush-api` | `website` | 部署：`cd apps/worker && npx wrangler deploy` | – | `website/apps/worker/*`、`website/packages/shared/*` |
+| Pages `wordtoflush-web` | `website/apps/web` | 构建：`cd ../.. && pnpm install --frozen-lockfile && pnpm build` | `dist` | `website/apps/web/*`、`website/packages/shared/*` |
+
+- Pages 根目录必须是 `website/apps/web`：Functions 目录与输出目录都按根目录解析。
+- 该目录下存在 `wrangler.toml`，Pages 以它为准并**忽略控制台中的变量**；构建变量 `SKIP_DEPENDENCY_INSTALL`（跳过 Pages 自带的 npm 安装，它不识别 pnpm workspace）与 `PNPM_VERSION` 写在其 `[vars]` 中。
 
 手动部署：`pnpm deploy:worker`、`pnpm deploy:web`（先 Worker 后 Pages，Pages 的 Service Binding 依赖 Worker）。
 
