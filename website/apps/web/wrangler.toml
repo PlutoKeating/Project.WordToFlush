@@ -9,3 +9,10 @@ compatibility_date = "2026-09-01"
 [[services]]
 binding = "API"
 service = "wordtoflush-api"
+
+# 存在本文件时 Pages 忽略控制台中的变量，构建变量须写在这里。
+# Git 构建根目录为 website/apps/web：跳过 Pages 自带的 npm 安装（不识别 pnpm workspace），
+# 由构建命令 `cd ../.. && pnpm install --frozen-lockfile && pnpm build` 在工作区根安装
+[vars]
+SKIP_DEPENDENCY_INSTALL = "true"
+PNPM_VERSION = "11.21.0"
